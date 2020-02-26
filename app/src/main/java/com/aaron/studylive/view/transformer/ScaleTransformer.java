@@ -4,6 +4,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+/**
+ * Created by Aaron on 2020/2/25
+ * The current project is StudyLive
+ *
+ * @Describe: 启动页切换并缩小动画
+ */
+
 //启动页动画的编写
 public class ScaleTransformer implements ViewPager.PageTransformer {
 

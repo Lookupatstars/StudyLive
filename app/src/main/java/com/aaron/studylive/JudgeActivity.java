@@ -22,7 +22,6 @@ import com.aaron.studylive.view.transformer.ScaleTransformer;
 
 public class JudgeActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

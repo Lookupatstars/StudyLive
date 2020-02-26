@@ -3,6 +3,12 @@ package com.aaron.studylive.utils;
 import android.os.Build;
 import android.util.Log;
 
+/**
+ * Created by Aaron on 2020/2/25
+ * The current project is StudyLive
+ *
+ * @Describe: 日志调试文件
+ */
 import com.aaron.studylive.BuildConfig;
 
 public class L {

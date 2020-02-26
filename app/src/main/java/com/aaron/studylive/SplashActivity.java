@@ -65,7 +65,5 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
         mVpMain.setPageTransformer(true,new ScaleTransformer());
-
     }
-
 }
