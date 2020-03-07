@@ -51,7 +51,7 @@
                 android:id="@+id/touxiang"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/head"
+                android:src="@drawable/head"
                 />
         </LinearLayout>
     </LinearLayout>

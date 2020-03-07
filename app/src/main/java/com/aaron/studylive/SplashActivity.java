@@ -28,9 +28,9 @@ public class SplashActivity extends AppCompatActivity {
     private ViewPager mVpMain;
     //显示的图片资源
     public int[] mResIds = new int[]{
-            R.mipmap.start1,
-            R.mipmap.start2,
-            R.mipmap.start3,
+            R.drawable.start1,
+            R.drawable.start2,
+            R.drawable.start3,
     };
 
 

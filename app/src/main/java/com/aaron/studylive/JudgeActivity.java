@@ -48,7 +48,7 @@ public class JudgeActivity extends AppCompatActivity {
     }
 
     private void enterHomeActivity() {
-        Intent intent = new Intent(this, MainActivityWithTab.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }

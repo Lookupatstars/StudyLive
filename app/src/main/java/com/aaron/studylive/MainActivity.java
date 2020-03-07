@@ -1,14 +1,11 @@
 package com.aaron.studylive;
 
-import android.app.LocalActivityManager;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.app.ActivityGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
 public class MainActivity extends ActivityGroup implements OnClickListener{
@@ -59,7 +56,7 @@ public class MainActivity extends ActivityGroup implements OnClickListener{
         v.setSelected(true); // 选中指定标签
         if (v == ll_first) {
             // 切换到第一个活动页面DepartmentHomeActivity
-            toActivity("first", MainActivity.class);
+            toActivity("first", HomeActivity.class);
         } else if (v == ll_second) {
             // 切换到第二个活动页面DepartmentClassActivity
             toActivity("second", MainActivity.class);

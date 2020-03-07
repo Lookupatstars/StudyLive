@@ -151,10 +151,10 @@ public class MainActivityWithTab extends AppCompatActivity {
         mBtnCourse = findViewById(R.id.tab_course);
         mBtnMine = findViewById(R.id.tab_mine);
 
-        mBtnHome.setIconAndText(R.mipmap.home648a8a8a,R.mipmap.home641296db,"首页");
-        mBtnDiscuss.setIconAndText(R.mipmap.discuss648a8a8a,R.mipmap.discuss641296db,"问答");
-        mBtnCourse.setIconAndText(R.mipmap.course648a8a8a,R.mipmap.course641296db,"我的课程");
-        mBtnMine.setIconAndText(R.mipmap.mine648a8a8a,R.mipmap.mine641296db,"我的");
+        mBtnHome.setIconAndText(R.drawable.home648a8a8a,R.drawable.home641296db,"首页");
+        mBtnDiscuss.setIconAndText(R.drawable.discuss648a8a8a,R.drawable.discuss641296db,"问答");
+        mBtnCourse.setIconAndText(R.drawable.course648a8a8a,R.drawable.course641296db,"我的课程");
+        mBtnMine.setIconAndText(R.drawable.mine648a8a8a,R.drawable.mine641296db,"我的");
 
         mTabs.add(mBtnHome);
         mTabs.add(mBtnDiscuss);
