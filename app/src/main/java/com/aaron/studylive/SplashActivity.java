@@ -27,13 +27,14 @@ public class SplashActivity extends AppCompatActivity {
 
     private ViewPager mVpMain;
     //显示的图片资源
-    private int[] mResIds = new int[]{
+    public int[] mResIds = new int[]{
             R.mipmap.start1,
             R.mipmap.start2,
             R.mipmap.start3,
     };
 
-    private Button btnStart;
+
+    public Button btnStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,11 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
+
+        mVpMain.setPageTransformer(true,new ScaleTransformer());
+
         btnStart = findViewById(R.id.btn_start);
+
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +69,6 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mVpMain.setPageTransformer(true,new ScaleTransformer());
+
     }
 }

@@ -3,6 +3,9 @@ package com.aaron.studylive.view.transformer;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Button;
+
+import com.aaron.studylive.SplashActivity;
 
 /**
  * Created by Aaron on 2020/2/25
@@ -18,6 +21,7 @@ public class ScaleTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
     //透明度的变化
     private static final float MIN_ALPHA = 0.5f;
+
 
     //滑动画面的时候，通过position的值来看计算出滑动的动画
     @Override
@@ -57,6 +61,7 @@ public class ScaleTransformer implements ViewPager.PageTransformer {
             page.setScaleY(MIN_SCALE);
             page.setAlpha(MIN_ALPHA);
         }
+
 
     }
 

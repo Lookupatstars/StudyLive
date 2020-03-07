@@ -22,7 +22,7 @@ import java.util.List;
  * Created by Aaron on 2020/2/24
  * The current project is StudyLive
  *
- * @Describe: 底部导航栏
+ * @Describe: 可滑动的底部导航栏
  */
 
 public class MainActivityWithTab extends AppCompatActivity {

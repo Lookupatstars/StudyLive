@@ -1,52 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
     >
 
-    <android.support.v4.view.ViewPager
+
+    <LinearLayout
+        android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/vp_main"
-        tools:context=".MainActivity">
-    </android.support.v4.view.ViewPager>
+        android:gravity="bottom|center"
+        android:orientation="horizontal" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/tabbar_height"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_home"
+        <LinearLayout
+            android:id="@+id/ll_first"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="首页" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_discuss"
+            <TextView
+                style="@style/TabButton"
+                android:drawableTop="@drawable/tab_first_selector"
+                android:text="@string/menu_first" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_second"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="问答" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_course"
+            <TextView
+                style="@style/TabButton"
+                android:drawableTop="@drawable/tab_second_selector"
+                android:text="@string/menu_second" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_third"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="我的课程" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_mine"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="我的" />
-
+            <TextView
+                style="@style/TabButton"
+                android:drawableTop="@drawable/tab_third_selector"
+                android:text="@string/menu_third" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
