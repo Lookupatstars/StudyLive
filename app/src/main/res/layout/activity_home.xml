@@ -31,6 +31,7 @@
 
             <com.aaron.studylive.widget.BannerPager
                 android:id="@+id/banner_pager"
+                android:paddingHorizontal="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

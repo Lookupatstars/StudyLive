@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.aaron.studylive.Fragment.SplashFragment;
-import com.aaron.studylive.global.AppContants;
+import com.aaron.studylive.constant.AppContants;
 import com.aaron.studylive.utils.SpUtils;
 import com.aaron.studylive.view.transformer.ScaleTransformer;
 

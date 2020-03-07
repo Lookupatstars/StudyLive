@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.aaron.studylive.Fragment.SplashFragment;
-import com.aaron.studylive.global.AppContants;
+import com.aaron.studylive.constant.AppContants;
 import com.aaron.studylive.utils.SpUtils;
 import com.aaron.studylive.view.transformer.ScaleTransformer;
 
