@@ -5,4 +5,12 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+
+    <string name="menu_first">首页</string>
+    <string name="menu_second">问答</string>
+    <string name="menu_third">我的课程</string>
+    <string name="menu_forth">我的</string>
+    <string name="please_input">请输入</string>
+    <string name="search">搜索</string>
+
 </resources>

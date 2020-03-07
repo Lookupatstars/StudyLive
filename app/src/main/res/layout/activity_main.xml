@@ -57,6 +57,19 @@
                 android:drawableTop="@drawable/tab_third_selector"
                 android:text="@string/menu_third" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_forth"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TabButton"
+                android:drawableTop="@drawable/tab_forth_selector"
+                android:text="@string/menu_forth" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
