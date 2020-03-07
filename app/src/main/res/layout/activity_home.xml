@@ -7,8 +7,38 @@
     android:orientation="vertical"
     tools:context=".HomeActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="首页"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tl_head"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue_light"
+        app:navigationIcon="@drawable/launch"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginVertical="10dp"
+                android:layout_height="0dp" />
+
+            <com.aaron.studylive.widget.BannerPager
+                android:id="@+id/banner_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

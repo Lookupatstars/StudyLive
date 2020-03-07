@@ -11,9 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".HomeActivity"></activity>
         <activity android:name=".PersonalActivity" />
-        <activity android:name=".JudgeActivity" android:theme="@style/Theme.Design.NoActionBar">
+        <activity
+            android:name=".JudgeActivity"
+            android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,7 +30,11 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppCompatTheme" />
-        <activity android:name=".HomeActivity" android:theme="@style/AppCompatTheme" />
+        <activity android:name=".MineActivity"></activity>
+        <activity android:name=".CourseActivity" />
+        <activity android:name=".DiscussActivity" />
+        <activity android:name=".HomeActivity" />
+
     </application>
 
 </manifest>

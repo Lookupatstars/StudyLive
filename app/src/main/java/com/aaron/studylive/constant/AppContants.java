@@ -1,4 +1,4 @@
-package com.aaron.studylive.global;
+package com.aaron.studylive.constant;
 
 /**
  * Created by Aaron on 2020/2/26

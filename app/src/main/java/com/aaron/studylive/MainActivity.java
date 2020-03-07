@@ -41,7 +41,7 @@ public class MainActivity extends ActivityGroup implements OnClickListener{
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.ll_first || v.getId() == R.id.ll_second || v.getId() == R.id.ll_third) {
+        if (v.getId() == R.id.ll_first || v.getId() == R.id.ll_second || v.getId() == R.id.ll_third || v.getId() == R.id.ll_forth) {
             changeContainerView(v); // 点击了哪个标签，就切换到该标签对应的内容视图
         }
     }
@@ -59,12 +59,12 @@ public class MainActivity extends ActivityGroup implements OnClickListener{
             toActivity("first", HomeActivity.class);
         } else if (v == ll_second) {
             // 切换到第二个活动页面DepartmentClassActivity
-            toActivity("second", MainActivity.class);
+            toActivity("second", DiscussActivity.class);
         } else if (v == ll_third) {
             // 切换到第三个活动页面DepartmentCartActivity
-            toActivity("third", MainActivity.class);
+            toActivity("third", CourseActivity.class);
         } else if (v == ll_forth){
-            toActivity("forth",MainActivity.class);
+            toActivity("forth",MineActivity.class);
         }
     }
 
