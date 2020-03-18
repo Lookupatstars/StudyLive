@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StudyLive</string>
+    <string name="app_name">学院在线</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -12,5 +12,9 @@
     <string name="menu_forth">我的</string>
     <string name="please_input">请输入</string>
     <string name="search">搜索</string>
+
+    <string name="login_student">学生登录</string>
+    <string name="login_teacher">教师登录</string>
+    <string name="login_root">管理员登录</string>
 
 </resources>

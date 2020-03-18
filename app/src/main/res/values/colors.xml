@@ -12,6 +12,7 @@
     <color name="transparent">#00000000</color>
     <color name="blue">#0099ff</color>
     <color name="green">#00ff99</color>
+    <color name="a_grey">#55CCC6C6</color>
 
     <color name="orange">#F9CC12</color>
     <color name="blue_light">#aaaaff</color>
@@ -19,4 +20,7 @@
     <color name="blue_black">#1673b8</color>
     <color name="tab_text_selected">#0084e8</color>
     <color name="tab_text_normal">#7597b3</color>
+
+    <color name="login_tab_text_selected">#991673b8</color>
+    <color name="login_tab_text_normal">#ffffff</color>
 </resources>

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class DiscussActivity extends AppCompatActivity {
 
-    private final static String TAG = "DepartmentClassActivity";
+    private final static String TAG = "DiscussActivity";
     private ViewPager vp_content; // 定义一个翻页视图对象
     private TabLayout tab_title; // 定义一个标签布局对象
     private ArrayList<String> mTitleArray = new ArrayList<String>(); // 标题文字队列
@@ -42,10 +42,12 @@ public class DiscussActivity extends AppCompatActivity {
     private void initTabLayout() {
         // 从布局文件中获取名叫tab_title的标签布局
         tab_title = findViewById(R.id.tab_title);
+
         // 给tab_title添加一个指定文字的标签
         tab_title.addTab(tab_title.newTab().setText(mTitleArray.get(0)));
-        // 给tab_title添加一个指定文字的标签
         tab_title.addTab(tab_title.newTab().setText(mTitleArray.get(1)));
+        tab_title.addTab(tab_title.newTab().setText(mTitleArray.get(2)));
+
         // 给tab_title添加标签选中监听器，该监听器默认绑定了翻页视图vp_content
         tab_title.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_content));
     }

@@ -1,4 +1,4 @@
-package com.aaron.studylive.Fragment;
+package com.aaron.studylive.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;

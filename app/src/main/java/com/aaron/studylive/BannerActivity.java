@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aaron.studylive.Fragment.SplashFragment;
+import com.aaron.studylive.fragment.SplashFragment;
 import com.aaron.studylive.view.transformer.ScaleTransformer;
 
 /**

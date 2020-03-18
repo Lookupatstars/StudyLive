@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.aaron.studylive.Fragment.SplashFragment;
+import com.aaron.studylive.fragment.SplashFragment;
 import com.aaron.studylive.constant.AppContants;
 import com.aaron.studylive.utils.SpUtils;
 import com.aaron.studylive.view.transformer.ScaleTransformer;
@@ -48,7 +49,7 @@ public class JudgeActivity extends AppCompatActivity {
     }
 
     private void enterHomeActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

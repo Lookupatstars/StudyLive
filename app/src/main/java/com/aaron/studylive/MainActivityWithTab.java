@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.aaron.studylive.Fragment.TabFragment;
+import com.aaron.studylive.fragment.TabFragment;
 import com.aaron.studylive.view.TabView;
 
 import java.util.ArrayList;

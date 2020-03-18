@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/blue_light"
-        app:navigationIcon="@drawable/launch"
+        app:navigationIcon="@drawable/ic_search"
         />
 
     <ScrollView

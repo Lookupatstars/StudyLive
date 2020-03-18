@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 
 public class MainActivity extends ActivityGroup implements OnClickListener{
 
-    private static final String TAG = "DepartmentStoreActivity";
+    private static final String TAG = "MainActivity";
     private Bundle mBundle = new Bundle(); // 声明一个包裹对象
     private LinearLayout ll_container, ll_first, ll_second, ll_third,ll_forth;
 
@@ -55,15 +55,16 @@ public class MainActivity extends ActivityGroup implements OnClickListener{
         ll_forth.setSelected(false);
         v.setSelected(true); // 选中指定标签
         if (v == ll_first) {
-            // 切换到第一个活动页面DepartmentHomeActivity
+            // 切换到第一个活动页面
             toActivity("first", HomeActivity.class);
         } else if (v == ll_second) {
-            // 切换到第二个活动页面DepartmentClassActivity
+            // 切换到第二个活动页面
             toActivity("second", DiscussActivity.class);
         } else if (v == ll_third) {
-            // 切换到第三个活动页面DepartmentCartActivity
+            // 切换到第三个活动页面
             toActivity("third", CourseActivity.class);
         } else if (v == ll_forth){
+            // 切换到第三个活动页面
             toActivity("forth",MineActivity.class);
         }
     }

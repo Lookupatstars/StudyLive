@@ -1,4 +1,4 @@
-package com.aaron.studylive.Fragment;
+package com.aaron.studylive.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

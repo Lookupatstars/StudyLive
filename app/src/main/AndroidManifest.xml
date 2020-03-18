@@ -10,7 +10,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".RegistActivity"></activity>
+        <activity
+            android:name=".LoginRootActivity"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".LoginTeacherActivity"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".LoginStudentActivity"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity android:name=".AboutActivity" />
         <activity android:name=".PersonalActivity" />
         <activity
             android:name=".JudgeActivity"
@@ -30,11 +43,10 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppCompatTheme" />
-        <activity android:name=".MineActivity"></activity>
+        <activity android:name=".MineActivity" />
         <activity android:name=".CourseActivity" />
         <activity android:name=".DiscussActivity" />
         <activity android:name=".HomeActivity" />
-
     </application>
 
 </manifest>
