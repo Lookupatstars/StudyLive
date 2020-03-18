@@ -24,12 +24,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:inputType="text"
                     android:layout_gravity="center"
                     android:layout_marginRight="50dp"
                     android:layout_marginLeft="50dp"
                     android:textColor="#9F9FA0"
                     android:textColorHint="#9F9FA0"
-                    android:hint="用户名"/>
+                    android:hint="手机号/昵称"/>
 
                 <View
                     android:layout_width="match_parent"

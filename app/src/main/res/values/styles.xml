@@ -51,4 +51,10 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="ClickableTextView">
+        <item name="android:textColor">@drawable/button_agree_style</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
 </resources>
