@@ -65,6 +65,7 @@ public class LoginStudentActivity extends AppCompatActivity {
 
     }
 
+
     //注册界面的点击按钮
     class RegistClickListener implements View.OnClickListener{
 
@@ -78,6 +79,7 @@ public class LoginStudentActivity extends AppCompatActivity {
 
         }
     }
+
 
 
     // 定义一个编辑框监听器，在输入回车符时自动跳到下一个控件
