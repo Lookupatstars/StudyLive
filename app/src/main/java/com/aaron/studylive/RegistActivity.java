@@ -88,6 +88,7 @@ public class RegistActivity extends AppCompatActivity {
                 String student_conpasswd = et_reg_conpasswd.getText().toString().trim();
 
                 //判断是否为空
+                //判断数据库中是否有重复的手机号，如果有重复的可以提示找回密码
                 if(student_phone.equals("")){
                     Toast.makeText(RegistActivity.this,"手机号不能为空",Toast.LENGTH_SHORT).show();
                 }else if (student_name.equals("")){
@@ -112,7 +113,7 @@ public class RegistActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
 
-                }else if (student_passwd.equals("")!=student_conpasswd.equals("")){
+                }else if (student_passwd!=student_conpasswd){
                     Toast.makeText(RegistActivity.this,"两次输入的密码不一致，请重新输入！",Toast.LENGTH_SHORT).show();
                 }
 
