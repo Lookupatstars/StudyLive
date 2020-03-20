@@ -3,11 +3,9 @@ package com.aaron.studylive.database;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.ContentObservable;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.aaron.studylive.bean.StudentInfo;
 import com.aaron.studylive.utils.L;
