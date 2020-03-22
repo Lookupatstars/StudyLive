@@ -59,7 +59,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
     //打开数据库的写连接
     public SQLiteDatabase openWriteLink(){
         if(sDB == null || !sDB.isOpen()){
-            sDB = studentDBhelper.openWriteLink();
+            sDB = studentDBhelper.getWritableDatabase();
         }
         return sDB;
     }
@@ -81,9 +81,9 @@ public class StudentDBhelper extends SQLiteOpenHelper {
         db.execSQL(drop_sql);
 
         String create_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
-                + "id INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL,"
-                + "phone VARCHAR NOT NULL," + "passwd INTEGER NOT NULL,"
-                + "name LONG NOT NULL,"  + "update_time VARCHAR NOT NULL"
+                + "_id INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL,"
+                + "phone VARCHAR NOT NULL," + "password VARCHAR NOT NULL,"
+                + "name VARCHAR NOT NULL,"  + "update_time VARCHAR NOT NULL"
                 + ");";
         L.d( "create_sql:",create_sql);
         db.execSQL(create_sql);
@@ -180,9 +180,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
 
     // 根据指定条件查询记录，并返回结果数据队列
     public ArrayList<StudentInfo> query(String condition) {
-        String sql = String.format("select rowid,_id,name,update_time," +
-                "phone,password from %s where %s;", TABLE_NAME, condition);
-        L.d("query sql: ",sql);
+        String sql = String.format("select rowid,_id,name,update_time,phone,password from %s where %s;", TABLE_NAME, condition);
         ArrayList<StudentInfo> infoArray = new ArrayList<StudentInfo>();
         // 执行记录查询动作，该语句返回结果集的游标
         Cursor cursor = sDB.rawQuery(sql, null);
@@ -192,21 +190,24 @@ public class StudentDBhelper extends SQLiteOpenHelper {
             info.rowid = cursor.getLong(0); // 取出长整型数
             info.xuhao = cursor.getInt(1); // 取出整型数
             info.name = cursor.getString(2); // 取出字符串
-            info.update_time = cursor.getString(7);
-            info.phone = cursor.getString(8);
-            info.password = cursor.getString(9);
+            info.update_time = cursor.getString(3);
+            info.phone = cursor.getString(4);
+            info.password = cursor.getString(5);
             infoArray.add(info);
         }
+
         cursor.close(); // 查询完毕，关闭游标
         return infoArray;
     }
 
     // 根据手机号码查询指定记录
     public StudentInfo queryByPhone(String phone) {
+        L.d("queryByPhone"+phone);
         StudentInfo info = null;
         ArrayList<StudentInfo> infoArray = query(String.format("phone='%s'", phone));
         if (infoArray.size() > 0) {
             info = infoArray.get(0);
+            L.d("info: "+info);
         }
         return info;
     }
