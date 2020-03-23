@@ -75,9 +75,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
     //创建数据库，建表
     @Override
     public void onCreate(SQLiteDatabase db) {
-        L.d("onCreate");
         String drop_sql = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
-        L.d("drop_sql",drop_sql);
         db.execSQL(drop_sql);
 
         String create_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
@@ -85,7 +83,6 @@ public class StudentDBhelper extends SQLiteOpenHelper {
                 + "phone VARCHAR NOT NULL," + "password VARCHAR NOT NULL,"
                 + "name VARCHAR NOT NULL,"  + "update_time VARCHAR NOT NULL"
                 + ");";
-        L.d( "create_sql:",create_sql);
         db.execSQL(create_sql);
 
     }
@@ -135,6 +132,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
                     continue;
                 }
             }
+
             // 如果存在同样的手机号码，则更新记录
             if (info.phone != null && info.phone.length() > 0) {
                 String condition = String.format("phone='%s'", info.phone);
@@ -202,7 +200,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
 
     // 根据手机号码查询指定记录
     public StudentInfo queryByPhone(String phone) {
-        L.d("queryByPhone"+phone);
+        L.d("根据手机号查询queryByPhone :"+phone);
         StudentInfo info = null;
         ArrayList<StudentInfo> infoArray = query(String.format("phone='%s'", phone));
         if (infoArray.size() > 0) {

@@ -20,7 +20,7 @@ import com.aaron.studylive.database.StudentDBhelper;
 import com.aaron.studylive.utils.DateUtil;
 import com.aaron.studylive.utils.L;
 
-public class LoginStudentActivity extends AppCompatActivity implements OnFocusChangeListener{
+public class LoginStudentActivity extends AppCompatActivity{
 
     private static final String TAG = "LoginStudentActivity";
 
@@ -69,20 +69,8 @@ public class LoginStudentActivity extends AppCompatActivity implements OnFocusCh
 
         btn_login.setOnClickListener(new LoginOnClickListener());
         btn_regist.setOnClickListener(new RegistClickListener());
-        // 给ck_remember设置勾选监听器
-        cb_remember.setOnCheckedChangeListener(new CheckListener());
-    }
 
-    // 定义是否记住密码的勾选监听器
-    private class CheckListener implements CompoundButton.OnCheckedChangeListener {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (buttonView.getId() == R.id.cb_remember) {
-                isRemember = isChecked;
-                L.d("isChecked"+isChecked);
-                L.d("isRemember"+isRemember);
-            }
-        }
+        et_student_passwd.setOnFocusChangeListener(new PasswdFocusListener());
     }
 
     @Override
@@ -118,16 +106,15 @@ public class LoginStudentActivity extends AppCompatActivity implements OnFocusCh
                 //对比数据库的用户名密码
                 //如果比对失败，提示注册
 
-                // 如果勾选了“记住密码”，则把手机号码和密码保存为数据库的用户表记录
-                if (isRemember) {
-                    // 创建一个用户信息实体类
-                    StudentInfo info = new StudentInfo();
-                    info.phone = et_student_user.getText().toString();
-                    info.password = et_student_passwd.getText().toString();
-                    info.update_time = DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss");
-                    // 往用户数据库添加登录成功的用户信息（包含手机号码、密码、登录时间）
-                    sDB.insert(info);
-                }
+                //实现记住密码功能
+                // 创建一个用户信息实体类
+                StudentInfo info = new StudentInfo();
+                info.phone = et_student_user.getText().toString().trim();
+                info.password = et_student_passwd.getText().toString().trim();
+                info.update_time = DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss");
+                // 往用户数据库添加登录成功的用户信息（包含手机号码、密码、登录时间）
+                sDB.insert(info);
+                L.d("insert is exe : "+sDB);
 
                 Intent intent = new Intent(LoginStudentActivity.this,MainActivity.class);
                 startActivity(intent);
@@ -142,20 +129,26 @@ public class LoginStudentActivity extends AppCompatActivity implements OnFocusCh
 
     // 焦点变更事件的处理方法，hasFocus表示当前控件是否获得焦点。
     // 为什么光标进入密码框事件不选onClick？因为要点两下才会触发onClick动作（第一下是切换焦点动作）
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        String phone = et_student_user.getText().toString();
-        // 判断是否是密码编辑框发生焦点变化
-        if (v.getId() == R.id.et_reg_passwd) {
-            // 用户已输入手机号码，且密码框获得焦点
-            if (phone.length() > 0 && hasFocus) {
-                // 根据手机号码到数据库中查询用户记录
-                StudentInfo info = sDB.queryByPhone(phone);
-                if (info != null) {
-                    // 找到用户记录，则自动在密码框中填写该用户的密码
-                    et_student_passwd.setText(info.password);
+
+    private class PasswdFocusListener implements OnFocusChangeListener {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            String phone = et_student_user.getText().toString();
+            L.d("onFocusChange");
+            // 判断是否是密码编辑框发生焦点变化
+//            if (v.getId() == R.id.et_reg_passwd) {
+                // 用户已输入手机号码，且密码框获得焦点
+                L.d("v.getId() == R.id.et_reg_passwd");
+                if (phone.length() > 0 && hasFocus) {
+                    // 根据手机号码到数据库中查询用户记录
+                    StudentInfo info = sDB.queryByPhone(phone);
+                    L.d("StudentInfo Info: "+info);
+                    if (info != null) {
+                        // 找到用户记录，则自动在密码框中填写该用户的密码
+                        et_student_passwd.setText(info.password);
+                    }
                 }
-            }
+//            }
         }
     }
 
@@ -183,52 +176,6 @@ public class LoginStudentActivity extends AppCompatActivity implements OnFocusCh
             }
         }
     }
-
-
-
-    // 定义一个编辑框监听器，在输入回车符时自动跳到下一个控件
-//    private class JumpTextWatcher implements TextWatcher {
-//        private EditText mThisView;  // 声明当前的编辑框对象
-//        private View mNextView; // 声明下一个视图对象
-//
-//        public JumpTextWatcher(EditText vThis, View vNext) {
-//            super();
-//            mThisView = vThis;
-//            if (vNext != null) {
-//                mNextView = vNext;
-//            }
-//        }
-//
-//        // 在编辑框的输入文本变化前触发
-//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//        // 在编辑框的输入文本变化时触发
-//        public void onTextChanged(CharSequence s, int start, int before, int count) {}
-//
-//        // 在编辑框的输入文本变化后触发
-//        public void afterTextChanged(Editable s) {
-//            String str = s.toString();
-//            // 发现输入回车符或换行符
-//            if (str.contains("\r") || str.contains("\n")) {
-//                // 去掉回车符和换行符
-//                mThisView.setText(str.replace("\r", "").replace("\n", ""));
-//                if (mNextView != null) {
-//                    // 让下一个视图获得焦点，即将光标移到下个视图
-//                    mNextView.requestFocus();
-//                    // 如果下一个视图是编辑框，则将光标自动移到编辑框的文本末尾
-//                    if (mNextView instanceof EditText) {
-//                        EditText et = (EditText) mNextView;
-//                        // 让光标自动移到编辑框内部的文本末尾
-//                        // 方式一：直接调用EditText的setSelection方法
-//                        et.setSelection(et.getText().length());
-//                        // 方式二：调用Selection类的setSelection方法
-//                        //Editable edit = et.getText();
-//                        //Selection.setSelection(edit, edit.length());
-//                    }
-//                }
-//            }
-//        }
-//    }
 
 
 }
