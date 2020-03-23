@@ -61,37 +61,18 @@
                 android:paddingBottom="30dp"
                 android:paddingTop="20dp"
                 android:background="#99404348"
+                android:gravity="center"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="left">
-                    <CheckBox
-                        android:id="@+id/cb_remember"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="记住密码"
-                        android:layout_gravity="center|right"
-                        android:textColor="#DDDDDD"
-                        android:textSize="15sp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right">
                     <TextView
                         android:id="@+id/tv_forgotpasswd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|right"
-                        android:text="忘记密码？"
+                        android:text="忘记密码？点击这里"
                         android:textColor="#DDDDDD"
                         android:textSize="15sp"/>
-                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
