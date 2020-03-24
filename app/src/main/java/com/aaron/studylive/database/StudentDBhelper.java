@@ -203,6 +203,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
         L.d("根据手机号查询queryByPhone :"+phone);
         StudentInfo info = null;
         ArrayList<StudentInfo> infoArray = query(String.format("phone='%s'", phone));
+        L.d("infoArray :"+infoArray);
         if (infoArray.size() > 0) {
             info = infoArray.get(0);
             L.d("info: "+info);

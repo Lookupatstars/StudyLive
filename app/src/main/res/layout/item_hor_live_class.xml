@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/ll_live_class_item"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginHorizontal="30dp"
+    android:padding="10dp"
+    >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:orientation="vertical"
+        android:layout_weight="3"
+        android:layout_height="120dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="20dp"
+            android:gravity="top"
+            android:layout_height="60dp">
+            <TextView
+                android:id="@+id/tv_class_title"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="18dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="Android：直播APP的设计与实现"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:layout_height="60dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_class_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MySQL"
+                    android:layout_marginRight="10dp" />
+                <TextView
+                    android:id="@+id/tv_class_teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="xx老师"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_class_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2020.03.23  20:00 - 21:00"
+                    android:layout_marginRight="10dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_height="120dp">
+
+        <ImageView
+            android:id="@+id/iv_class_image"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:src="@drawable/teacher1"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -107,13 +107,10 @@ public class LoginStudentActivity extends AppCompatActivity{
                 if(phone.equals("")){
                     Toast.makeText(LoginStudentActivity.this,"用户名不能为空！",Toast.LENGTH_SHORT).show();
                     return;
-                } else if (et_student_passwd.equals("")){
+                } else if (passwd.equals("")){
                     Toast.makeText(LoginStudentActivity.this,"密码不能为空！",Toast.LENGTH_SHORT).show();
                     return;
-                } else if (!phone.equals(byPhoneInfo.phone)){
-                    Toast.makeText(LoginStudentActivity.this,"用户名不存在！",Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (phone.equals(byPhoneInfo.phone)){
+                } else if (byPhoneInfo.password.equals("")|| phone.equals(byPhoneInfo.phone)){
                     //对比数据库的用户名密码
                     //如果比对失败，提示注册
                     if (passwd.equals(byPhoneInfo.password)){
@@ -135,6 +132,9 @@ public class LoginStudentActivity extends AppCompatActivity{
                         Toast.makeText(LoginStudentActivity.this,"密码不正确！",Toast.LENGTH_SHORT).show();
                         return;
                     }
+                }else {
+                    Toast.makeText(LoginStudentActivity.this,"用户名不正确！",Toast.LENGTH_SHORT).show();
+                    return;
                 }
             }
         }
