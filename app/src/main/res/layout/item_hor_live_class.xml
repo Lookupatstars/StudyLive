@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:tool="http://schemas.android.com/tools"
     android:id="@+id/ll_live_class_item"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:layout_marginHorizontal="30dp"
-    android:padding="10dp"
-    >
+    android:layout_margin="20dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -23,10 +24,12 @@
             <TextView
                 android:id="@+id/tv_class_title"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:textSize="18dp"
-                android:textColor="@color/black"
+                android:textColor="@color/a_black"
                 android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:text="Android：直播APP的设计与实现"
                 />
         </LinearLayout>
@@ -36,7 +39,7 @@
             android:layout_marginHorizontal="20dp"
             android:gravity="bottom"
             android:orientation="vertical"
-            android:layout_height="60dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -79,11 +82,11 @@
         <ImageView
             android:id="@+id/iv_class_image"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
-            android:src="@drawable/teacher1"
+            android:background="@drawable/teacher1"
+            android:src="@drawable/circle_images"
             />
-
     </LinearLayout>
 
 </LinearLayout>

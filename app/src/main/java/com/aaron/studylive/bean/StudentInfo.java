@@ -4,7 +4,7 @@ package com.aaron.studylive.bean;
  * Created by Aaron on 2020/3/20
  * The current project is StudyLive
  *
- * @Describe:  学生数据信息
+ * @Describe:  学生数据信息(数据库)
  */
 public class StudentInfo  {
     public long rowid; //0

@@ -62,9 +62,18 @@ public class LiveClassAdapter extends RecyclerView.Adapter<ViewHolder>
         holder.tv_class_teacher.setText(liveClassInfos.get(position).live_class_teacher);
         holder.tv_class_name.setText(liveClassInfos.get(position).live_class_name);
         holder.tv_class_time.setText(liveClassInfos.get(position).live_class_time);
-        holder.iv_class_image.setImageResource(liveClassInfos.get(position).live_class_item_id);
+        holder.iv_class_image.setBackgroundResource(liveClassInfos.get(position).live_class_item_id);
 
-
+        holder.ll_live_class_item.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId()==R.id.ll_live_class_item){
+                    if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, position);
+                    }
+                }
+            }
+        });
 
 //        LayoutParams params = holder.ll_item.getLayoutParams();
 //        params.height = (int) Math.round(300 * Math.random());
@@ -74,15 +83,6 @@ public class LiveClassAdapter extends RecyclerView.Adapter<ViewHolder>
 //        // 很奇怪，setLayoutParams对瀑布流网格不起作用，只能用setHeight
 //        holder.tv_title.setHeight(params.height);
 
-//        // 列表项的点击事件需要自己实现
-//        holder.ll_item.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (mOnItemClickListener != null) {
-//                    mOnItemClickListener.onItemClick(v, position);
-//                }
-//            }
-//        });
 //        // 列表项的长按事件需要自己实现
 //        holder.ll_item.setOnLongClickListener(new View.OnLongClickListener() {
 //            @Override

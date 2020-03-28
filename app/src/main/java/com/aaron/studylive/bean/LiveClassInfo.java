@@ -10,6 +10,7 @@ import java.util.ArrayList;
  *
  * @Describe: 直播公开课的信息
  */
+
 public class LiveClassInfo {
     public int live_class_item_id;
     public String live_class_teacher;
@@ -39,7 +40,7 @@ public class LiveClassInfo {
             R.drawable.teacher4,R.drawable.teacher5,R.drawable.teacher6
     };
     private static String[] liveClassTitleArray = {
-            "Android: 直播APP的设计与实现","MySQL: 数据库的创建以及增删改查","研究生复试的技巧",
+            "Android: 直播APP的设计与实现","MySQL: 数据库的创建以及增删改查，数据库的创建以及增删改查","研究生复试的技巧",
             "浅谈机器学习","英语在日常生活中的重要性","微信公众号的开发"
     };
     private static String[] liveClassTeacherNameArray = {

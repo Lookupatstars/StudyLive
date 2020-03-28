@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center|top"
     android:orientation="vertical"
     tools:context=".HomeActivity">
 
@@ -15,47 +18,23 @@
         app:navigationIcon="@drawable/ic_search"
         />
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/ll_calendar_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:gravity="center|top"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_calendar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_height="0dp" />
-
-            <com.aaron.studylive.widget.BannerPager
-                android:id="@+id/banner_pager"
-                android:paddingHorizontal="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp" />
-
-        </LinearLayout>
-    </ScrollView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="直播公开课"
-        android:textSize="18dp"
-        android:paddingLeft="20dp"
-        />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_hor_live_class"
-        android:layout_width="match_parent"
-        android:paddingLeft="20dp"
-        android:layout_height="wrap_content"
-        />
+            <android.support.v4.view.PagerTabStrip
+                android:id="@+id/pts_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </android.support.v4.view.ViewPager>
+    </LinearLayout>
 
 </LinearLayout>

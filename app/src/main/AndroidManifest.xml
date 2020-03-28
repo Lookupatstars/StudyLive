@@ -4,30 +4,21 @@
     package="com.aaron.studylive">
 
     <application
-        android:allowBackup="true"
         android:name=".constant.GlobalVaries"
+        android:allowBackup="true"
         android:icon="@drawable/launch"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".RegistActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+
+
+
+        <activity android:name=".GuideActivity" />
         <activity
-            android:name=".LoginRootActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
-        <activity
-            android:name=".LoginTeacherActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
-        <activity
-            android:name=".LoginStudentActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
-        <activity android:name=".AboutActivity" />
-        <activity
-            android:name=".JudgeActivity"
+            android:name=".SplashActivity"
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,20 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/Theme.Design.NoActionBar" />
-        <activity
-            android:name=".MainActivityWithTab"
-            android:theme="@style/AppCompatTheme" />
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppCompatTheme" />
-        <activity android:name=".MineActivity" />
-        <activity android:name=".CourseActivity" />
-        <activity android:name=".DiscussActivity" />
-        <activity android:name=".HomeActivity" />
-
     </application>
 
 </manifest>
