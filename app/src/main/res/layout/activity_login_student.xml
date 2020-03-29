@@ -87,6 +87,7 @@
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
+                    android:enabled="false"
                     android:background="@drawable/button_login_style"
                     android:text="登录"/>
                 <Button

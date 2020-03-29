@@ -110,10 +110,11 @@ public class LoginStudentActivity extends AppCompatActivity{
                 } else if (passwd.equals("")){
                     Toast.makeText(LoginStudentActivity.this,"密码不能为空！",Toast.LENGTH_SHORT).show();
                     return;
-                } else if (byPhoneInfo.password.equals("")|| phone.equals(byPhoneInfo.phone)){
+                } else if (phone.equals(byPhoneInfo.phone)){ //对比数据库的手机号（用户名
                     //对比数据库的用户名密码
                     //如果比对失败，提示注册
                     if (passwd.equals(byPhoneInfo.password)){
+                        btn_login.setEnabled(true);//设置按钮可点击
                         //实现记住密码功能
                         // 创建一个用户信息实体类
                         StudentInfo info = new StudentInfo();
@@ -129,11 +130,11 @@ public class LoginStudentActivity extends AppCompatActivity{
                         finish();
 
                     }else {
-                        Toast.makeText(LoginStudentActivity.this,"密码不正确！",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginStudentActivity.this,"密码不正确",Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }else {
-                    Toast.makeText(LoginStudentActivity.this,"用户名不正确！",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginStudentActivity.this,"用户不存在",Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -158,23 +159,14 @@ public class LoginStudentActivity extends AppCompatActivity{
                 if (byPhoneInfo != null) {
                     // 找到用户记录，则自动在密码框中填写该用户的密码
                     et_student_passwd.setText(byPhoneInfo.password);
+                    btn_login.setEnabled(true);//设置按钮可点击
+                }else {
+                    Toast.makeText(LoginStudentActivity.this,"用户不存在！",Toast.LENGTH_SHORT).show();
+                    return;
                 }
             }
         }
     }
 
-
-/**
-    //接收返回数据
-    protected void onActivityResult(int requestCode , int resultCode , Intent data){
-        if (requestCode == REQUEST_CODE_TO_REG){
-            if (resultCode == RESULT_OK){
-                //从意图中取出名为phone的字符串
-                String phone = data.getStringExtra("phone");
-                et_student_user.setText(phone);
-            }
-        }
-    }
-*/
 
 }

@@ -15,23 +15,10 @@ import com.aaron.studylive.utils.PrefUtils;
  * Created by Aaron on 2020/2/25
  * The current project is StudyLive
  *
- * @Describe: 第一次启动显示页   闪屏界面
+ * @Describe:  闪屏界面
  */
 
 public class SplashActivity extends AppCompatActivity {
-
-    /*
-    private ViewPager mVpMain;
-    //显示的图片资源
-    public int[] mResIds = new int[]{
-            R.drawable.start1,
-            R.drawable.start2,
-            R.drawable.start3,
-    };
-
-
-    public Button btnStart;
-*/
 
     private RelativeLayout rl_splash;
 
@@ -78,7 +65,7 @@ public class SplashActivity extends AppCompatActivity {
                 intent = new Intent(SplashActivity.this,GuideActivity.class);
             }else {
                 //调到主页面
-                intent = new Intent(SplashActivity.this,MainActivity.class);
+                intent = new Intent(SplashActivity.this,LoginActivity.class);
             }
             startActivity(intent);
             finish();
@@ -90,46 +77,6 @@ public class SplashActivity extends AppCompatActivity {
 
         }
     }
-
-/*
-        mVpMain = findViewById(R.id.vp_main);
-        mVpMain.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int i) {
-                return SplashFragment.newInstance(mResIds[i]);
-            }
-            @Override
-            public int getCount() {
-                return mResIds.length;
-            }
-        });
-
-
-        mVpMain.setPageTransformer(true,new ScaleTransformer());
-
-        btnStart = findViewById(R.id.btn_start);
-
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                //this前面为当前activty名称，class前面为要跳转到得activity名称
-                intent.setClass(SplashActivity.this, JudgeActivity.class);
-                startActivity(intent);
-                SpUtils.putBoolean(SplashActivity.this, AppContants.FIRST_OPEN, true);
-                finish();
-            }
-        });
-
-*/
-
-
-//New
-
-
-
-
-
 
 
 }

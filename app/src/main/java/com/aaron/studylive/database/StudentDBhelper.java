@@ -6,7 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
+import com.aaron.studylive.LoginActivity;
+import com.aaron.studylive.LoginStudentActivity;
 import com.aaron.studylive.bean.StudentInfo;
 import com.aaron.studylive.utils.L;
 
@@ -182,6 +185,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
         ArrayList<StudentInfo> infoArray = new ArrayList<StudentInfo>();
         // 执行记录查询动作，该语句返回结果集的游标
         Cursor cursor = sDB.rawQuery(sql, null);
+
         // 循环取出游标指向的每条记录
         while (cursor.moveToNext()) {
             StudentInfo info = new StudentInfo();
@@ -195,6 +199,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
         }
 
         cursor.close(); // 查询完毕，关闭游标
+
         return infoArray;
     }
 
@@ -204,6 +209,7 @@ public class StudentDBhelper extends SQLiteOpenHelper {
         StudentInfo info = null;
         ArrayList<StudentInfo> infoArray = query(String.format("phone='%s'", phone));
         L.d("infoArray :"+infoArray);
+
         if (infoArray.size() > 0) {
             info = infoArray.get(0);
             L.d("info: "+info);

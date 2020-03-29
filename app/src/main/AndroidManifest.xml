@@ -10,12 +10,21 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppCompatTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
 
-
-
+        <activity android:name=".home.RecommendActivity"/>
+        <activity android:name=".HomeActivity"/>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".MineActivity"/>
+        <activity android:name=".DiscussActivity"/>
+        <activity android:name=".CourseActivity"/>
+        <activity android:name=".RegistActivity"/>
+        <activity android:name=".BannerActivity"/>
+        <activity android:name=".LoginStudentActivity"/>
+        <activity android:name=".LoginTeacherActivity"/>
+        <activity android:name=".MainActivity"/>
         <activity android:name=".GuideActivity" />
         <activity
             android:name=".SplashActivity"
