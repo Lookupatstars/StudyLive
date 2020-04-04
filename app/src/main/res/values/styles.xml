@@ -12,15 +12,19 @@
     <style name="AppCompatTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+
     <!-- 标签按钮的声明 （底部标签栏的按钮）-->
     <style name="TabButton">
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:padding">5dp</item>
+        <item name="android:button">@null</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/tab_bg_selector</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:drawablePadding">3dp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@drawable/tab_text_selector</item>
     </style>

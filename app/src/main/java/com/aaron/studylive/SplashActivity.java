@@ -65,7 +65,7 @@ public class SplashActivity extends AppCompatActivity {
                 intent = new Intent(SplashActivity.this,GuideActivity.class);
             }else {
                 //调到主页面
-                intent = new Intent(SplashActivity.this,LoginActivity.class);
+                intent = new Intent(SplashActivity.this,MainActivityWithTab.class);
             }
             startActivity(intent);
             finish();

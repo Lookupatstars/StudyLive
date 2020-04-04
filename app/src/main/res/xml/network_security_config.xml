@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?><!--网络安全的设置-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

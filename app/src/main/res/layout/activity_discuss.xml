@@ -7,12 +7,21 @@
     android:orientation="vertical"
     tools:context=".DiscussActivity">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/tl_head"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_light"
-        >
+        android:background="@color/blue_light">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,20 +37,10 @@
                 app:tabIndicatorHeight="2dp"
                 app:tabMode="scrollable"
                 app:tabSelectedTextColor="@color/red"
-                app:tabTextColor="@color/grey"
-                app:tabTextAppearance="@style/TabText" />
+                app:tabTextAppearance="@style/TabText"
+                app:tabTextColor="@color/grey" />
 
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey" />
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -19,7 +19,7 @@
     <color name="blue_light">#aaaaff</color>
     <color name="blue_dark">#1983d1</color>
     <color name="blue_black">#1673b8</color>
-    <color name="tab_text_selected">#0084e8</color>
+    <color name="tab_text_selected">#1296db</color>
     <color name="tab_text_normal">#7597b3</color>
 
     <color name="login_tab_text_selected">#991673b8</color>

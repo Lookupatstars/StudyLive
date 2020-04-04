@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 底部标签的第一个图片 -->
-    <item android:state_selected="true" android:drawable="@drawable/discuss641296db" />
+    <item android:state_checked="true" android:drawable="@drawable/discuss641296db" />
     <item android:drawable="@drawable/discuss648a8a8a" />
     
 </selector>
