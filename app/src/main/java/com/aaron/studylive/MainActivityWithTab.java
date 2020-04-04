@@ -29,8 +29,6 @@ import java.util.List;
  */
 
 public class MainActivityWithTab extends AppCompatActivity {
-
-
     private static final String TAG_CONTENT = "TAG_CONTENT";
 
     @Override
@@ -41,18 +39,21 @@ public class MainActivityWithTab extends AppCompatActivity {
         //替换帧布局
         initFragment();
 
-
     }
 
     //替换帧布局
+    //初始化fragment
     private void initFragment(){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction(); //开始事务
+
         transaction.replace(R.id.fl_main,new ContentFragment(),TAG_CONTENT);//用fragment替换帧布局
         transaction.commit(); // 提交事务
 
 //        Fragment fragment = fm.findFragmentByTag(TAG_CONTENT);//根据标记查找对应的fragment；
 
     }
+
+
 
 }

@@ -13,7 +13,7 @@ import com.aaron.studylive.R;
 import com.aaron.studylive.view.NoScrollViewPager;
 import com.aaron.studylive.widget.BasePager;
 import com.aaron.studylive.widget.implement.CoursePager;
-import com.aaron.studylive.widget.implement.DiscussPager;
+import com.aaron.studylive.widget.implement.ClassPager;
 import com.aaron.studylive.widget.implement.HomePager;
 import com.aaron.studylive.widget.implement.MinePager;
 
@@ -46,7 +46,7 @@ public class ContentFragment extends BaseFragment {
         mPagers = new ArrayList<BasePager>();
         //添加四个tab标签页
         mPagers.add(new HomePager(mActivity));
-        mPagers.add(new DiscussPager(mActivity));
+        mPagers.add(new ClassPager(mActivity));
         mPagers.add(new CoursePager(mActivity));
         mPagers.add(new MinePager(mActivity));
 
@@ -61,7 +61,7 @@ public class ContentFragment extends BaseFragment {
 //                        mViewPager.setCurrentItem(0);
                         mViewPager.setCurrentItem(0,false); //不平滑滑动
                         break;
-                    case R.id.rb_dic://问答
+                    case R.id.rb_dic://直播课程
                         mViewPager.setCurrentItem(1,false);
                         break;
                     case R.id.rb_kc://我的课程

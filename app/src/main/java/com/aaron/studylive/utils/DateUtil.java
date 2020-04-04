@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by Aaron on 2020/3/20
  * The current project is StudyLive
  *
- * @Describe: 时间操作的类
+ * @Describe: 时间工具的类
  */
 
 @SuppressLint("SimpleDateFormat")

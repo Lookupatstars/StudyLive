@@ -7,8 +7,9 @@ import android.util.Log;
  * Created by Aaron on 2020/2/25
  * The current project is StudyLive
  *
- * @Describe: 日志调试文件
+ * @Describe: 日志调试文件工具类
  */
+
 import com.aaron.studylive.BuildConfig;
 
 public class L {

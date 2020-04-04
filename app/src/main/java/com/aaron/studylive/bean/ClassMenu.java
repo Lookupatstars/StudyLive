@@ -7,9 +7,9 @@ import java.util.List;
  * Created by Aaron on 2020/4/4
  * The current project is StudyLive
  *
- * @Describe:  分类信息的封装  ——  主界面的CourseWeb类
+ * @Describe:  分类信息的封装  ——  课程界面的CourseWeb类
  */
-public class HomeMune  {
+public class ClassMenu  {
 
     /**
      * code : 0
@@ -20,10 +20,10 @@ public class HomeMune  {
     //解析名字要一致
 
     public int code;
-    public ArrayList<HomeMenuData> content;
+    public ArrayList<ClassMenuData> content;
 
     //内容的对象
-    public class HomeMenuData{
+    public class ClassMenuData{
         public String create_time;
         public int id;
         public String name;
@@ -34,7 +34,7 @@ public class HomeMune  {
 
         @Override
         public String toString() {
-            return "HomeMenuData{" +
+            return "ClassMenuData{" +
                     "create_time='" + create_time + '\'' +
                     ", id=" + id +
                     ", name='" + name + '\'' +
@@ -48,7 +48,7 @@ public class HomeMune  {
 
     @Override
     public String toString() {
-        return "HomeMune{" +
+        return "ClassMenu{" +
                 "code=" + code +
                 ", content=" + content +
                 '}';

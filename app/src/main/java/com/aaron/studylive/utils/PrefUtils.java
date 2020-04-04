@@ -7,8 +7,10 @@ import android.content.SharedPreferences;
  * Created by Aaron on 2020/3/28
  * The current project is StudyLive
  *
- * @Describe: SharePreference封装
+ * @Describe: SharePreference封装工具类
+ *
  */
+
 public class PrefUtils {
 
     //boolen
