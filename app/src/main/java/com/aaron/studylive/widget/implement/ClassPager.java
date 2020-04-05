@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,9 +13,12 @@ import com.aaron.studylive.MainActivity;
 import com.aaron.studylive.MainActivityWithTab;
 import com.aaron.studylive.bean.ClassMenu;
 import com.aaron.studylive.constant.AppContants;
+import com.aaron.studylive.fragment.LeftMenuFragment;
 import com.aaron.studylive.utils.CacheUtils;
 import com.aaron.studylive.utils.L;
+import com.aaron.studylive.widget.BaseMenuDetailPager;
 import com.aaron.studylive.widget.BasePager;
+import com.aaron.studylive.widget.implement.menu.CourseWebDetailPager;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -23,6 +27,8 @@ import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.util.ArrayList;
+
 /**
  * Created by Aaron on 2020/3/29
  * The current project is StudyLive
@@ -30,21 +36,17 @@ import org.xutils.x;
  * @Describe: 直播课程
  */
 public class ClassPager extends BasePager {
+
+    private ArrayList<BaseMenuDetailPager> mMenuDetailPager; //详情页的集合
+
+    private ClassMenu classMenu;
+
     public ClassPager(Activity activity) {
         super(activity);
     }
 
     @Override
     public void initData() {
-        //要给帧布局填充一个布局。数据
-        TextView view = new TextView(mActivity); //mActivity 是来自基类的对象
-        view.setText("直播课程");
-        view.setTextColor(Color.RED);
-        view.setTextSize(22);
-        view.setGravity(Gravity.CENTER);
-
-        //用基类的fl_content添加布局
-        fl_content.addView(view);
 
         //在请求服务器之前，先判断有没有缓存。有的话，先加载缓存
         String cache = CacheUtils.getCache(AppContants.COURSE_WEB,mActivity);
@@ -55,8 +57,8 @@ public class ClassPager extends BasePager {
         //请求服务器，获取数据
         //使用第三方开源框架XUtils
         getDataFromServer();
-
     }
+
 
     //获取网络数据 CourseWeb
     private void getDataFromServer() {
@@ -115,15 +117,40 @@ public class ClassPager extends BasePager {
     //Gson 解析数据 CourseWeb
     private void processData(String json) {
         Gson gson = new Gson();
-        ClassMenu classMenu = gson.fromJson(json, ClassMenu.class);  //homeMune里边已经是解析的结果
+        classMenu = gson.fromJson(json, ClassMenu.class);  //homeMune里边已经是解析的结果
         L.d("Gson解析的结果：："+classMenu);
 
 
         //获取侧边栏对象
         MainActivityWithTab mainUI = (MainActivityWithTab) mActivity;
+//        LeftMenuFragment fragment = mainUI.getLeftMenuFragment();  //获取侧边栏
 
+        //给侧边栏设置数据--让Fragment更新界面
+//        fragment.setMenuData(classMenu.content);
 
+        //设置详情页
+        mMenuDetailPager = new ArrayList<BaseMenuDetailPager>();
+        mMenuDetailPager.add(new CourseWebDetailPager(mActivity)); // 课程的列表
 
+        //默认显示第一个详情页
+        setCurrentDetailPager(0);
+    }
+
+    //设置直播课程详情页
+    public void setCurrentDetailPager( int position){
+        //重新给Frame Layout添加内容
+        BaseMenuDetailPager pager = mMenuDetailPager.get(position); //获取应该显示的界面
+        View view = pager.mRootView; // 当前页面
+
+        //清除之前的布局
+        fl_content.removeAllViews();
+        fl_content.addView(view); //给帧布局添加布局
+
+        //初始化页面数据
+        pager.initData();
+
+        //更新标题
+//        tv_title.setText(classMenu.content.get(position).type);
     }
 
 }

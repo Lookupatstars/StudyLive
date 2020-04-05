@@ -123,7 +123,7 @@ public class RegistActivity extends AppCompatActivity {
                         Toast.makeText(RegistActivity.this,"注册成功",Toast.LENGTH_SHORT).show();
                         //注册成功后直接登陆.
 
-                        Intent intent=new Intent(RegistActivity.this,MainActivity.class);
+                        Intent intent=new Intent(RegistActivity.this,MainActivityWithTab.class);
                         startActivity(intent);
                         finish();
 

@@ -6,13 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tl_head"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/blue_light"
-        app:navigationIcon="@drawable/ic_search"
-        />
+<!--    <android.support.v7.widget.Toolbar-->
+<!--        android:id="@+id/tl_head"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="@color/blue_light"-->
+<!--        app:navigationIcon="@drawable/ic_search"-->
+<!--        />-->
+
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="match_parent"

@@ -124,7 +124,7 @@ public class LoginStudentActivity extends AppCompatActivity{
                         // 往用户数据库添加登录成功的用户信息（包含手机号码、密码、登录时间）
                         sDB.insert(info);
 
-                        Intent intent = new Intent(LoginStudentActivity.this,MainActivity.class);
+                        Intent intent = new Intent(LoginStudentActivity.this,MainActivityWithTab.class);
                         //把昵称，签名输入到界面   ？？？？？？？？？？
                         startActivity(intent);
                         finish();

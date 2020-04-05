@@ -30,7 +30,7 @@ public class ContentFragment extends BaseFragment {
 
     private NoScrollViewPager mViewPager;
     private RadioGroup rg_group;
-    private ArrayList<BasePager> mPagers; //五个标签页的集合
+    private ArrayList<BasePager> mPagers; //四个标签页的集合
 
     @Override
     public View initView() {
@@ -125,6 +125,13 @@ public class ContentFragment extends BaseFragment {
         public void destroyItem( ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
+    }
+
+
+    //从主界面获取到直播课的界面 ClassPager
+    public ClassPager getClassPager(){
+        ClassPager pager = (ClassPager) mPagers.get(1);
+        return pager;
     }
 
 
