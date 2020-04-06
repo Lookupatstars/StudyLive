@@ -83,7 +83,7 @@ public class LeftMenuFragment extends BaseFragment {
         //获取ClassPager
         ClassPager classPager = fragment.getClassPager();
         //修改课程的FrameLayout的布局
-        classPager.setCurrentDetailPager(position);
+//        classPager.setCurrentDetailPager(position);
 
     }
 
