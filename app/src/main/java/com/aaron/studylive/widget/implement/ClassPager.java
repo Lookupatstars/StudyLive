@@ -1,13 +1,16 @@
 package com.aaron.studylive.widget.implement;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
@@ -25,6 +28,12 @@ import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -35,26 +44,19 @@ import java.util.ArrayList;
  */
 public class ClassPager extends BasePager {
 
-    private ArrayList<TabDetailPager> tabDetailPagers; //详情页的集合
+    private static final String TAG = "ClassPager";
     private ClassMenu classMenu;
-
     private ViewPager mViewPager;
+    private TextView view;
 
     public ClassPager(Activity activity) {
         super(activity);
     }
 
-    @Override
-    public View initView() {
-        View view = View.inflate(mActivity, R.layout.pager_class_menu_detail,null);
-        mViewPager = view.findViewById(R.id.vp_class_menu_detail);
-        return super.initView();
-    }
-
+    //类似  Homepager 一样
     @Override
     public void initData() {
-        tabDetailPagers = new ArrayList<TabDetailPager>();//初始化tab标签的ArrayList
-
+        L.d("initData()   执行了 ");
         //在请求服务器之前，先判断有没有缓存。有的话，先加载缓存
         String cache = CacheUtils.getCache(AppContants.COURSE_WEB,mActivity);
         if (!TextUtils.isEmpty(cache)){
@@ -63,27 +65,41 @@ public class ClassPager extends BasePager {
         }
         L.d("有没有缓存都要重新请求数据库");
         //请求服务器，获取数据
-        //使用第三方开源框架XUtils
+        //自己搭建的HttpUtils
         getDataFromServer();
 
         //初始化页签class tab menu
         for (int i = 0;i<classMenu.content.size();i++){
-            L.d("classMenu.content.get(i):::"+classMenu.content.get(i));
-            TabDetailPager pager = new TabDetailPager(mActivity,classMenu.content.get(i));
-            tabDetailPagers.add(pager);
+            L.d("data.content.get(i):::"+classMenu.content.get(i));
+
+            //要给帧布局填充一个布局。数据
+            view = new TextView(mActivity); //mActivity 是来自基类的对象
+            view.setText(classMenu.content.get(i).name); //在这里初始化会空指针
+            view.setTextColor(Color.RED);
+            view.setTextSize(22);
+            view.setGravity(Gravity.CENTER);
+            L.d("classMenu.content.get(i).name："+classMenu.content.get(i).name);
+            mViewPager.addView(view);
         }
-
         mViewPager.setAdapter( new ClassMenuDetailAdapter());
-        L.d("mViewPager.setAdapter( new ClassMenuDetailAdapter());执行了");
+//        L.d("classMene：："+classMenu);
     }
-
+    //一定是initView先执行
+    @Override
+    public View initView() {
+        L.d("initView() 执行了");
+        View view = View.inflate(mActivity, R.layout.pager_class_menu_detail,null);
+        mViewPager = view.findViewById(R.id.vp_class_menu_detail);
+        return super.initView();
+    }
 
     //给ViewPager填充界面 ，需要一个Adapter类
     class ClassMenuDetailAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return tabDetailPagers.size();
+            L.d("tabDetailPagers.size::"+classMenu.content.size());
+            return classMenu.content.size();
         }
 
         @Override
@@ -94,7 +110,7 @@ public class ClassPager extends BasePager {
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            TabDetailPager pager = tabDetailPagers.get(position);
+            ClassPager pager = new ClassPager(mActivity);
             View view = pager.mRootView;
             container.addView(view);
             pager.initData();
@@ -109,53 +125,59 @@ public class ClassPager extends BasePager {
 
 
 
+
+
     //获取网络数据 CourseWeb
     private void getDataFromServer() {
         L.d("getDataFromServer 执行了");
-        RequestParams params = new RequestParams(AppContants.COURSE_WEB);
-        x.http().request(HttpMethod.POST, params, new Callback.CommonCallback<String>() {
 
-            private boolean hasError = false;
-            private String result = null;
+        final String address = AppContants.COURSE_WEB;
+        new Thread(new Runnable() {
             @Override
-            public void onSuccess(String result) {
-                //成功
-//                String res = result.toString();
-                //如果服务返回304或onCache选择了信任缓存,这时result为null
-                L.d("JAVA, 开始请求");
-                if (result != null) {
-                    this.result = result;
-                    //Gson 解析数据
-                    processData(result);
-                    //把数据写入缓存
-                    CacheUtils.setCache(AppContants.COURSE_WEB,result,mActivity);
+            public void run() {
+                boolean hasError = false;
+                String result = null;
+
+                HttpURLConnection connection = null;
+                BufferedReader reader = null;
+
+                try {
+                    URL url = new URL(address);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");  //POST 方式都要大写
+                    connection.setConnectTimeout(8000);
+                    connection.setReadTimeout(8000);
+                    connection.setDoInput(true);
+                    connection.setDoOutput(true);
+
+                    InputStream in = connection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    //response 就是result
+                    L.d("查看responses的结果：：" + response);
+                    processData(response.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                if (reader != null){
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (connection != null) {
+                    connection.disconnect();
                 }
             }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                hasError = true;
-                Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                if (ex instanceof HttpException) { //网络错误
-                    HttpException httpEx = (HttpException) ex;
-                    int responseCode = httpEx.getCode();
-                    String responseMsg = httpEx.getMessage();
-                    String errorResult = httpEx.getResult();
-                    //...
-                } else { //其他错误
-                    //...
-                    L.d("其他错误！");
-                }
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-            }
-
-            @Override
-            public void onFinished() {
-            }
-        });
+                //END try catch finally
+        }
+        }).start();
 
         L.d("getDataFromServer  结束了");
 
@@ -164,43 +186,7 @@ public class ClassPager extends BasePager {
     //Gson 解析数据 CourseWeb
     private void processData(String json) {
         Gson gson = new Gson();
-        classMenu = gson.fromJson(json, ClassMenu.class);  //classMenu里边已经是解析的结果
-        L.d("Gson解析的结果：："+classMenu);
-
-//        classMenu.content.get(i).name;   //是每个标签的名字
-
-
-
-        //获取侧边栏对象
-//        MainActivityWithTab mainUI = (MainActivityWithTab) mActivity;
-//        LeftMenuFragment fragment = mainUI.getLeftMenuFragment();  //获取侧边栏
-
-        //给侧边栏设置数据--让Fragment更新界面
-//        fragment.setMenuData(classMenu.content);
-
-        //设置详情页
-//        mMenuDetailPager = new ArrayList<BaseMenuDetailPager>();
-//        mMenuDetailPager.add(new CourseWebDetailPager(mActivity,classMenu.content.get(0).name)); // 课程的列表
-
-        //默认显示第一个详情页
-//        setCurrentDetailPager(0);
+        ClassMenu data = gson.fromJson(json, ClassMenu.class);  //classMenu里边已经是解析的结果
+        this.classMenu = data;
     }
-
-    //设置直播课程详情页
-//    public void setCurrentDetailPager( int position){
-        //重新给Frame Layout添加内容
-//        BaseMenuDetailPager pager = mMenuDetailPager.get(position); //获取应该显示的界面
-//        View view = pager.mRootView; // 当前页面
-
-        //清除之前的布局
-//        fl_content.removeAllViews();
-//        fl_content.addView(view); //给帧布局添加布局
-
-        //初始化页面数据
-//        pager.initData();
-
-        //更新标题
-//        tv_title.setText(classMenu.content.get(position).type);
-//    }
-
 }

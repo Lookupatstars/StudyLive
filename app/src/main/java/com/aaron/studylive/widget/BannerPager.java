@@ -24,7 +24,7 @@ import java.util.List;
  * Created by Aaron on 2020/3/7
  * The current project is StudyLive
  *
- * @Describe:
+ * @Describe: 轮播图
  */
 public class BannerPager extends RelativeLayout implements View.OnClickListener {
     private static final String TAG = "BannerPager";
