@@ -10,14 +10,20 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.bean.ClassMenu;
+import com.aaron.studylive.bean.TabMenuList;
 import com.aaron.studylive.constant.AppContants;
+import com.aaron.studylive.constant.ImageList;
 import com.aaron.studylive.utils.CacheUtils;
 import com.aaron.studylive.utils.L;
+import com.aaron.studylive.utils.Utils;
+import com.aaron.studylive.widget.BannerPager;
 import com.aaron.studylive.widget.BasePager;
 import com.aaron.studylive.widget.implement.menu.TabDetailPager;
 import com.google.gson.Gson;
@@ -49,8 +55,36 @@ public class ClassPager extends BasePager {
     private ViewPager mViewPager;
     private TextView view;
 
+
     public ClassPager(Activity activity) {
         super(activity);
+    }
+
+    //一定是initView先执行,不论位置在哪
+    @Override
+    public View initView() {
+        L.d("initView() 执行了");
+        View view = View.inflate(mActivity, R.layout.pager_class_menu_detail,null);
+        TabDetailPager tabDetailPager = view.findViewById(R.id.vp_class_menu_detail);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabDetailPager.getLayoutParams();
+        params.height = (int) (Utils.getScreenWidth(mActivity) * 250f / 640f);
+        // 设置横幅轮播条的布局参数
+        tabDetailPager.setLayoutParams(params);
+        tabDetailPager.setTextView(TabMenuList.getDefault());
+        // 设置横幅轮播条的广告点击监听器
+        tabDetailPager.setOnBannerListener(new BannerClick());
+        // 开始广告图片的轮播滚动
+        tabDetailPager.start();
+
+        return super.initView();
+    }
+    // 一旦点击了广告图，就回调监听器的onBannerClick方法
+    private class BannerClick implements BannerPager.BannerClickListener {
+        @Override
+        public void onBannerClick(int position) {
+            String desc = String.format("您点击了第%d张图片", position + 1);
+            Toast.makeText(mActivity, desc, Toast.LENGTH_LONG).show();
+        }
     }
 
     //类似  Homepager 一样
@@ -84,47 +118,6 @@ public class ClassPager extends BasePager {
         mViewPager.setAdapter( new ClassMenuDetailAdapter());
 //        L.d("classMene：："+classMenu);
     }
-    //一定是initView先执行
-    @Override
-    public View initView() {
-        L.d("initView() 执行了");
-        View view = View.inflate(mActivity, R.layout.pager_class_menu_detail,null);
-        mViewPager = view.findViewById(R.id.vp_class_menu_detail);
-        return super.initView();
-    }
-
-    //给ViewPager填充界面 ，需要一个Adapter类
-    class ClassMenuDetailAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            L.d("tabDetailPagers.size::"+classMenu.content.size());
-            return classMenu.content.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            ClassPager pager = new ClassPager(mActivity);
-            View view = pager.mRootView;
-            container.addView(view);
-            pager.initData();
-            return view;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((View) object);
-        }
-    }
-
-
-
 
 
     //获取网络数据 CourseWeb
@@ -164,19 +157,19 @@ public class ClassPager extends BasePager {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                if (reader != null){
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (reader != null){
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (connection != null) {
+                        connection.disconnect();
                     }
                 }
-                if (connection != null) {
-                    connection.disconnect();
-                }
-            }
                 //END try catch finally
-        }
+            }
         }).start();
 
         L.d("getDataFromServer  结束了");
@@ -189,4 +182,44 @@ public class ClassPager extends BasePager {
         ClassMenu data = gson.fromJson(json, ClassMenu.class);  //classMenu里边已经是解析的结果
         this.classMenu = data;
     }
+
+
+
+    //给ViewPager填充界面 ，需要一个Adapter类
+    class ClassMenuDetailAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            L.d("tabDetailPagers.size::"+classMenu.content.size());
+            return classMenu.content.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == object;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            ClassPager pager = new ClassPager(mActivity);
+            View view = pager.mRootView;
+            container.addView(view);
+            pager.initData();
+            return view;
+        }
+
+        @Override
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+            container.removeView((View) object);
+        }
+    }
+
+
+
+
+
+
+
+
 }
