@@ -19,9 +19,56 @@
     <color name="blue_light">#aaaaff</color>
     <color name="blue_dark">#1983d1</color>
     <color name="blue_black">#1673b8</color>
+<!--    首页的文字显示-->
     <color name="tab_text_selected">#1296db</color>
     <color name="tab_text_normal">#7597b3</color>
 
     <color name="login_tab_text_selected">#991673b8</color>
     <color name="login_tab_text_normal">#ffffff</color>
+
+<!--    Fly的color配置-->
+    <color name="divider">#e2e2e2</color>
+    <color name="click_bg">#fafafa</color>
+
+    <color name="title">#313131</color>
+    <color name="subtitle">#757575</color>
+    <color name="tab_unselected">#b3b3b3</color>
+    <color name="progressbar_bg">#7cf5f5f5</color>
+    <color name="dowmload_subtitle">#89f5f5f5</color>
+
+    <color name="mine_header_bg">#272727</color>
+    <color name="mine_header_divider">#3a3c36</color>
+    <color name="mine_header_tip_text">#898c8a</color>
+    <color name="mine_text">#383838</color>
+
+    <color name="course_update_text">#2dcc7d</color>
+    <color name="course_text">#313131</color>
+    <color name="course_second_text">#b3b3b3</color>
+
+    <color name="jobline_text">#393939</color>
+    <color name="jobline_divider">#828282</color>
+    <color name="jobline_secode_text">#323232</color>
+
+    <color name="classify_text">#282828</color>
+    <color name="classify_seconde_text">#b3b3b3</color>
+    <color name="classify_tab_text">#ff918a</color>
+
+    <color name="raise_tab_unselected">#6f6863</color>
+    <color name="raise_text">#313131</color>
+    <color name="raise_second_text">#b8b8b8</color>
+    <color name="raise_bg">#fafafa</color>
+
+    <color name="video_bg">#88000000</color>
+    <color name="secondaryProgress">#ff918a</color>
+
+    <color name="cp_text">#313131</color>
+    <color name="cp_second_text">#939292</color>
+
+    <color name="comment_name">#898989</color>
+    <color name="comment_time">#b5b5b5</color>
+    <color name="comment_content">#313131</color>
+
+    <color name="intro_text">#313131</color>
+    <color name="intro_second_text">#6d6d6d</color>
+
 </resources>

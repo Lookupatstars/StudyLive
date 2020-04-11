@@ -9,6 +9,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.widget.RelativeLayout;
 
+import com.aaron.studylive.activitys.FlyMainActivity;
 import com.aaron.studylive.utils.PrefUtils;
 
 /**
@@ -65,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
                 intent = new Intent(SplashActivity.this,GuideActivity.class);
             }else {
                 //调到主页面
-                intent = new Intent(SplashActivity.this,LoginActivity.class);
+                intent = new Intent(SplashActivity.this, FlyMainActivity.class);
             }
             startActivity(intent);
             finish();

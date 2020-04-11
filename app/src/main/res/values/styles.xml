@@ -61,4 +61,11 @@
         <item name="android:focusable">true</item>
     </style>
 
+<!--    Loading 中使用-->
+    <style name="DialogProgress" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
 </resources>
