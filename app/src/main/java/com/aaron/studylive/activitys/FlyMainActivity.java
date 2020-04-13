@@ -21,6 +21,7 @@ import java.util.List;
 
 public class FlyMainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //声明底部标签栏和界面
     private ViewPager mViewPager;
     private RelativeLayout mTabHome;
     private RelativeLayout mTabClass;
@@ -30,15 +31,15 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
     private TextView mTvClass;
     private TextView mTVCourse;
     private TextView mTvMine;
-
+    //声明四个主要界面和界面列表
     private List<Fragment> mFragments;
     private HomeFragment mHomeFragment;
     private ClassFragment mClassFragment;
     private CourseFragment mCourseFragment;
     private MineFragment mMineFragment;
 
-    private Drawable drawable;// 为了设值图片
-    private static int[] mainMenuList = {
+    private Drawable drawable;// 给底部标签栏设置图片
+    private static int[] mainMenuList = { //底部标签栏图片
             R.drawable.home648a8a8a,R.drawable.discuss648a8a8a,
             R.drawable.course648a8a8a, R.drawable.mine648a8a8a
     };
@@ -50,19 +51,22 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
 
         //初始化布局
         initLayoutView();
-
-        setupContent();//设置显示内容
+        //设置显示内容
+        setupContent();
+        //设置底部Tab的点击事件
         setupTabClick();
 
     }
 
+    //初始化布局
     private void initLayoutView() {
+        //初始化主界面的内容界面和底部Tab
         mViewPager = findViewById(R.id.vp_fly_content);
         mTabHome = findViewById(R.id.tab_fly_home);
         mTabClass = findViewById(R.id.tab_fly_class);
         mTabCourse = findViewById(R.id.tab_fly_course);
         mTabMine = findViewById(R.id.tab_fly_mine);
-        //TextView的初始化
+        //底部Tab的TextView的初始化
         mTvHome = findViewById(R.id.tv_fly_home);
         mTvClass = findViewById(R.id.tv_fly_class);
         mTVCourse = findViewById(R.id.tv_fly_course);
@@ -70,10 +74,12 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    //设置显示内容
+    //设置主界面的显示内容
     private void setupContent() {
+        //初始化四个Fragment
         initFragments();
 
+        //四个Fragment的获取
         FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -87,59 +93,10 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         };
 
         mViewPager.setAdapter(adapter);
-        mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+        mViewPager.addOnPageChangeListener(mOnPageChangeListener); //界面监听
         mViewPager.setOffscreenPageLimit(mFragments.size());
     }
-
-
-    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            clearTabBackgroundWithTextColor();//每次点击之前，清除上次的点击
-
-            switch (position) {
-                case 0:
-                    drawable = getResources().getDrawable(R.drawable.home641296db);
-                    // 这一步必须要做，否则不会显示。
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    mTvHome.setCompoundDrawables(null, drawable, null, null);
-                    mTvHome.setTextColor(getResources().getColor(R.color.tab_text_selected));
-                    break;
-                case 1:
-                    drawable = getResources().getDrawable(R.drawable.discuss641296db);
-                    // 这一步必须要做，否则不会显示。
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    mTvClass.setCompoundDrawables(null, drawable, null, null);
-                    mTvClass.setTextColor(getResources().getColor(R.color.tab_text_selected));
-                    break;
-                case 2:
-                    drawable = getResources().getDrawable(R.drawable.course641296db);
-                    // 这一步必须要做，否则不会显示。
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    mTVCourse.setCompoundDrawables(null,drawable, null, null);
-                    mTVCourse.setTextColor(getResources().getColor(R.color.tab_text_selected));
-                    break;
-                case 3:
-                    drawable = getResources().getDrawable(R.drawable.mine641296db);
-                    // 这一步必须要做，否则不会显示。
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    mTvMine.setCompoundDrawables(null, drawable, null, null);
-                    mTvMine.setTextColor(getResources().getColor(R.color.tab_text_selected));
-                    break;
-            }
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    };
-
+    //初始化四个Fragment
     private void initFragments() {
         mFragments = new ArrayList<>();
         mHomeFragment = new HomeFragment();
@@ -153,15 +110,59 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         mFragments.add(mMineFragment);
     }
 
-    //每次点击之前，清除上次的点击
-    private void clearTabBackgroundWithTextColor() {
-        ClearImage(mTvHome,0);
-        ClearImage(mTvClass,1);
-        ClearImage(mTVCourse,2);
-        ClearImage(mTvMine,3);
+    //界面监听，当界面改变的时候，进行设置
+    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+        //界面被选中
+        @Override
+        public void onPageSelected(int position) {
+            clearTabBackgroundWithTextColor();//每次点击之前，清除上次的点击
+
+            switch (position) {
+                case 0:
+                    //设置DrawableTop 、DrawableLeft、DrawableRight、DrawableBottom图片
+                    setDrawableTopImage(R.drawable.home641296db,mTvHome);
+                    break;
+                case 1:
+                    setDrawableTopImage(R.drawable.discuss641296db,mTvClass);
+                    break;
+                case 2:
+                    setDrawableTopImage(R.drawable.course641296db,mTVCourse);
+                    break;
+                case 3:
+                    setDrawableTopImage(R.drawable.mine641296db,mTvMine);
+                    break;
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+
+    //设置DrawableTop 、DrawableLeft、DrawableRight、DrawableBottom图片
+    private void setDrawableTopImage(int id,TextView tv){
+        drawable = getResources().getDrawable(id);
+        // 这一步必须要做，否则不会显示。
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        tv.setCompoundDrawables(null, drawable, null, null);
+        tv.setTextColor(getResources().getColor(R.color.tab_text_selected));
     }
 
-    private void ClearImage(TextView tv, int position){
+    //每次点击之前，清除上次的点击
+    private void clearTabBackgroundWithTextColor() {
+        ClearImageAndColor(mTvHome,0);
+        ClearImageAndColor(mTvClass,1);
+        ClearImageAndColor(mTVCourse,2);
+        ClearImageAndColor(mTvMine,3);
+    }
+
+    //每次点击之前，清除上次的点击
+    private void ClearImageAndColor(TextView tv, int position){
         drawable = getResources().getDrawable(mainMenuList[position]);
         // 这一步必须要做，否则不会显示。
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -170,6 +171,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         tv.setTextColor(getResources().getColor(R.color.tab_text_normal));
     }
 
+    //Tab的每次点击事件
     private void setupTabClick() {
         mTabHome.setOnClickListener(this);
         mTabClass.setOnClickListener(this);
@@ -177,7 +179,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         mTabMine.setOnClickListener(this);
     }
 
-
+    //当点击到对应的Tab的时候，显示对应的界面
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

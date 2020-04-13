@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
     
     <com.aaron.studylive.views.FlyBanner
-        android:id="@+id/banner"
+        android:id="@+id/fb_banner"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         />
