@@ -15,6 +15,7 @@ import com.aaron.studylive.fragments.ClassFragment;
 import com.aaron.studylive.fragments.CourseFragment;
 import com.aaron.studylive.fragments.HomeFragment;
 import com.aaron.studylive.fragments.MineFragment;
+import com.aaron.studylive.view.NoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 public class FlyMainActivity extends AppCompatActivity implements View.OnClickListener {
 
     //声明底部标签栏和界面
-    private ViewPager mViewPager;
+    private NoScrollViewPager mViewPager;
     private RelativeLayout mTabHome;
     private RelativeLayout mTabClass;
     private RelativeLayout mTabCourse;

@@ -59,4 +59,12 @@
 
     </RelativeLayout>
 
+    <com.aaron.studylive.views.RefreshListView
+        android:id="@+id/refresh_listview_class"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:scrollbars="none"
+        />
+
 </LinearLayout>

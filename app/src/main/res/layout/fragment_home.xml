@@ -11,14 +11,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary">
 
-        <ImageView
-            android:id="@+id/iv_launch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/launch"
-            />
-
 <!--        <ImageView-->
 <!--            android:id="@+id/iv_study_latest"-->
 <!--            android:layout_width="26dp"-->
@@ -35,8 +27,7 @@
             android:layout_marginLeft="10dp"
             android:src="@drawable/search_selected"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/iv_launch" />
+            android:layout_marginRight="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,7 +38,6 @@
             android:layout_toRightOf="@+id/iv_search"
             android:textSize="26sp"
             />
-
     </RelativeLayout>
 
     <com.aaron.studylive.views.RefreshListView

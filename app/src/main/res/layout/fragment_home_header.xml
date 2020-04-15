@@ -54,14 +54,6 @@
             android:layout_height="wrap_content"
             android:text="课程列表"
             android:textSize="14sp" />
-        <TextView
-            android:id="@+id/tv_subscribe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ 订阅"
-            android:textSize="12sp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
 

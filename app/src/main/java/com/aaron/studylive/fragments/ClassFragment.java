@@ -1,39 +1,56 @@
 package com.aaron.studylive.fragments;
 
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.activitys.CoursePlayActivity;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
-import com.aaron.studylive.bean.BannerData;
 import com.aaron.studylive.bean.CourseListData;
+import com.aaron.studylive.utils.HttpRequest;
+import com.aaron.studylive.utils.HttpUrl;
+import com.aaron.studylive.utils.L;
 import com.aaron.studylive.utils.Loading;
-import com.aaron.studylive.views.FlyBanner;
+import com.aaron.studylive.views.RefreshListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
+import butterknife.Bind;
 
 public class ClassFragment extends BaseFragment implements View.OnClickListener,
-        AdapterView.OnItemClickListener {
+        AdapterView.OnItemClickListener, RefreshListView.OnRefreshListener{
 
     //分类、扫描、搜索、最近学习
-    private ImageView mIvClassify, mIvScan,mIvSearch,mIvStudyLatest;
+    @Bind(R.id.iv_search)
+    ImageView mIvSearch;
+
+    @Bind(R.id.iv_classify)
+    ImageView mIvClassify;
+
+    @Bind(R.id.iv_scan)
+    ImageView mIvScan;
+
+    @Bind(R.id.iv_study_latest)
+    ImageView mIvStudyLatest;
+
+    @Bind(R.id.refresh_listview_class)
+    RefreshListView mRefreshListView;
+
+
     private CourseListAdapter mAdapter;
 
     private List<CourseListData> mCourseDatas;
-
-    private List<BannerData> mBannerDatas;
-
-    private View mHeaderView;
-
-    private FlyBanner mBanner;
-
-    private LinearLayout mTabOne;//求职路线计划
-
-    private LinearLayout mTabTwo;//加薪利器计划
 
     private Loading mLoading;
 
@@ -53,13 +70,170 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
 
     }
 
-    @Override
-    public void onClick(View v) {
+    /**
+     * 设置点击事件
+     */
+    private void setupClick() {
+        mIvSearch.setOnClickListener(this);
+    }
 
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+//            case R.id.iv_classify:
+//                Intent intent1 = new Intent(getActivity(), ClassifyActivity.class);
+//                startActivity(intent1);
+//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
+//                break;
+//            case R.id.tab_one:
+//                Intent intent2 = new Intent(getActivity(), JobLineActivity.class);
+//                startActivity(intent2);
+//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
+//                break;
+//            case R.id.tab_two:
+//                Intent intent3 = new Intent(getActivity(), RaiseActivity.class);
+//                startActivity(intent3);
+//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
+//                break;
+            case R.id.iv_scan:
+
+                break;
+            case R.id.iv_search:
+
+                break;
+            case R.id.iv_study_latest:
+
+                break;
+        }
+    }
+
+
+    /**
+     * 解析课程列表数据
+     * @param s
+     */
+    private void analysisCourseListJsonData(String s) {
+        L.d("analysisCourseListJsonData::SSS"+s);
+        try {
+            JSONObject object = new JSONObject(s);
+            int errorCode = object.getInt("code");
+            mRefreshListView.refreshComplete();
+
+            if (errorCode == 0) {
+                JSONArray array =object.getJSONObject("content").getJSONArray("list");
+                L.d("+2::"+array);
+                for (int i = 0; i< array.length(); i++) {
+                    CourseListData data = new CourseListData();
+                    object = array.getJSONObject(i);
+
+                    L.d("analysisCourseListJsonData::"+i);
+                    L.d("id::"+object.getInt("id"));
+                    L.d("summary:::"+object.getString("summary"));
+                    L.d("view_count::"+object.getInt("view_count"));
+                    L.d("name:::"+object.getString("name"));
+                    L.d("update_time::"+object.getString("update_time"));
+                    L.d("type:::"+object.getInt("type"));
+
+                    data.setId(object.getInt("id"));
+                    data.setName(object.getString("name"));
+                    data.setDesc(object.getString("summary"));
+                    data.setNumbers(object.getInt("view_count"));
+//                    data.setUpdateTime(object.getLong("update_time"));
+                    data.setCoursetype(object.getInt("type"));
+
+//                    data.setLastTime(object.getLong("last_time"));
+//                    data.setChapterSeq(object.getInt("chapter_seq"));
+//                    data.setMediaSeq(object.getInt("media_seq"));
+
+//                    debug(data.toString());
+
+                    mCourseDatas.add(data);
+                }
+                hideLoading();
+                mAdapter.notifyDataSetChanged();
+
+                if (mIsRefshing == true) {
+                    toast("刷新成功");
+                }
+                mIsRefshing = false;
+                mIsLoadingMore = false;
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            mRefreshListView.refreshComplete();
+        }
+    }
+
+
+    @Override
+    public void onRefresh() {
+        mCurrentPage = 1;
+        mIsRefshing = true;
+        mCourseDatas.clear();
+        new CourseListAsyncTask().execute();
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (!mIsLoadingMore) {
+            mCurrentPage++;
+            mIsLoadingMore = true;
+            new CourseListAsyncTask().execute();
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        CourseListData data = mCourseDatas.get(position-2);
+        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
+        intent.putExtra("id", data.getId());
+        intent.putExtra("title", data.getName());
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
     }
+
+
+    private class CourseListAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String url = HttpUrl.getInstance().getCourseListUrl();
+            Map<String, String> params = HttpUrl.getInstance().getCourseListParams(mCurrentPage);
+            String result = HttpRequest.getInstance().POST(url, params);
+            L.d("CourseListAsyncTask"+result);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            analysisCourseListJsonData(s);
+        }
+    }
+
+
+    private void showLoading() {
+        mLoading.show();
+        mRefreshListView.setVisibility(View.GONE);
+    }
+
+    private void hideLoading() {
+        mLoading.hide();
+        mRefreshListView.setVisibility(View.VISIBLE);
+    }
+
+
+    private void toast(String str) {
+        Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+    }
+
+    private void debug(String str) {
+        Log.d(CourseFragment.class.getSimpleName(), str);
+    }
+
+
 }

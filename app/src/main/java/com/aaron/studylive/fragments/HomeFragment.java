@@ -3,6 +3,9 @@ package com.aaron.studylive.fragments;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +15,19 @@ import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.activitys.CoursePlayActivity;
+import com.aaron.studylive.adapter.LiveClassAdapter;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.BannerData;
 import com.aaron.studylive.bean.CourseListData;
+import com.aaron.studylive.bean.LiveClassInfo;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
 import com.aaron.studylive.utils.Loading;
 import com.aaron.studylive.views.FlyBanner;
 import com.aaron.studylive.views.RefreshListView;
+import com.aaron.studylive.widget.SpacesItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +40,8 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.aaron.studylive.views.FlyBanner.CENTER;
+
 public class HomeFragment extends BaseFragment implements View.OnClickListener
         , RefreshListView.OnRefreshListener , AdapterView.OnItemClickListener {
 
@@ -42,7 +50,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     @Bind(R.id.refresh_listview)
     RefreshListView mRefreshListView;
-
 
     private FlyBanner mBanner;
     private List<CourseListData> mCourseDatas;
@@ -53,6 +60,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
     private int mCurrentPage = 1;//当前页面
     private boolean mIsRefshing = false;//是否正在刷新
     private boolean mIsLoadingMore = false;//是否正在加载更多
+    private RecyclerView rv_hor_live_class;
 
 
     //获取到activity
@@ -75,6 +83,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_home_header,null);
         mRefreshListView.addHeaderView(mHeaderView);
         mBanner = ButterKnife.findById(mHeaderView,R.id.fb_banner);
+
+        //初始化直播公开课
+        // 从布局文件中获取循环视图
+        rv_hor_live_class = mHeaderView.findViewById(R.id.rv_hor_live_class);
+        // 创建一个横向的瀑布流布局管理器
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(1, RecyclerView.HORIZONTAL);
+        // 设置循环视图的布局管理器
+        rv_hor_live_class.setLayoutManager(manager);
+        // 构建一个直播公开课信息列表的瀑布流适配器
+        LiveClassAdapter liveClassAdapter = new LiveClassAdapter(getActivity(), LiveClassInfo.getDefaultStag());
+        // 设置瀑布流列表的点击监听器
+        liveClassAdapter.setOnItemClickListener(liveClassAdapter);
+        // 给rv_hor_live_class设置直播公开课信息瀑布流适配器
+        rv_hor_live_class.setAdapter(liveClassAdapter);
+        // 设置rv_hor_live_class的默认动画效果
+        rv_hor_live_class.setItemAnimator(new DefaultItemAnimator());
+        // 给rv_hor_live_class添加列表项之间的空白装饰
+        rv_hor_live_class.addItemDecoration(new SpacesItemDecoration(1));
 
         mCourseDatas = new ArrayList<>();
         mAdapter = new CourseListAdapter(getActivity(), mCourseDatas);
@@ -137,7 +163,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
             if (errorCode == 0) {
                 mBannerDatas = new ArrayList<>();
                 JSONArray array =object.getJSONObject("content").getJSONArray("list");
-                L.d("+2::"+array);
+//                L.d("+2::"+array);
                 for (int i = 0; i < array.length(); i++) {
                     BannerData data = new BannerData();
                     object = array.getJSONObject(i);
@@ -147,7 +173,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
                     //每当数据不对的时候，总是会停止，
 
                     data.setName(object.getString("name"));
-                    data.setPic(object.getString("img"));
+//                    data.setPic(object.getString("img"));
 //                    debug(data.toString());
                     mBannerDatas.add(data);
                 }
@@ -163,12 +189,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
      * 设置广告栏
      */
     private void setBanner() {
-        List<String> imgs = new ArrayList<>();
-        for (BannerData data : mBannerDatas) {
-            imgs.add(data.getPic());  //??????????????????
-        }
+//        List<String> imgs = new ArrayList<>();
+//        for (BannerData data : mBannerDatas) {
+//            imgs.add(data.getPic());  //??????????????????
+//        }
+        List<Integer> imgs = new ArrayList<>();
+        imgs.add(R.drawable.banner1);
+        imgs.add(R.drawable.banner2);
+        imgs.add(R.drawable.banner3);
+        imgs.add(R.drawable.banner4);
+        imgs.add(R.drawable.banner_5);
         //设置的网络图片
-        mBanner.setImagesUrl(imgs);
+        mBanner.setImages(imgs);
+        mBanner.setPointsIsVisible(true);
+        mBanner.setPoinstPosition(CENTER);
         mBanner.setOnItemClickListener(new FlyBanner.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -183,31 +217,34 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
      * @param s
      */
     private void analysisCourseListJsonData(String s) {
+        L.d("analysisCourseListJsonData::SSS"+s);
         try {
             JSONObject object = new JSONObject(s);
             int errorCode = object.getInt("code");
             mRefreshListView.refreshComplete();
 
             if (errorCode == 0) {
-                JSONArray array = object.getJSONArray("content");
-                L.d("analysisCourseListJsonData:array"+array);
+                JSONArray array =object.getJSONObject("content").getJSONArray("list");
+                L.d("+2::"+array);
                 for (int i = 0; i< array.length(); i++) {
                     CourseListData data = new CourseListData();
                     object = array.getJSONObject(i);
 
+                    L.d("analysisCourseListJsonData::"+i);
+                    L.d("id::"+object.getInt("id"));
+                    L.d("summary:::"+object.getString("summary"));
+                    L.d("view_count::"+object.getInt("view_count"));
+                    L.d("name:::"+object.getString("name"));
+                    L.d("update_time::"+object.getString("update_time"));
+                    L.d("type:::"+object.getInt("type"));
+
                     data.setId(object.getInt("id"));
                     data.setName(object.getString("name"));
-                    data.setDesc(object.getString("desc"));
-                    data.setIsLearned(object.getInt("is_learned"));
-                    data.setCompanyId(object.getInt("company_id"));
-                    data.setNumbers(object.getInt("numbers"));
-                    data.setUpdateTime(object.getLong("update_time"));
-                    data.setCoursetype(object.getInt("coursetype"));
-                    data.setDuration(object.getLong("duration"));
-                    data.setFinished(object.getInt("finished"));
-                    data.setIsFollow(object.getInt("is_follow"));
-                    data.setMaxChapterSeq(object.getInt("max_chapter_seq"));
-                    data.setMaxMediaSeq(object.getInt("max_media_seq"));
+                    data.setDesc(object.getString("summary"));
+                    data.setNumbers(object.getInt("view_count"));
+//                    data.setUpdateTime(object.getLong("update_time"));
+                    data.setCoursetype(object.getInt("type"));
+
 //                    data.setLastTime(object.getLong("last_time"));
 //                    data.setChapterSeq(object.getInt("chapter_seq"));
 //                    data.setMediaSeq(object.getInt("media_seq"));
