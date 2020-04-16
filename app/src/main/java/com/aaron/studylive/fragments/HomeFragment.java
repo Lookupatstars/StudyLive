@@ -40,8 +40,6 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static com.aaron.studylive.views.FlyBanner.CENTER;
-
 public class HomeFragment extends BaseFragment implements View.OnClickListener
         , RefreshListView.OnRefreshListener , AdapterView.OnItemClickListener {
 
@@ -74,7 +72,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         initView();
         setupClick();
         new BannerAsyncTask().execute();
-        new CourseListAsyncTask().execute();
+        new CourseListHotAsyncTask().execute();
 
     }
 
@@ -202,7 +200,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         //设置的网络图片
         mBanner.setImages(imgs);
         mBanner.setPointsIsVisible(true);
-        mBanner.setPoinstPosition(CENTER);
         mBanner.setOnItemClickListener(new FlyBanner.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -216,7 +213,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
      * 解析课程列表数据
      * @param s
      */
-    private void analysisCourseListJsonData(String s) {
+    private void analysisCourseListHotJsonData(String s) {
         L.d("analysisCourseListJsonData::SSS"+s);
         try {
             JSONObject object = new JSONObject(s);
@@ -276,7 +273,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         mCurrentPage = 1;
         mIsRefshing = true;
         mCourseDatas.clear();
-        new CourseListAsyncTask().execute();
+        new CourseListHotAsyncTask().execute();
     }
 
     @Override
@@ -284,7 +281,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         if (!mIsLoadingMore) {
             mCurrentPage++;
             mIsLoadingMore = true;
-            new CourseListAsyncTask().execute();
+            new CourseListHotAsyncTask().execute();
         }
     }
 
@@ -318,12 +315,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private class CourseListAsyncTask extends AsyncTask<String, Void, String> {
+    private class CourseListHotAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = HttpUrl.getInstance().getCourseListUrl();
-            Map<String, String> params = HttpUrl.getInstance().getCourseListParams(mCurrentPage);
+            String url = HttpUrl.getInstance().getCourseListUrlHot();
+            Map<String, String> params = HttpUrl.getInstance().getCourseListHotParams(mCurrentPage);
             String result = HttpRequest.getInstance().POST(url, params);
             L.d("CourseListAsyncTask"+result);
             return result;
@@ -333,7 +330,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            analysisCourseListJsonData(s);
+            analysisCourseListHotJsonData(s);
         }
     }
 

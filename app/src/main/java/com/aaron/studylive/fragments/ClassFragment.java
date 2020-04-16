@@ -2,13 +2,13 @@ package com.aaron.studylive.fragments;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.activitys.ClassifyActivity;
 import com.aaron.studylive.activitys.CoursePlayActivity;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,10 @@ import butterknife.Bind;
 
 public class ClassFragment extends BaseFragment implements View.OnClickListener,
         AdapterView.OnItemClickListener, RefreshListView.OnRefreshListener{
+
+    public static final String FRUIT_NAME = "fruit_name";
+
+    public static final String FRUIT_IMAGE_ID = "fruit_image_id";
 
     //分类、扫描、搜索、最近学习
     @Bind(R.id.iv_search)
@@ -67,6 +72,20 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     protected void init() {
+        initView();
+        setupClick();
+
+        new CourseListNewAsyncTask().execute();
+    }
+
+    private void initView(){
+        mCourseDatas = new ArrayList<>();
+        mAdapter = new CourseListAdapter(getActivity(),mCourseDatas);
+        mRefreshListView.setAdapter(mAdapter);
+        mRefreshListView.setOnRefreshListener(this);
+        mRefreshListView.setOnItemClickListener(this);
+        mLoading = Loading.getInstance(getActivity());
+        showLoading();
 
     }
 
@@ -75,17 +94,21 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
      */
     private void setupClick() {
         mIvSearch.setOnClickListener(this);
+        mIvClassify.setOnClickListener(this);
+        mIvScan.setOnClickListener(this);
+        mIvStudyLatest.setOnClickListener(this);
     }
 
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-//            case R.id.iv_classify:
-//                Intent intent1 = new Intent(getActivity(), ClassifyActivity.class);
-//                startActivity(intent1);
-//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
-//                break;
+            case R.id.iv_classify:
+                toast("点击了分类信息");
+                Intent intent1 = new Intent(getActivity(), ClassifyActivity.class);
+                startActivity(intent1);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
+                break;
 //            case R.id.tab_one:
 //                Intent intent2 = new Intent(getActivity(), JobLineActivity.class);
 //                startActivity(intent2);
@@ -97,12 +120,14 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
 //                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
 //                break;
             case R.id.iv_scan:
-
+                toast("点击了扫描信息");
                 break;
             case R.id.iv_search:
+                toast("点击了搜索信息");
 
                 break;
             case R.id.iv_study_latest:
+                toast("点击了最近学习信息");
 
                 break;
         }
@@ -113,12 +138,12 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
      * 解析课程列表数据
      * @param s
      */
-    private void analysisCourseListJsonData(String s) {
+    private void analysisCourseListNewJsonData(String s) {
         L.d("analysisCourseListJsonData::SSS"+s);
         try {
             JSONObject object = new JSONObject(s);
             int errorCode = object.getInt("code");
-            mRefreshListView.refreshComplete();
+//            mRefreshListView.refreshComplete();
 
             if (errorCode == 0) {
                 JSONArray array =object.getJSONObject("content").getJSONArray("list");
@@ -163,7 +188,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
 
         } catch (JSONException e) {
             e.printStackTrace();
-            mRefreshListView.refreshComplete();
+//            mRefreshListView.refreshComplete();
         }
     }
 
@@ -173,7 +198,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
         mCurrentPage = 1;
         mIsRefshing = true;
         mCourseDatas.clear();
-        new CourseListAsyncTask().execute();
+        new CourseListNewAsyncTask().execute();
     }
 
     @Override
@@ -181,7 +206,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
         if (!mIsLoadingMore) {
             mCurrentPage++;
             mIsLoadingMore = true;
-            new CourseListAsyncTask().execute();
+            new CourseListNewAsyncTask().execute();
         }
     }
 
@@ -195,13 +220,12 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
         getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
     }
 
-
-    private class CourseListAsyncTask extends AsyncTask<String, Void, String> {
+    private class CourseListNewAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = HttpUrl.getInstance().getCourseListUrl();
-            Map<String, String> params = HttpUrl.getInstance().getCourseListParams(mCurrentPage);
+            String url = HttpUrl.getInstance().getCourseListUrlNew();
+            Map<String, String> params = HttpUrl.getInstance().getCourseListNewParams(mCurrentPage);
             String result = HttpRequest.getInstance().POST(url, params);
             L.d("CourseListAsyncTask"+result);
             return result;
@@ -211,7 +235,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            analysisCourseListJsonData(s);
+            analysisCourseListNewJsonData(s);
         }
     }
 
@@ -230,10 +254,5 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
     private void toast(String str) {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
     }
-
-    private void debug(String str) {
-        Log.d(CourseFragment.class.getSimpleName(), str);
-    }
-
 
 }

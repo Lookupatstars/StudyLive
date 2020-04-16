@@ -71,13 +71,13 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
         headerViewHeight = headerView.getMeasuredHeight();
         topPadding(-headerViewHeight);
 
-        //添加动画
+//        添加动画
         tip = (TextView) headerView.findViewById(R.id.tip);
         img = (ImageView) headerView.findViewById(R.id.img);
         img.setBackgroundResource(R.drawable.refresh_anim);
         drawableAnim = (AnimationDrawable) img.getBackground();
 
-        //关闭view的OverScroll
+//        关闭view的OverScroll
         setOverScrollMode(OVER_SCROLL_NEVER);
         setOnScrollListener(this);
         state = NONE;
@@ -88,7 +88,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
 
     /**
      * 通知父布局，占用的宽，高
-     * @param view
+//     * @param view
      */
     private void measureView(View view) {
         ViewGroup.LayoutParams p = view.getLayoutParams();
@@ -147,17 +147,17 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
                         }
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        onMove(ev);
+//                        onMove(ev);
                         break;
                     case MotionEvent.ACTION_UP:
                         if (state == RELESE) {
                             state = REFLASHING;
                             //加载最新数据
-                            refreshViewByState();
+//                            refreshViewByState();
                             onRefreshListener.onRefresh();
                         } else if (state == PULL) {
                             state = NONE;
-                            refreshViewByState();
+//                            refreshViewByState();
                             setSelection(0);
                         }
                         isRemark = false;
@@ -165,7 +165,6 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
                 }
             }
         }
-
         return super.onTouchEvent(ev);
     }
 
@@ -173,6 +172,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
      * 判断移动过程操作
      * @param ev
      */
+
     private void onMove(MotionEvent ev) {
 
 
@@ -238,10 +238,10 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
 
         }
     }
-
     /**
      * 根据当前状态，改变界面显示
      */
+
     private void refreshViewByState() {
         switch (state) {
             case NONE:
@@ -270,7 +270,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
         isEnd = true;
         state = NONE;
 
-        refreshViewByState();
+//        refreshViewByState();
     }
 
     private OnRefreshListener onRefreshListener;

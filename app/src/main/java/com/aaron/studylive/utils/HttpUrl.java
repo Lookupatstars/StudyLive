@@ -14,16 +14,15 @@ public class HttpUrl {
     private String mHostName = "http://218.28.238.170:8180";
     //Banner请求URL  Banner
     private String mBannerUrl = mHostName + "/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1";
-    //课程列表请求URL
-    private String mCourseListUrl = mHostName + "/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1";
+    //课程列表请求URL（最新）
+    private String mCourseListUrlNew = mHostName + "/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1";
+    //课程列表请求URL（最新）
+    private String mCourseListUrlHot = mHostName + "/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=2";
     //课程分类列表URL
-    private String mClassifyCourseUrl = mHostName + "/api3/newcourseskill";
-    //求职路线计划URL
-    private String mJobLineUrl = mHostName +"/api3/program";
-    //加薪利器URL
-    private String mRaiseweaponUrl = mHostName + "/api3/program";
-    //分类课程列表
-    private String mClassifyListUrl = mHostName+"/api3/courselist_ver2";
+    private String mClassifyCourseUrl = mHostName + "/courseWeb/courseWeb/getSort";
+
+    //分类课程列表  http://218.28.238.170:8180/courseWeb/courseWeb/getType
+    private String mClassifyListUrl = mHostName+"/courseWeb/courseWeb/getType";
     //社区文章
     private String mArticleListUrl = mHostName + "/api3/articlelist";
     //文章内容
@@ -58,20 +57,15 @@ public class HttpUrl {
         return mBannerUrl;
     }
 
-    public String getCourseListUrl() {
-        return mCourseListUrl;
+    public String getCourseListUrlNew() {
+        return mCourseListUrlNew;
+    }
+    public String getCourseListUrlHot() {
+        return mCourseListUrlHot;
     }
 
     public String getClassifyCourseUrl() {
         return mClassifyCourseUrl;
-    }
-
-    public String getJobLineUrl() {
-        return mJobLineUrl;
-    }
-
-    public String getRaiseweaponUrl() {
-        return mRaiseweaponUrl;
     }
 
     public String getClassifListUrl() {
@@ -121,11 +115,26 @@ public class HttpUrl {
 
 
     /**
-     * 获取课程列表参数
+     * 获取课程列表参数 最新
      * @param page
      * @return
      */
-    public Map<String, String> getCourseListParams(int page) {
+    public Map<String, String> getCourseListNewParams(int page) {
+        Map<String, String> params = new HashMap<>();
+        params.put("timestamp", System.currentTimeMillis()+"");
+        params.put("page", page+"");
+        params.put("uid", "2902109");
+        params.put("token", "933b40289b2a668bb882e2261a759267");
+
+        return params;
+    }
+
+    /**
+     * 获取课程列表参数 最热
+     * @param page
+     * @return
+     */
+    public Map<String, String> getCourseListHotParams(int page) {
         Map<String, String> params = new HashMap<>();
         params.put("timestamp", System.currentTimeMillis()+"");
         params.put("page", page+"");

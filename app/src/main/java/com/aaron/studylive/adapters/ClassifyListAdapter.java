@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.studylive.R;
-import com.aaron.studylive.bean.CourseListData;
+import com.aaron.studylive.bean.ClassifyListData;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -17,18 +17,18 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 /**
- * Created by recker on 16/5/24.
+ * Created by recker on 16/5/31.
  */
-public class CourseListAdapter extends BaseAdapter {
+public class ClassifyListAdapter extends BaseAdapter {
 
-    private List<CourseListData> listDatas;
+    private List<ClassifyListData> listDatas;
 
     private LayoutInflater inflater;
 
     private Context mContext;
 
-    public CourseListAdapter(Context context, List<CourseListData> list) {
-        listDatas = list;
+    public ClassifyListAdapter(Context context, List<ClassifyListData> list) {
+        this.listDatas = list;
         inflater = LayoutInflater.from(context);
         mContext = context;
     }
@@ -51,13 +51,12 @@ public class CourseListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
-        CourseListData data = listDatas.get(i);
+        ClassifyListData data = listDatas.get(i);
         ViewHodler hodler = null;
 
         if (view == null) {
             hodler = new ViewHodler();
-            view = inflater.inflate(R.layout.fragment_course_item, null);
+            view = inflater.inflate(R.layout.fragment_classify_list_ite, null);
 
             hodler.img = ButterKnife.findById(view, R.id.img);
             hodler.title = ButterKnife.findById(view, R.id.tv_title);
@@ -69,7 +68,7 @@ public class CourseListAdapter extends BaseAdapter {
             hodler = (ViewHodler) view.getTag();
         }
 
-        Picasso.with(mContext).load(data.getPic()).placeholder(R.drawable.skirt02).into(hodler.img);
+        Picasso.with(mContext).load(data.getPic()).placeholder(R.drawable.course_default_bg).into(hodler.img);
         hodler.title.setText(data.getName()+"");
         hodler.numbers.setText(data.getNumbers()+"");
 
@@ -86,14 +85,11 @@ public class CourseListAdapter extends BaseAdapter {
         return view;
     }
 
-
-
     private static class ViewHodler {
         ImageView img;
         TextView title;
         TextView numbers;
         TextView finished;
     }
-
 
 }

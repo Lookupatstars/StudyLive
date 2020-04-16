@@ -21,6 +21,10 @@ android {
     sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/color'] } }
 }
 
+//Gson解析数据书写技巧
+//逢{}创建对象，[]创建集合ArrayList
+//解析名字要一致
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -39,4 +43,5 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.3.2'
     implementation project(path: ':vitamio')
     implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation 'com.android.support:palette-v7:28.0.0'
 }

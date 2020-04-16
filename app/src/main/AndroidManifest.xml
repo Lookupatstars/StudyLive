@@ -19,6 +19,9 @@
         <activity android:name=".fragments.CourseFragment" />
         <activity android:name=".fragments.HomeFragment" />
         <activity android:name=".activitys.FlyMainActivity" />
+        <activity android:name=".activitys.ClassifyActivity"/>
+        <activity android:name=".activitys.ClassifyListActivity"/>
+        <activity android:name=".activitys.CoursePlayActivity"/>
         <activity android:name=".home.RecommendActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity" />

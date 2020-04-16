@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_class_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/selector_click"
@@ -12,7 +11,7 @@
         android:layout_width="125dp"
         android:layout_height="70dp"
         android:scaleType="fitXY"
-        android:src="@drawable/skirt02"
+        android:src="@drawable/course_default_bg"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
 
