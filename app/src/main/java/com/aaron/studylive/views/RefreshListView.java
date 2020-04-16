@@ -3,7 +3,6 @@ package com.aaron.studylive.views;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -147,17 +146,17 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
                         }
                         break;
                     case MotionEvent.ACTION_MOVE:
-//                        onMove(ev);
+                        onMove(ev);
                         break;
                     case MotionEvent.ACTION_UP:
                         if (state == RELESE) {
                             state = REFLASHING;
                             //加载最新数据
-//                            refreshViewByState();
+                            refreshViewByState();
                             onRefreshListener.onRefresh();
                         } else if (state == PULL) {
                             state = NONE;
-//                            refreshViewByState();
+                            refreshViewByState();
                             setSelection(0);
                         }
                         isRemark = false;
@@ -270,7 +269,7 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
         isEnd = true;
         state = NONE;
 
-//        refreshViewByState();
+        refreshViewByState();
     }
 
     private OnRefreshListener onRefreshListener;
@@ -283,9 +282,5 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
     public interface OnRefreshListener {
         void onRefresh();
         void onLoadMore();
-    }
-
-    private void debug(String str) {
-        Log.d(RefreshListView.class.getSimpleName(), str);
     }
 }

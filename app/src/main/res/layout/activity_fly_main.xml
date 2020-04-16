@@ -68,9 +68,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/tab_fly_course">
+            android:id="@+id/tab_fly_download">
             <TextView
-                android:id="@+id/tv_fly_course"
+                android:id="@+id/tv_fly_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"

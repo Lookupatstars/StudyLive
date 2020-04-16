@@ -204,7 +204,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onLoadMore() {
         if (!mIsLoadingMore) {
-            mCurrentPage++;
+            mCurrentPage++; //可以通过currentPage来控制刷新多少页？？
             mIsLoadingMore = true;
             new CourseListNewAsyncTask().execute();
         }

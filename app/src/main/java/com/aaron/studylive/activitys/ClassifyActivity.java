@@ -15,7 +15,6 @@ import com.aaron.studylive.base.BaseActivity;
 import com.aaron.studylive.bean.ClassifyData;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
-import com.aaron.studylive.utils.L;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,8 +106,8 @@ public class ClassifyActivity extends BaseActivity implements
 
             if (errorCode == 0) {
 //                ClassifyData data = new ClassifyData();
-//                object = object.getJSONObject("content");
-//                L.d("analysisJsonData::object::"+object);
+//                object = object.getJSONObject("data");
+//
 //                data.setId(object.getInt("id"));
 //                data.setName(object.getString("name"));
 //                data.setPic(object.getString("pic"));
@@ -117,7 +116,6 @@ public class ClassifyActivity extends BaseActivity implements
 //                listDatas.add(data);
 
                 JSONArray array = object.getJSONArray("content");
-                L.d("analysisJsonData::array::"+array);
                 for (int i = 0; i < array.length(); i++) {
                     ClassifyData data1 = new ClassifyData();
                     object = array.getJSONObject(i);

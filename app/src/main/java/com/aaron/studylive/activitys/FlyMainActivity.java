@@ -1,18 +1,18 @@
 package com.aaron.studylive.activitys;
 
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.fragments.ClassFragment;
-import com.aaron.studylive.fragments.CourseFragment;
+import com.aaron.studylive.fragments.DownloadFragment;
 import com.aaron.studylive.fragments.HomeFragment;
 import com.aaron.studylive.fragments.MineFragment;
 import com.aaron.studylive.view.NoScrollViewPager;
@@ -26,17 +26,17 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
     private NoScrollViewPager mViewPager;
     private RelativeLayout mTabHome;
     private RelativeLayout mTabClass;
-    private RelativeLayout mTabCourse;
+    private RelativeLayout mTabDownload;
     private RelativeLayout mTabMine;
     private TextView mTvHome;
     private TextView mTvClass;
-    private TextView mTVCourse;
+    private TextView mTVDownload;
     private TextView mTvMine;
     //声明四个主要界面和界面列表
     private List<Fragment> mFragments;
     private HomeFragment mHomeFragment;
     private ClassFragment mClassFragment;
-    private CourseFragment mCourseFragment;
+    private DownloadFragment mDownloadFragment;
     private MineFragment mMineFragment;
 
     private Drawable drawable;// 给底部标签栏设置图片
@@ -65,12 +65,12 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         mViewPager = findViewById(R.id.vp_fly_content);
         mTabHome = findViewById(R.id.tab_fly_home);
         mTabClass = findViewById(R.id.tab_fly_class);
-        mTabCourse = findViewById(R.id.tab_fly_course);
+        mTabDownload = findViewById(R.id.tab_fly_download);
         mTabMine = findViewById(R.id.tab_fly_mine);
         //底部Tab的TextView的初始化
         mTvHome = findViewById(R.id.tv_fly_home);
         mTvClass = findViewById(R.id.tv_fly_class);
-        mTVCourse = findViewById(R.id.tv_fly_course);
+        mTVDownload = findViewById(R.id.tv_fly_download);
         mTvMine = findViewById(R.id.tv_fly_mine);
 
     }
@@ -102,12 +102,12 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         mFragments = new ArrayList<>();
         mHomeFragment = new HomeFragment();
         mClassFragment = new ClassFragment();
-        mCourseFragment = new CourseFragment();
+        mDownloadFragment = new DownloadFragment();
         mMineFragment = new MineFragment();
 
         mFragments.add(mHomeFragment);
         mFragments.add(mClassFragment);
-        mFragments.add(mCourseFragment);
+        mFragments.add(mDownloadFragment);
         mFragments.add(mMineFragment);
     }
 
@@ -131,7 +131,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
                     setDrawableTopImage(R.drawable.discuss641296db,mTvClass);
                     break;
                 case 2:
-                    setDrawableTopImage(R.drawable.course641296db,mTVCourse);
+                    setDrawableTopImage(R.drawable.course641296db,mTVDownload);
                     break;
                 case 3:
                     setDrawableTopImage(R.drawable.mine641296db,mTvMine);
@@ -158,7 +158,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
     private void clearTabBackgroundWithTextColor() {
         ClearImageAndColor(mTvHome,0);
         ClearImageAndColor(mTvClass,1);
-        ClearImageAndColor(mTVCourse,2);
+        ClearImageAndColor(mTVDownload,2);
         ClearImageAndColor(mTvMine,3);
     }
 
@@ -176,7 +176,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
     private void setupTabClick() {
         mTabHome.setOnClickListener(this);
         mTabClass.setOnClickListener(this);
-        mTabCourse.setOnClickListener(this);
+        mTabDownload.setOnClickListener(this);
         mTabMine.setOnClickListener(this);
     }
 
@@ -190,7 +190,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.tab_fly_class:
                 mViewPager.setCurrentItem(1);
                 break;
-            case R.id.tab_fly_course:
+            case R.id.tab_fly_download:
                 mViewPager.setCurrentItem(2);
                 break;
             case R.id.tab_fly_mine:

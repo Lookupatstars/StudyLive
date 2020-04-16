@@ -73,11 +73,11 @@ public class ClassifyListFragment extends BaseFragment implements
 
         try {
             JSONObject object = new JSONObject(s);
-            int errorCode = object.getInt("errorCode");
+            int errorCode = object.getInt("code");
             mListView.refreshComplete();
 
-            if (errorCode == 1000) {
-                JSONArray array = object.getJSONArray("data");
+            if (errorCode == 0) {
+                JSONArray array = object.getJSONArray("content");
 
                 for (int i = 0; i < array.length(); i++) {
                     object = array.getJSONObject(i);
