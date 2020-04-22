@@ -9,11 +9,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.constant.GlobalVaries;
+
 import butterknife.ButterKnife;
 
-/**
- * Created by recker on 16/5/24.
- */
+
 public class Loading {
 
     private static Loading instance;
@@ -25,6 +25,8 @@ public class Loading {
     private LayoutInflater inflater;
 
     private ImageView ivLoading;
+
+    final GlobalVaries globalVaries = new GlobalVaries(); // 是否是在loading
 
     private Loading() {
 
@@ -53,11 +55,22 @@ public class Loading {
     }
 
     public void show() {
-        mDialog.show();
+        try {
+            if (!mDialog.isShowing()){
+                mDialog.show();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            e.getMessage();
+        }
     }
 
     public void hide() {
-        mDialog.dismiss();
+        if (mDialog.isShowing()){
+            mDialog.dismiss();
+        }
+
     }
 
 }
+

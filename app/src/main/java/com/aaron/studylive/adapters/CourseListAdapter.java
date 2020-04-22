@@ -1,5 +1,6 @@
 package com.aaron.studylive.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.bean.CourseListData;
+import com.aaron.studylive.utils.L;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -49,6 +51,7 @@ public class CourseListAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
@@ -63,6 +66,8 @@ public class CourseListAdapter extends BaseAdapter {
             hodler.title = ButterKnife.findById(view, R.id.tv_title);
             hodler.numbers = ButterKnife.findById(view, R.id.tv_number);
             hodler.finished = ButterKnife.findById(view, R.id.tv_finished);
+            L.d("CourseListAdapter ::hodler.img"+hodler.img);
+            L.d("data.getPic:::"+listDatas.get(i).getPic());
 
             view.setTag(hodler);
         } else {
@@ -70,8 +75,8 @@ public class CourseListAdapter extends BaseAdapter {
         }
 
         Picasso.with(mContext).load(data.getPic()).placeholder(R.drawable.skirt02).into(hodler.img);
-        hodler.title.setText(data.getName()+"");
-        hodler.numbers.setText(data.getNumbers()+"");
+        hodler.title.setText(String.format("%s", data.getName()));
+        hodler.numbers.setText(String.format("%d", data.getNumbers()));
 
 
         if (data.getFinished() == 0) {

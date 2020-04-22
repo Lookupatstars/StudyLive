@@ -15,10 +15,19 @@ import com.aaron.studylive.fragments.ClassFragment;
 import com.aaron.studylive.fragments.DownloadFragment;
 import com.aaron.studylive.fragments.HomeFragment;
 import com.aaron.studylive.fragments.MineFragment;
+import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.view.NoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Created by Aaron on 2020/2/24
+ * The current project is StudyLive
+ *
+ * @Describe: 主页面 空布局
+ *
+ */
 
 public class FlyMainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -49,6 +58,8 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fly_main);
+
+        ActivityCollector.addActivity(this);
 
         //初始化布局
         initLayoutView();
@@ -198,5 +209,11 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.finishAll();
     }
 }

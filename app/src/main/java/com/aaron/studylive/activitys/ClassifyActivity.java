@@ -13,6 +13,7 @@ import com.aaron.studylive.R;
 import com.aaron.studylive.adapters.ClassifyAdapter;
 import com.aaron.studylive.base.BaseActivity;
 import com.aaron.studylive.bean.ClassifyData;
+import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 
@@ -59,6 +60,7 @@ public class ClassifyActivity extends BaseActivity implements
 
     @Override
     protected void init() {
+        ActivityCollector.addActivity(this);
         initView();
         new ClassifyAsyncTask().execute();
         setupClick();
@@ -186,4 +188,9 @@ public class ClassifyActivity extends BaseActivity implements
         Log.d(ClassifyActivity.class.getSimpleName(), str);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

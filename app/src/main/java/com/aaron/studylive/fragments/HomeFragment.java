@@ -1,11 +1,11 @@
 package com.aaron.studylive.fragments;
 
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +14,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
-import com.aaron.studylive.activitys.CoursePlayActivity;
 import com.aaron.studylive.adapter.LiveClassAdapter;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.BannerData;
 import com.aaron.studylive.bean.CourseListData;
 import com.aaron.studylive.bean.LiveClassInfo;
+import com.aaron.studylive.utils.ActivityCollector;
+import com.aaron.studylive.utils.CacheUtils;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
@@ -39,6 +40,14 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+/**
+ * 使用FlyBanner作为轮播图
+ *
+ * 这个界面最后可能还需要加上 我也是有底线的~~~
+ *
+ * 或者可以加上教师的信息列表？？
+ */
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener
         , RefreshListView.OnRefreshListener , AdapterView.OnItemClickListener {
@@ -73,8 +82,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         setupClick();
         new BannerAsyncTask().execute();
         new CourseListHotAsyncTask().execute();
-
     }
+
 
     // 头部 fragment_home_header.xml 的 banner、课程列表 初始化
     private void initView(){
@@ -140,6 +149,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
                 break;
             case R.id.iv_search:
+                toast("点击了搜索");
 
                 break;
             case R.id.iv_study_latest:
@@ -154,10 +164,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
      */
     private void analysisBannnerJsonData(String s) {
         L.d("analysisBannnerJsonData::SSS"+s);
+
+
         try {
             JSONObject object = new JSONObject(s);
             int errorCode = object.getInt("code");
-
             if (errorCode == 0) {
                 mBannerDatas = new ArrayList<>();
                 JSONArray array =object.getJSONObject("content").getJSONArray("list");
@@ -287,17 +298,26 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        CourseListData data = mCourseDatas.get(position-2);
-        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
-        intent.putExtra("id", data.getId());
-        intent.putExtra("title", data.getName());
-        startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
+        toast("点击了视频，但是播放暂未实现");
+//        CourseListData data = mCourseDatas.get(position-2);
+//        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
+//        intent.putExtra("id", data.getId());
+//        intent.putExtra("title", data.getName());
+//        startActivity(intent);
+//        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
     }
 
     private class BannerAsyncTask extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... voids) {
+
+            //在请求服务器之前，先判断有没有缓存。有的话，先加载缓存
+            String cache = CacheUtils.getCache(HttpUrl.getInstance().getBannerUrl(),getActivity());
+            if (!TextUtils.isEmpty(cache)){
+                L.d("发现缓存,直接解析数据analysisBannnerJsonData");
+                analysisBannnerJsonData(cache);
+            }
+            L.d("有没有缓存都要重新请求数据库analysisBannnerJsonData");
 
             String url = HttpUrl.getInstance().getBannerUrl();
             Map<String, String> params = HttpUrl.getInstance().getBannerParams();
@@ -318,6 +338,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
     private class CourseListHotAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
+
+            String cache = CacheUtils.getCache(HttpUrl.getInstance().getCourseListUrlHot(),getActivity());
+            if (!TextUtils.isEmpty(cache)){
+                L.d("发现缓存,直接解析数据analysisCourseListHotJsonData");
+                analysisCourseListHotJsonData(cache);
+            }
+            L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
 
             String url = HttpUrl.getInstance().getCourseListUrlHot();
             Map<String, String> params = HttpUrl.getInstance().getCourseListHotParams(mCurrentPage);
@@ -367,5 +394,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         Log.d(CourseFragment.class.getSimpleName(), str);
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(getActivity());
+    }
 }

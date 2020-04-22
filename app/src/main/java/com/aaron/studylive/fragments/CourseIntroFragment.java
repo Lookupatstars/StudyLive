@@ -143,10 +143,10 @@ public class CourseIntroFragment extends BaseFragment {
     private void analysisContentJsonData(String s) {
         try {
             JSONObject object = new JSONObject(s);
-            int errorCode = object.getInt("errorCode");
+            int errorCode = object.getInt("code");
 
             if (errorCode == 1000) {
-                JSONArray array = object.getJSONArray("data");
+                JSONArray array = object.getJSONArray("content");
 
                 for (int i = 0; i < array.length(); i++) {
                     CourseListData data = new CourseListData();

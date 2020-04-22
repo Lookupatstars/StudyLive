@@ -30,7 +30,7 @@
                     android:layout_marginLeft="50dp"
                     android:textColor="#9F9FA0"
                     android:textColorHint="#9F9FA0"
-                    android:hint="手机号/昵称"/>
+                    android:hint="手机号"/>
 
                 <View
                     android:layout_width="match_parent"

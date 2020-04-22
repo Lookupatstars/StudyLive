@@ -6,11 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
-import com.aaron.studylive.LoginActivity;
-import com.aaron.studylive.LoginStudentActivity;
-import com.aaron.studylive.bean.StudentInfo;
 import com.aaron.studylive.utils.L;
 
 import java.util.ArrayList;
@@ -84,7 +80,8 @@ public class StudentDBhelper extends SQLiteOpenHelper {
         String create_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + "_id INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL,"
                 + "phone VARCHAR NOT NULL," + "password VARCHAR NOT NULL,"
-                + "name VARCHAR NOT NULL,"  + "update_time VARCHAR NOT NULL"
+                + "name VARCHAR NOT NULL,"  + "update_time VARCHAR NOT NULL,"
+                + "permission INTEGER NOT NULL,"+"teacherid VARCHAR NOT NULL"
                 + ");";
         db.execSQL(create_sql);
 
@@ -149,10 +146,12 @@ public class StudentDBhelper extends SQLiteOpenHelper {
 
             // 不存在唯一性重复的记录，则插入新记录
             ContentValues cv = new ContentValues();
-            cv.put("name", info.name);
-            cv.put("update_time", info.update_time);
             cv.put("phone", info.phone);
             cv.put("password", info.password);
+            cv.put("name", info.name);
+            cv.put("update_time", info.update_time);
+            cv.put("permission",info.permission);
+            cv.put("teacherid",info.teacherid);
             // 执行插入记录动作，该语句返回插入记录的行号
             result = sDB.insert(TABLE_NAME, "", cv);
             // 添加成功后返回行号，失败后返回-1
@@ -166,10 +165,10 @@ public class StudentDBhelper extends SQLiteOpenHelper {
     // 根据条件更新指定的表记录
     public int update(StudentInfo info, String condition) {
         ContentValues cv = new ContentValues();
-        cv.put("name", info.name);
-        cv.put("update_time", info.update_time);
         cv.put("phone", info.phone);
         cv.put("password", info.password);
+        cv.put("name", info.name);
+        cv.put("update_time", info.update_time);
         // 执行更新记录动作，该语句返回记录更新的数目
         return sDB.update(TABLE_NAME, cv, condition, null);
     }
@@ -181,31 +180,48 @@ public class StudentDBhelper extends SQLiteOpenHelper {
 
     // 根据指定条件查询记录，并返回结果数据队列
     public ArrayList<StudentInfo> query(String condition) {
-        String sql = String.format("select rowid,_id,name,update_time,phone,password from %s where %s;", TABLE_NAME, condition);
+        //查询之前要打开读连接，要不然会导致刚注册没办法查询
+        sDB = openReadLink();
+        //rowid,_id,name,update_time,phone,password
+        String sql = String.format("select * from %s where %s;", TABLE_NAME, condition);
         ArrayList<StudentInfo> infoArray = new ArrayList<StudentInfo>();
         // 执行记录查询动作，该语句返回结果集的游标
-        Cursor cursor = sDB.rawQuery(sql, null);
+        try {
+            Cursor cursor = sDB.rawQuery(sql, null);
+            L.d("3.cursor的结果toString() = "+cursor.toString());
+            // 循环取出游标指向的每条记录
+            while (cursor.moveToNext()) {
+                StudentInfo info = new StudentInfo();
+                info.rowid = cursor.getLong(0); // 取出长整型数 id
+                L.d("cursor.getLong(0)"+cursor.getLong(0));
+                info.phone = cursor.getString(1);
+                L.d("cursor.getString(1)"+cursor.getString(1));
+                info.password = cursor.getString(2);
+                L.d("cursor.getString(2)"+cursor.getString(2));
+                info.name = cursor.getString(3); // 取出字符串
+                L.d("cursor.getString(3)"+cursor.getString(3));
+                info.update_time = cursor.getString(4);
+                L.d("cursor.getString(4)"+cursor.getString(4));
+                info.permission = cursor.getInt(5);
+                L.d("cursor.getInt(5)"+cursor.getInt(5));
+                info.teacherid = cursor.getString(6);
+                L.d("cursor.cursor.getString(6)"+cursor.getString(6));
+                infoArray.add(info);
+            }
+            cursor.close(); // 查询完毕，关闭游标
+//            closeLink();//关闭数据库连接
 
-        // 循环取出游标指向的每条记录
-        while (cursor.moveToNext()) {
-            StudentInfo info = new StudentInfo();
-            info.rowid = cursor.getLong(0); // 取出长整型数
-            info.xuhao = cursor.getInt(1); // 取出整型数
-            info.name = cursor.getString(2); // 取出字符串
-            info.update_time = cursor.getString(3);
-            info.phone = cursor.getString(4);
-            info.password = cursor.getString(5);
-            infoArray.add(info);
+        } catch (Exception e){
+            e.printStackTrace();
+            e.getMessage();
         }
-
-        cursor.close(); // 查询完毕，关闭游标
 
         return infoArray;
     }
 
     // 根据手机号码查询指定记录
     public StudentInfo queryByPhone(String phone) {
-        L.d("根据手机号查询queryByPhone :"+phone);
+        L.d("1.根据手机号查询queryByPhone 首先获取输入框的手机号码：：:"+phone);
         StudentInfo info = null;
         ArrayList<StudentInfo> infoArray = query(String.format("phone='%s'", phone));
         L.d("infoArray :"+infoArray);

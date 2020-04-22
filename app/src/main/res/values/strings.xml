@@ -14,6 +14,7 @@
     <string name="please_input">请输入</string>
     <string name="search">搜索</string>
 
+    <string name="login">登录</string>
     <string name="login_student">学生登录</string>
     <string name="login_teacher">教师登录</string>
     <string name="login_root">管理员登录</string>

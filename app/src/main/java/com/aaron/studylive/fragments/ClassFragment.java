@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.activitys.ClassifyActivity;
-import com.aaron.studylive.activitys.CoursePlayActivity;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.CourseListData;
@@ -143,7 +142,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
         try {
             JSONObject object = new JSONObject(s);
             int errorCode = object.getInt("code");
-//            mRefreshListView.refreshComplete();
+            mRefreshListView.refreshComplete();
 
             if (errorCode == 0) {
                 JSONArray array =object.getJSONObject("content").getJSONArray("list");
@@ -159,6 +158,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
                     L.d("name:::"+object.getString("name"));
                     L.d("update_time::"+object.getString("update_time"));
                     L.d("type:::"+object.getInt("type"));
+                    L.d("pic::"+object.getString("img"));
 
                     data.setId(object.getInt("id"));
                     data.setName(object.getString("name"));
@@ -166,6 +166,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
                     data.setNumbers(object.getInt("view_count"));
 //                    data.setUpdateTime(object.getLong("update_time"));
                     data.setCoursetype(object.getInt("type"));
+                    data.setPic(object.getString("img"));
 
 //                    data.setLastTime(object.getLong("last_time"));
 //                    data.setChapterSeq(object.getInt("chapter_seq"));
@@ -188,7 +189,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
 
         } catch (JSONException e) {
             e.printStackTrace();
-//            mRefreshListView.refreshComplete();
+            mRefreshListView.refreshComplete();
         }
     }
 
@@ -210,14 +211,16 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
+    //点击之后打开视频播放界面
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        CourseListData data = mCourseDatas.get(position-2);
-        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
-        intent.putExtra("id", data.getId());
-        intent.putExtra("title", data.getName());
-        startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
+        toast("点击了视频，播放暂未实现");
+//        CourseListData data = mCourseDatas.get(position-2);
+//        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
+//        intent.putExtra("id", data.getId());
+//        intent.putExtra("title", data.getName());
+//        startActivity(intent);
+//        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
     }
 
     private class CourseListNewAsyncTask extends AsyncTask<String, Void, String> {

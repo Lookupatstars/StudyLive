@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.aaron.studylive.R;
 import com.aaron.studylive.base.BaseActivity;
 import com.aaron.studylive.fragments.ClassifyListFragment;
+import com.aaron.studylive.utils.ActivityCollector;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -63,6 +64,7 @@ public class ClassifyListActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        ActivityCollector.addActivity(this);
 
         mId = getIntent().getIntExtra("id", 0);
         mTitle = getIntent().getStringExtra("title");
@@ -152,6 +154,12 @@ public class ClassifyListActivity extends BaseActivity {
 
     @OnClick(R.id.iv_back) void back() {
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
 }

@@ -99,7 +99,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我的文章"
+                android:text="我的评论"
                 android:textSize="14sp"
                 android:textColor="@color/mine_text"
                 android:singleLine="true"
@@ -108,6 +108,31 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_setting"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="31dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/setting" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:textSize="14sp"
+                android:textColor="@color/mine_text"
+                android:singleLine="true"
+                android:layout_marginTop="12dp"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_about_fly"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -117,35 +142,12 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/people_mynote_icon"
+                android:src="@drawable/about"
                 android:layout_gravity="center_horizontal"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我的笔记"
-                android:textSize="14sp"
-                android:textColor="@color/mine_text"
-                android:singleLine="true"
-                android:layout_marginTop="12dp"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/my_qa"
-                android:layout_gravity="center_horizontal"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我的猿问"
+                android:text="关于我们"
                 android:textSize="14sp"
                 android:textColor="@color/mine_text"
                 android:singleLine="true"

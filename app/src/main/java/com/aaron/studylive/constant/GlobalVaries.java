@@ -13,6 +13,7 @@ import org.xutils.x;
  */
 public class GlobalVaries extends Application {
     private  String verifyCode;
+    private Boolean isLoading=false;
 
     @Override
     public void onCreate() {
@@ -26,8 +27,15 @@ public class GlobalVaries extends Application {
         return verifyCode;
     }
 
+    public Boolean getLoading() {
+        return isLoading;
+    }
+
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
     }
 
+    public void setLoading(Boolean loading) {
+        isLoading = loading;
+    }
 }

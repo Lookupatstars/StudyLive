@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/loginbg"
+    android:background="@drawable/login_bg"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".activitys.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,22 +42,22 @@
             <TextView
                 style="@style/LoginButton"
                 android:textSize="18dp"
-                android:text="@string/login_student"/>
+                android:text="@string/login"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_teacher"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/ll_teacher"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="match_parent">-->
 
-            <TextView
-                style="@style/LoginButton"
-                android:textSize="18dp"
-                android:text="@string/login_teacher"/>
+<!--            <TextView-->
+<!--                style="@style/LoginButton"-->
+<!--                android:textSize="18dp"-->
+<!--                android:text="@string/login_teacher"/>-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
     </LinearLayout>
 

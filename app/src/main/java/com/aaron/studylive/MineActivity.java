@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.aaron.studylive.activitys.AboutActivity;
+
 public class MineActivity extends AppCompatActivity {
 
     @Override
@@ -20,7 +22,7 @@ public class MineActivity extends AppCompatActivity {
     private class About implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(MineActivity.this,AboutActivity.class);
+            Intent intent = new Intent(MineActivity.this, AboutActivity.class);
             startActivity(intent);
         }
     }

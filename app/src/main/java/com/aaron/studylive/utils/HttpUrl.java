@@ -9,9 +9,8 @@ import java.util.Map;
 public class HttpUrl {
 
     private static HttpUrl instance;
-    //主机地址  http://218.28.238.170:8180/courseWeb/courseWeb/getDirection
-    //http://218.28.238.170:8180/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1
-    private String mHostName = "http://218.28.238.170:8180";
+    //主机地址
+    private String mHostName = "http://218.28.238.170:8995";
     //Banner请求URL  Banner
     private String mBannerUrl = mHostName + "/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1";
     //课程列表请求URL（最新）

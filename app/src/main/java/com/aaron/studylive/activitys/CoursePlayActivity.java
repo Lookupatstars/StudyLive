@@ -30,6 +30,7 @@ import com.aaron.studylive.events.PlayNextVideo;
 import com.aaron.studylive.fragments.CourseCommentFragment;
 import com.aaron.studylive.fragments.CourseIntroFragment;
 import com.aaron.studylive.fragments.CpFragment;
+import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 
@@ -156,6 +157,7 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
 
     @Override
     protected void init() {
+        ActivityCollector.addActivity(this);
         mId = getIntent().getIntExtra("id", 0);
         mTitle = getIntent().getStringExtra("title");
 
@@ -551,5 +553,6 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
     private void debug(String str) {
         Log.d(CoursePlayActivity.class.getSimpleName(), str);
     }
+
 
 }

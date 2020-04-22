@@ -1,15 +1,9 @@
 package com.aaron.studylive.widget.implement;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.aaron.studylive.AboutActivity;
-import com.aaron.studylive.MineActivity;
 import com.aaron.studylive.R;
 import com.aaron.studylive.widget.BasePager;
 
