@@ -11,7 +11,6 @@
         android:layout_width="125dp"
         android:layout_height="70dp"
         android:scaleType="fitXY"
-        android:src="@drawable/course_default_bg"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
 
@@ -20,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lines="2"
-        android:text="PHP微信公众平台开发高级篇-群发接口"
         android:textColor="@color/course_text"
         android:textSize="16sp"
         android:layout_toRightOf="@+id/img"
@@ -55,7 +53,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:text="更新完成"
         android:textSize="12sp"
         android:textColor="@color/course_second_text"
         android:layout_below="@+id/tv_title"

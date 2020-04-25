@@ -81,6 +81,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         initView();
         setupClick();
         new BannerAsyncTask().execute();
+        setBanner();
         new CourseListHotAsyncTask().execute();
     }
 
@@ -164,15 +165,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
      */
     private void analysisBannnerJsonData(String s) {
         L.d("analysisBannnerJsonData::SSS"+s);
-
-
         try {
             JSONObject object = new JSONObject(s);
             int errorCode = object.getInt("code");
             if (errorCode == 0) {
                 mBannerDatas = new ArrayList<>();
                 JSONArray array =object.getJSONObject("content").getJSONArray("list");
-//                L.d("+2::"+array);
+                L.d("+2::"+array);
                 for (int i = 0; i < array.length(); i++) {
                     BannerData data = new BannerData();
                     object = array.getJSONObject(i);
@@ -232,26 +231,19 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
             mRefreshListView.refreshComplete();
 
             if (errorCode == 0) {
-                JSONArray array =object.getJSONObject("content").getJSONArray("list");
+                JSONArray array =object.getJSONObject("content").getJSONArray("records");
                 L.d("+2::"+array);
                 for (int i = 0; i< array.length(); i++) {
                     CourseListData data = new CourseListData();
                     object = array.getJSONObject(i);
 
-                    L.d("analysisCourseListJsonData::"+i);
-                    L.d("id::"+object.getInt("id"));
-                    L.d("summary:::"+object.getString("summary"));
-                    L.d("view_count::"+object.getInt("view_count"));
-                    L.d("name:::"+object.getString("name"));
-                    L.d("update_time::"+object.getString("update_time"));
-                    L.d("type:::"+object.getInt("type"));
-
                     data.setId(object.getInt("id"));
                     data.setName(object.getString("name"));
                     data.setDesc(object.getString("summary"));
-                    data.setNumbers(object.getInt("view_count"));
+                    data.setNumbers(object.getInt("viewCount"));
 //                    data.setUpdateTime(object.getLong("update_time"));
                     data.setCoursetype(object.getInt("type"));
+                    data.setPic(object.getString("img"));
 
 //                    data.setLastTime(object.getLong("last_time"));
 //                    data.setChapterSeq(object.getInt("chapter_seq"));
@@ -315,7 +307,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
             String cache = CacheUtils.getCache(HttpUrl.getInstance().getBannerUrl(),getActivity());
             if (!TextUtils.isEmpty(cache)){
                 L.d("发现缓存,直接解析数据analysisBannnerJsonData");
-                analysisBannnerJsonData(cache);
+//                analysisBannnerJsonData(cache);
             }
             L.d("有没有缓存都要重新请求数据库analysisBannnerJsonData");
 
@@ -331,7 +323,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            analysisBannnerJsonData(s);
+//            analysisBannnerJsonData(s);
         }
     }
 
@@ -346,10 +338,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
             }
             L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
 
-            String url = HttpUrl.getInstance().getCourseListUrlHot();
+            String url = HttpUrl.getInstance().getCourseListUrlNew(mCurrentPage);
             Map<String, String> params = HttpUrl.getInstance().getCourseListHotParams(mCurrentPage);
-            String result = HttpRequest.getInstance().POST(url, params);
-            L.d("CourseListAsyncTask"+result);
+            String result = HttpRequest.getInstance().GET(url, null);
+            L.d("url = "+url);
+            L.d("getCourseListHotParams,result =  "+result);
+
             return result;
         }
 

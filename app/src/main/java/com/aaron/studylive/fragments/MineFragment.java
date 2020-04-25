@@ -13,6 +13,7 @@ import com.aaron.studylive.activitys.SettingActivity;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.LoginStudentInfo;
 import com.aaron.studylive.database.StudentDBhelper;
+import com.aaron.studylive.utils.L;
 
 import butterknife.Bind;
 
@@ -51,9 +52,14 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     //获取到用户名
     @SuppressLint("ResourceAsColor")
     private void setName(){
-
-        if (loginStudentInfo.getName().equals("")){
-            tv_name.setText(loginStudentInfo.getPhone());
+        L.d("loginStudentInfo.getName()  = "+loginStudentInfo.getName());
+        L.d("loginStudentInfo.getPhone() = "+loginStudentInfo.getPhone());
+        if ( loginStudentInfo.getName() == null || loginStudentInfo.getName().equals("")){
+            if ( loginStudentInfo.getPhone() == null || loginStudentInfo.getPhone().equals("")){
+                tv_name.setText("未登录");
+            }else {
+                tv_name.setText(loginStudentInfo.getPhone());
+            }
         }else {
             tv_name.setText(loginStudentInfo.getName());
         }

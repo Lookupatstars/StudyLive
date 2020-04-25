@@ -24,7 +24,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 
@@ -32,8 +31,8 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
         AdapterView.OnItemClickListener, RefreshListView.OnRefreshListener{
 
     public static final String FRUIT_NAME = "fruit_name";
-
     public static final String FRUIT_IMAGE_ID = "fruit_image_id";
+    private static final String ImgUrl = "http://course-api.zzu.gdatacloud.com:890/";
 
     //分类、扫描、搜索、最近学习
     @Bind(R.id.iv_search)
@@ -138,35 +137,35 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
      * @param s
      */
     private void analysisCourseListNewJsonData(String s) {
-        L.d("analysisCourseListJsonData::SSS"+s);
+        L.d("analysisCourseListNewJsonData::直接"+s);
         try {
             JSONObject object = new JSONObject(s);
             int errorCode = object.getInt("code");
             mRefreshListView.refreshComplete();
-
             if (errorCode == 0) {
-                JSONArray array =object.getJSONObject("content").getJSONArray("list");
-                L.d("+2::"+array);
+                L.d("object.getJSONObject(\"content\")::直接"+object.getJSONObject("content"));
+                JSONArray array =object.getJSONObject("content").getJSONArray("records");
+                L.d("classFragmente::analysisCourseListNewJsonData = array:::+2::"+array.length());
                 for (int i = 0; i< array.length(); i++) {
                     CourseListData data = new CourseListData();
                     object = array.getJSONObject(i);
 
-                    L.d("analysisCourseListJsonData::"+i);
+                    L.d("analysisCourseListNewJsonData::"+i);
                     L.d("id::"+object.getInt("id"));
                     L.d("summary:::"+object.getString("summary"));
-                    L.d("view_count::"+object.getInt("view_count"));
+                    L.d("viewCount::"+object.getInt("viewCount"));
                     L.d("name:::"+object.getString("name"));
-                    L.d("update_time::"+object.getString("update_time"));
+                    L.d("updateTime::"+object.getString("updateTime"));
                     L.d("type:::"+object.getInt("type"));
-                    L.d("pic::"+object.getString("img"));
+                    L.d("img::"+ ImgUrl + object.getString("img"));
 
                     data.setId(object.getInt("id"));
                     data.setName(object.getString("name"));
                     data.setDesc(object.getString("summary"));
-                    data.setNumbers(object.getInt("view_count"));
+                    data.setNumbers(object.getInt("viewCount"));
 //                    data.setUpdateTime(object.getLong("update_time"));
                     data.setCoursetype(object.getInt("type"));
-                    data.setPic(object.getString("img"));
+                    data.setPic(ImgUrl + object.getString("img"));
 
 //                    data.setLastTime(object.getLong("last_time"));
 //                    data.setChapterSeq(object.getInt("chapter_seq"));
@@ -227,10 +226,9 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
         @Override
         protected String doInBackground(String... strings) {
 
-            String url = HttpUrl.getInstance().getCourseListUrlNew();
-            Map<String, String> params = HttpUrl.getInstance().getCourseListNewParams(mCurrentPage);
-            String result = HttpRequest.getInstance().POST(url, params);
-            L.d("CourseListAsyncTask"+result);
+            String url = HttpUrl.getInstance().getCourseListUrlNew(mCurrentPage);
+//            Map<String, String> params = HttpUrl.getInstance().getCourseListNewParams();
+            String result = HttpRequest.getInstance().GET(url,null);
             return result;
         }
 
