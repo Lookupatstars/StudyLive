@@ -1,7 +1,5 @@
 package com.aaron.studylive.bean;
 
-import com.aaron.studylive.R;
-
 import java.util.ArrayList;
 
 /**
@@ -35,8 +33,8 @@ public class LoveClassInfo {
     }
 
     private static int[] loveClassImageArray = {
-            R.drawable.skirt01,R.drawable.skirt02,R.drawable.skirt03,R.drawable.skirt04,R.drawable.skirt05,R.drawable.skirt06,R.drawable.skirt07,
-            R.drawable.skirt08,R.drawable.skirt09,R.drawable.skirt10,R.drawable.skirt11,R.drawable.skirt12
+//            R.drawable.skirt01,R.drawable.skirt02,R.drawable.skirt03,R.drawable.skirt04,R.drawable.skirt05,R.drawable.skirt06,R.drawable.skirt07,
+//            R.drawable.skirt08,R.drawable.skirt09,R.drawable.skirt10,R.drawable.skirt11,R.drawable.skirt12
     };
     private static String[] loveClassTitleArray = {
             "Android: 直播APP的设计与实现","MySQL: 数据库的创建以及增删改查，数据库的创建以及增删改查","研究生复试的技巧",

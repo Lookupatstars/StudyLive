@@ -6,11 +6,19 @@
     android:layout_height="wrap_content"
     android:background="@android:color/white">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="简介"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="12dp"
-        android:paddingTop="12dp"
         android:paddingLeft="16dp">
 
         <TextView
@@ -22,14 +30,14 @@
             android:textSize="14sp"
             android:singleLine="true"/>
 
-        <ImageView
-            android:id="@+id/iv_finish"
-            android:layout_width="30dp"
-            android:layout_height="15dp"
-            android:src="@drawable/class_finished"
-            android:layout_toRightOf="@+id/tv_title"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_finish"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:src="@drawable/class_finished"-->
+<!--            android:layout_toRightOf="@+id/tv_title"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginLeft="8dp"/>-->
 
     </RelativeLayout>
 
@@ -50,35 +58,49 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="12dp"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.recker.flymooc.customviews.ShapeImageView
-            android:id="@+id/img"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/course_default_bg"
-            app:shape_mode="circle"
-            android:layout_marginLeft="16dp"/>
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recker"
-            android:textColor="@color/intro_text"
-            android:textSize="14sp"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@+id/img"
-            android:layout_centerVertical="true"/>
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+<!--        一个圆角的图片？-->
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_img"-->
+<!--            android:layout_width="70dp"-->
+<!--            android:layout_height="70dp"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_marginTop="50dp"-->
+<!--            android:background="@drawable/teacher1"-->
+<!--            android:src="@drawable/circle_images"-->
+<!--            />-->
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@drawable/teacher_icon"
-            android:layout_toRightOf="@+id/tv_name"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"/>
-    </RelativeLayout>
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_name"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Recker"-->
+<!--            android:textColor="@color/intro_text"-->
+<!--            android:textSize="14sp"-->
+<!--            android:layout_marginLeft="8dp"-->
+<!--            android:layout_toRightOf="@+id/img"-->
+<!--            android:layout_centerVertical="true"/>-->
+
+<!--        <ImageView-->
+<!--            android:layout_width="15dp"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:src="@drawable/teacher_icon"-->
+<!--            android:layout_toRightOf="@+id/tv_name"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginLeft="8dp"/>-->
+<!--    </RelativeLayout>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="课程须知"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        />
 
     <TextView
         android:id="@+id/tv_intro"
@@ -97,22 +119,22 @@
         android:layout_height="0.5dp"
         android:background="@color/divider"/>
 
-    <RelativeLayout
-        android:id="@+id/teacher_all_course"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/selector_click"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="老师的全部课程"
-            android:textColor="@color/intro_text"
-            android:textSize="14sp"/>
-    </RelativeLayout>
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/teacher_all_course"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/selector_click"-->
+<!--        android:paddingTop="16dp"-->
+<!--        android:paddingBottom="16dp"-->
+<!--        android:paddingLeft="16dp"-->
+<!--        android:paddingRight="16dp">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="老师的全部课程"-->
+<!--            android:textColor="@color/intro_text"-->
+<!--            android:textSize="14sp"/>-->
+<!--    </RelativeLayout>-->
 
     <View
         android:layout_width="match_parent"
@@ -123,7 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="相关推荐"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textColor="@color/intro_text"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"/>

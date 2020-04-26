@@ -128,7 +128,7 @@ public class GuideActivity extends AppCompatActivity {
                 PrefUtils.setBoolen(getApplicationContext(), "is_first", false);
 
                 //跳到主页面
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), FlyMainActivity.class));
                 finish();
             }
         });

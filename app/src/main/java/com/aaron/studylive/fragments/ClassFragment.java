@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.activitys.ClassifyActivity;
+import com.aaron.studylive.activitys.CoursePlayActivity;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.CourseListData;
@@ -107,16 +108,6 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
                 startActivity(intent1);
                 getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
                 break;
-//            case R.id.tab_one:
-//                Intent intent2 = new Intent(getActivity(), JobLineActivity.class);
-//                startActivity(intent2);
-//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
-//                break;
-//            case R.id.tab_two:
-//                Intent intent3 = new Intent(getActivity(), RaiseActivity.class);
-//                startActivity(intent3);
-//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
-//                break;
             case R.id.iv_scan:
                 toast("点击了扫描信息");
                 break;
@@ -163,16 +154,8 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
                     data.setName(object.getString("name"));
                     data.setDesc(object.getString("summary"));
                     data.setNumbers(object.getInt("viewCount"));
-//                    data.setUpdateTime(object.getLong("update_time"));
                     data.setCoursetype(object.getInt("type"));
                     data.setPic(ImgUrl + object.getString("img"));
-
-//                    data.setLastTime(object.getLong("last_time"));
-//                    data.setChapterSeq(object.getInt("chapter_seq"));
-//                    data.setMediaSeq(object.getInt("media_seq"));
-
-//                    debug(data.toString());
-
                     mCourseDatas.add(data);
                 }
                 hideLoading();
@@ -213,13 +196,13 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
     //点击之后打开视频播放界面
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toast("点击了视频，播放暂未实现");
-//        CourseListData data = mCourseDatas.get(position-2);
-//        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
-//        intent.putExtra("id", data.getId());
-//        intent.putExtra("title", data.getName());
-//        startActivity(intent);
-//        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
+        toast("ClassFragment = 点击了视频，正在实现视频播放");
+        CourseListData data = mCourseDatas.get(position-1);
+        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
+        intent.putExtra("id", data.getId());
+        intent.putExtra("title", data.getName());
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
     }
 
     private class CourseListNewAsyncTask extends AsyncTask<String, Void, String> {

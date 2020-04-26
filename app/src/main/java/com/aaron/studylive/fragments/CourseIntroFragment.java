@@ -1,7 +1,6 @@
 package com.aaron.studylive.fragments;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -91,12 +90,12 @@ public class CourseIntroFragment extends BaseFragment {
         mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_intro_header, null);
 
         mTvTitle = ButterKnife.findById(mHeaderView, R.id.tv_title);
-        mIvIsFinish = ButterKnife.findById(mHeaderView, R.id.iv_finish);
+//        mIvIsFinish = ButterKnife.findById(mHeaderView, R.id.iv_finish);
         mTvContent = ButterKnife.findById(mHeaderView, R.id.tv_content);
-        mImage = ButterKnife.findById(mHeaderView, R.id.img);
-        mTvName = ButterKnife.findById(mHeaderView, R.id.tv_name);
+//        mImage = ButterKnife.findById(mHeaderView, R.id.iv_img);
+//        mTvName = ButterKnife.findById(mHeaderView, R.id.tv_name);
         mTvIntro = ButterKnife.findById(mHeaderView, R.id.tv_intro);
-        mTeachAllCourse = ButterKnife.findById(mHeaderView, R.id.teacher_all_course);
+//        mTeachAllCourse = ButterKnife.findById(mHeaderView, R.id.teacher_all_course);
 
         mListView.addHeaderView(mHeaderView);
     }
@@ -104,7 +103,7 @@ public class CourseIntroFragment extends BaseFragment {
     private void analysisHeaderJsonData(String s) {
         try {
             JSONObject object = new JSONObject(s);
-            int errorCode = object.getInt("errorCode");
+            int errorCode = object.getInt("code");
 
             if (errorCode == 1000) {
                 JSONArray array = object.getJSONArray("data");
@@ -113,9 +112,9 @@ public class CourseIntroFragment extends BaseFragment {
                 mTvTitle.setText(object.getString("course_name"));
                 mTvContent.setText(object.getString("course_des"));
                 //如果课程未完成，隐藏图标
-                if (!object.getString("finished").equals("1")){
-                    mIvIsFinish.setVisibility(View.GONE);
-                }
+//                if (!object.getString("finished").equals("1")){
+//                    mIvIsFinish.setVisibility(View.GONE);
+//                }
 
                 array = object.getJSONArray("teacher_list");
                 object = array.getJSONObject(0);
@@ -206,11 +205,6 @@ public class CourseIntroFragment extends BaseFragment {
             super.onPostExecute(s);
             analysisContentJsonData(s);
         }
-    }
-
-
-    private void debug(String str) {
-        Log.d(CourseIntroFragment.class.getSimpleName(), str);
     }
 
 }

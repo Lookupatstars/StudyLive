@@ -25,7 +25,6 @@
         <activity android:name=".activitys.ClassifyListActivity" />
         <activity android:name=".activitys.CoursePlayActivity" />
         <activity android:name=".activitys.ForgetPasswdActivity"/>
-        <activity android:name=".home.RecommendActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".activitys.LoginActivity" />
         <activity android:name=".MineActivity" />

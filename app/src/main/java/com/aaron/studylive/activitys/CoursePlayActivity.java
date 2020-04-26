@@ -33,6 +33,7 @@ import com.aaron.studylive.fragments.CpFragment;
 import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
+import com.aaron.studylive.utils.L;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -98,7 +99,7 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
     @Bind(R.id.iv_fullscreen)
     ImageView mIvFullScreen;
 
-    private int mId;
+    private int mCourseId;
     private String mTitle;
     private MediaData mMediaData;
     private String[] mTitles = {"章节", "评论", "详情"};
@@ -158,10 +159,14 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
     @Override
     protected void init() {
         ActivityCollector.addActivity(this);
-        mId = getIntent().getIntExtra("id", 0);
+        L.d("CoursePlayActivity——————————————————————————————————————————————");
+        mCourseId = getIntent().getIntExtra("id", 0);
         mTitle = getIntent().getStringExtra("title");
 
-        mTextView.setText(mTitle+"");
+        L.d("mCourseId = "+mCourseId);
+        L.d("mTitle = "+mTitle);
+
+        mTextView.setText(String.format("%s", mTitle));
 
         new MediaAsyncTask().execute();
         setupSeekBarChanged();
@@ -355,9 +360,9 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
         mCommentFragmet = new CourseCommentFragment();
         mIntroFragment = new CourseIntroFragment();
 
-        mCpFragment.setId(mId);
-        mCommentFragmet.setId(mId);
-        mIntroFragment.setId(mId);
+        mCpFragment.setId(mCourseId);
+        mCommentFragmet.setId(mCourseId);
+        mIntroFragment.setId(mCourseId);
 
         mCpFragment.setPlayVideoListener(this);
 
@@ -382,7 +387,7 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
         protected String doInBackground(Void... voids) {
 
             String url = HttpUrl.getInstance().getMediaInfo();
-            Map<String, String> params = HttpUrl.getInstance().getMediaInfoParams(mId+"");
+            Map<String, String> params = HttpUrl.getInstance().getMediaInfoParams(mCourseId+"");
 
             return HttpRequest.getInstance().POST(url, params);
         }

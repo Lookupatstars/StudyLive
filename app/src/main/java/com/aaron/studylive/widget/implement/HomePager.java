@@ -1,9 +1,6 @@
 package com.aaron.studylive.widget.implement;
 
 import android.app.Activity;
-import android.app.Application;
-import android.graphics.Color;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,12 +12,8 @@ import android.widget.Toast;
 import com.aaron.studylive.R;
 import com.aaron.studylive.adapter.LiveClassAdapter;
 import com.aaron.studylive.bean.LiveClassInfo;
-import com.aaron.studylive.constant.AppContants;
 import com.aaron.studylive.constant.ImageList;
-import com.aaron.studylive.utils.CacheUtils;
-import com.aaron.studylive.utils.L;
 import com.aaron.studylive.utils.Utils;
-import com.aaron.studylive.widget.BannerIndicator;
 import com.aaron.studylive.widget.BannerPager;
 import com.aaron.studylive.widget.BasePager;
 import com.aaron.studylive.widget.SpacesItemDecoration;
@@ -33,7 +26,6 @@ import com.aaron.studylive.widget.SpacesItemDecoration;
  * @Describe: 首页父类的实现
  */
 
-
 public class HomePager extends BasePager {
     private RecyclerView rv_hor_live_class;
     private ListView lv_love_class;
@@ -44,11 +36,11 @@ public class HomePager extends BasePager {
 
     @Override
     public View initView() {
-        View view = View.inflate(mActivity, R.layout.activity_home,null);
+        View view = View.inflate(mActivity, R.layout.activity_banner,null);
 
         //初始化轮播图
         // 从布局文件中获取名叫banner_pager的横幅轮播条
-        BannerPager banner = view.findViewById(R.id.banner_pager);
+        BannerPager banner = view.findViewById(R.id.tv_class_des);
         // 获取横幅轮播条的布局参数
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) banner.getLayoutParams();
         params.height = (int) (Utils.getScreenWidth(mActivity) * 250f / 640f);

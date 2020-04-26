@@ -65,7 +65,7 @@ public class CourseListAdapter extends BaseAdapter {
             hodler.img = ButterKnife.findById(view, R.id.img);
             hodler.title = ButterKnife.findById(view, R.id.tv_title);
             hodler.numbers = ButterKnife.findById(view, R.id.tv_number);
-            hodler.finished = ButterKnife.findById(view, R.id.tv_finished);
+            hodler.des = ButterKnife.findById(view,R.id.tv_class_des);
             L.d("CourseListAdapter ::hodler.img"+hodler.img);
             L.d("data.getPic:::"+listDatas.get(i).getPic());
 
@@ -74,19 +74,20 @@ public class CourseListAdapter extends BaseAdapter {
             hodler = (ViewHodler) view.getTag();
         }
 
-        Picasso.with(mContext).load(data.getPic()).placeholder(R.drawable.skirt02).into(hodler.img);
+        Picasso.with(mContext).load(data.getPic()).placeholder(R.drawable.bg_default).into(hodler.img);
         hodler.title.setText(String.format("%s", data.getName()));
+        hodler.des.setText(String.format("%s", data.getDesc()));
         hodler.numbers.setText(String.format("%d", data.getNumbers()));
 
 
-        if (data.getFinished() == 0) {
-            hodler.finished.setTextColor(mContext.getResources().getColor(R.color.course_update_text));
-            String update = "更新至"+data.getMaxChapterSeq()+"-"+data.getMaxMediaSeq();
-            hodler.finished.setText(update);
-        } else {
-            hodler.finished.setTextColor(mContext.getResources().getColor(R.color.course_second_text));
-            hodler.finished.setText("更新完成");
-        }
+//        if (data.getFinished() == 0) {
+//            hodler.finished.setTextColor(mContext.getResources().getColor(R.color.course_update_text));
+//            String update = "更新至"+data.getMaxChapterSeq()+"-"+data.getMaxMediaSeq();
+//            hodler.finished.setText(update);
+//        } else {
+//            hodler.finished.setTextColor(mContext.getResources().getColor(R.color.course_second_text));
+//            hodler.finished.setText("更新完成");
+//        }
 
         return view;
     }
@@ -97,7 +98,7 @@ public class CourseListAdapter extends BaseAdapter {
         ImageView img;
         TextView title;
         TextView numbers;
-        TextView finished;
+        TextView des;
     }
 
 
