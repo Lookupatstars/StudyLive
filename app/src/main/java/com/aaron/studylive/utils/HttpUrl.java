@@ -25,7 +25,7 @@ public class HttpUrl {
     private String mCourseListUrlNew;
 
     //课程列表请求URL（最新）
-    private String mCourseListUrlHot = "http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=2";
+    private String mCourseListUrlHot ;
 
     //课程分类列表URL http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getSort
     private String mClassifyCourseUrl = "http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getSort";
@@ -33,12 +33,12 @@ public class HttpUrl {
     //分类课程列表  http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getType
     private String mClassifyListUrl =  "http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getType";
 
-    //社区文章
-    private String mArticleListUrl = mHostName + "/api3/articlelist";
-    //文章内容
-    private String mArticleContent = mHostName + "/api3/articlecontent";
-    //获取视频信息
-    private String mMediaInfo = mHostName + "/api3/getmediainfo_ver2";
+    //获取课时信息   http://218.28.238.170:8995 /course/courseLesson/5/lessons?current=1&size=10
+    private String mMediaInfoStart = mHostName + "/course/courseLesson/";
+    private String mMediaInfoEnd = "/lessons?current=1&size=10";
+    private String mMediaInfo;
+
+
     //获取视频章节信息
     private String mCpInfo = mHostName + "/api3/getcpinfo_ver2";
     //获取课程评论列表
@@ -71,7 +71,9 @@ public class HttpUrl {
         mCourseListUrlNew = start+ current + end;
         return mCourseListUrlNew;
     }
+
     public String getCourseListUrlHot() {
+        mCourseListUrlHot = mCourseListUrlNew;
         return mCourseListUrlHot;
     }
 
@@ -83,15 +85,9 @@ public class HttpUrl {
         return mClassifyListUrl;
     }
 
-    public String getArticleListUrl() {
-        return mArticleListUrl;
-    }
 
-    public String getArticleContent() {
-        return mArticleContent;
-    }
-
-    public String getMediaInfo() {
+    public String getMediaInfo(int courseId) {
+        mMediaInfo = mMediaInfoStart + courseId + mMediaInfoEnd;
         return mMediaInfo;
     }
 

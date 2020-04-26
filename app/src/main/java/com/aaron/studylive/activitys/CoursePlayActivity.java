@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-//import android.widget.VideoView;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.base.BasePlayActivity;
@@ -42,12 +41,13 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.widget.VideoView;
+
+//import android.widget.VideoView;
 
 /**
  * Created by recker on 16/5/31.
@@ -163,9 +163,6 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
         mCourseId = getIntent().getIntExtra("id", 0);
         mTitle = getIntent().getStringExtra("title");
 
-        L.d("mCourseId = "+mCourseId);
-        L.d("mTitle = "+mTitle);
-
         mTextView.setText(String.format("%s", mTitle));
 
         new MediaAsyncTask().execute();
@@ -175,9 +172,12 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void analysisJsonData(String s) {
+
+        L.d("CoursePlayActivity ->  analysisJsonData + s = "+s);
+
         try {
             JSONObject object = new JSONObject(s);
-            int errorCode = object.getInt("errorCode");
+            int errorCode = object.getInt("code");
 
             if (errorCode == 1000) {
                 mMediaData = new MediaData();
@@ -386,10 +386,10 @@ public class CoursePlayActivity extends BasePlayActivity implements CpFragment.P
         @Override
         protected String doInBackground(Void... voids) {
 
-            String url = HttpUrl.getInstance().getMediaInfo();
-            Map<String, String> params = HttpUrl.getInstance().getMediaInfoParams(mCourseId+"");
-
-            return HttpRequest.getInstance().POST(url, params);
+            String url = HttpUrl.getInstance().getMediaInfo(mCourseId);
+//            Map<String, String> params = HttpUrl.getInstance().getMediaInfoParams(mCourseId+"");
+            L.d("CoursePlayActivity ->  MediaAsyncTask + url = "+url);
+            return HttpRequest.getInstance().GET(url,null);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)

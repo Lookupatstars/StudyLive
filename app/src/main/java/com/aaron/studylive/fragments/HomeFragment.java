@@ -331,20 +331,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         @Override
         protected String doInBackground(String... strings) {
 
-            String cache = CacheUtils.getCache(HttpUrl.getInstance().getCourseListUrlHot(),getActivity());
-            if (!TextUtils.isEmpty(cache)){
-                L.d("发现缓存,直接解析数据analysisCourseListHotJsonData");
-                analysisCourseListHotJsonData(cache);
+            try {
+                String cache = CacheUtils.getCache(HttpUrl.getInstance().getCourseListUrlHot(),getActivity());
+                if (!TextUtils.isEmpty(cache)){
+                    L.d("发现缓存,直接解析数据analysisCourseListHotJsonData");
+                    analysisCourseListHotJsonData(cache);
+                }
+                L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
+
+                String url = HttpUrl.getInstance().getCourseListUrlNew(mCurrentPage);
+                Map<String, String> params = HttpUrl.getInstance().getCourseListHotParams(mCurrentPage);
+                String result = HttpRequest.getInstance().GET(url, null);
+                L.d("url = "+url);
+                L.d("getCourseListHotParams,result =  "+result);
+
+                return result;
+            } catch (Exception e){
+                e.getMessage();
             }
-            L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
-
-            String url = HttpUrl.getInstance().getCourseListUrlNew(mCurrentPage);
-            Map<String, String> params = HttpUrl.getInstance().getCourseListHotParams(mCurrentPage);
-            String result = HttpRequest.getInstance().GET(url, null);
-            L.d("url = "+url);
-            L.d("getCourseListHotParams,result =  "+result);
-
-            return result;
+            return null;
         }
 
         @Override
