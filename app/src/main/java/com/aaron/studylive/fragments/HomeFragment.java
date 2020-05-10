@@ -1,10 +1,8 @@
 package com.aaron.studylive.fragments;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.activitys.DetailPlayerActivity;
 import com.aaron.studylive.adapter.LiveClassAdapter;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
@@ -38,6 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -68,6 +70,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
     private boolean mIsRefshing = false;//是否正在刷新
     private boolean mIsLoadingMore = false;//是否正在加载更多
     private RecyclerView rv_hor_live_class;
+
+    private static final String ImgUrl = "http://course-api.zzu.gdatacloud.com:890/";
 
 
     //获取到activity
@@ -120,42 +124,34 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-    /**
-     * 设置点击事件
-     */
-    private void setupClick() {
-        mIvSearch.setOnClickListener(this);
-    }
 
+    //Start 数据解析
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-//            case R.id.iv_classify:
-//                Intent intent1 = new Intent(getActivity(), ClassifyActivity.class);
-//                startActivity(intent1);
-//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
-//                break;
-//            case R.id.tab_one:
-//                Intent intent2 = new Intent(getActivity(), JobLineActivity.class);
-//                startActivity(intent2);
-//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
-//                break;
-//            case R.id.tab_two:
-//                Intent intent3 = new Intent(getActivity(), RaiseActivity.class);
-//                startActivity(intent3);
-//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
-//                break;
-            case R.id.iv_scan:
+    private class BannerAsyncTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
 
-                break;
-            case R.id.iv_search:
-                toast("点击了搜索");
+            //在请求服务器之前，先判断有没有缓存。有的话，先加载缓存
+            String cache = CacheUtils.getCache(HttpUrl.getInstance().getBannerUrl(),getActivity());
+            if (!TextUtils.isEmpty(cache)){
+                L.d("发现缓存,直接解析数据analysisBannnerJsonData");
+//                analysisBannnerJsonData(cache);
+            }
+            L.d("有没有缓存都要重新请求数据库analysisBannnerJsonData");
 
-                break;
-            case R.id.iv_study_latest:
+            String url = HttpUrl.getInstance().getBannerUrl();
+            Map<String, String> params = HttpUrl.getInstance().getBannerParams();
+            String result = HttpRequest.getInstance().POST(url, params);
+            L.d("BannerAsyncTask:result"+result);
 
-                break;
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+//            analysisBannnerJsonData(s);
         }
     }
 
@@ -218,6 +214,37 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         });
     }
 
+    private class CourseListHotAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+                String cache = CacheUtils.getCache(HttpUrl.getInstance().getCourseListUrlHot(mCurrentPage),getActivity());
+                if (!TextUtils.isEmpty(cache)){
+                    L.d("发现缓存,直接解析数据analysisCourseListHotJsonData");
+                    analysisCourseListHotJsonData(cache);
+                }
+                L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
+
+                String url = HttpUrl.getInstance().getCourseListUrlHot(mCurrentPage);
+                String result = HttpRequest.getInstance().GET(url, null);
+                L.d("url = "+url);
+                L.d("getCourseListHot  result =  "+result);
+
+                return result;
+            } catch (Exception e){
+                e.getMessage();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            analysisCourseListHotJsonData(s);
+        }
+    }
 
     /**
      * 解析课程列表数据
@@ -241,15 +268,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
                     data.setName(object.getString("name"));
                     data.setDesc(object.getString("summary"));
                     data.setNumbers(object.getInt("viewCount"));
-//                    data.setUpdateTime(object.getLong("update_time"));
-                    data.setCoursetype(object.getInt("type"));
-                    data.setPic(object.getString("img"));
-
-//                    data.setLastTime(object.getLong("last_time"));
-//                    data.setChapterSeq(object.getInt("chapter_seq"));
-//                    data.setMediaSeq(object.getInt("media_seq"));
-
-//                    debug(data.toString());
+                    data.setPic(ImgUrl + object.getString("img"));
+                    data.setThumb(ImgUrl + object.getString("img2"));
+                    data.setNumLession(object.getInt("lessonNum"));
 
                     mCourseDatas.add(data);
                 }
@@ -268,6 +289,21 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
             e.printStackTrace();
             mRefreshListView.refreshComplete();
         }
+    }
+
+    //END  数据解析
+
+
+    @Override
+    public void onClick(View v) {
+        //实现搜索的点击功能
+    }
+
+    /**
+     * 设置点击事件
+     */
+    private void setupClick() {
+        mIvSearch.setOnClickListener(this);
     }
 
 
@@ -290,75 +326,23 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toast("点击了视频，但是播放暂未实现");
-//        CourseListData data = mCourseDatas.get(position-2);
-//        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
-//        intent.putExtra("id", data.getId());
-//        intent.putExtra("title", data.getName());
-//        startActivity(intent);
-//        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
+        CourseListData data = mCourseDatas.get(position-1);
+        Intent intent = new Intent(getActivity(), DetailPlayerActivity.class);
+        L.d("onItemClick::data  = "+data);
+        intent.putExtra("id", data.getId());
+        intent.putExtra("title", data.getName());
+        intent.putExtra("lessionNum", data.getNumLession());
+        intent.putExtra("thumb",data.getThumb());
+
+        L.d("onItemClick::data.getId()  = "+data.getId());
+        L.d("onItemClick::data.getName()  = "+data.getName());
+        L.d("onItemClick::data.getThumb()  = "+data.getThumb());
+        L.d("onItemClick::data.getNumLession()  = "+data.getNumLession());
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
     }
 
-    private class BannerAsyncTask extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... voids) {
 
-            //在请求服务器之前，先判断有没有缓存。有的话，先加载缓存
-            String cache = CacheUtils.getCache(HttpUrl.getInstance().getBannerUrl(),getActivity());
-            if (!TextUtils.isEmpty(cache)){
-                L.d("发现缓存,直接解析数据analysisBannnerJsonData");
-//                analysisBannnerJsonData(cache);
-            }
-            L.d("有没有缓存都要重新请求数据库analysisBannnerJsonData");
-
-            String url = HttpUrl.getInstance().getBannerUrl();
-            Map<String, String> params = HttpUrl.getInstance().getBannerParams();
-            String result = HttpRequest.getInstance().POST(url, params);
-            L.d("BannerAsyncTask:result"+result);
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-//            analysisBannnerJsonData(s);
-        }
-    }
-
-    private class CourseListHotAsyncTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try {
-                String cache = CacheUtils.getCache(HttpUrl.getInstance().getCourseListUrlHot(),getActivity());
-                if (!TextUtils.isEmpty(cache)){
-                    L.d("发现缓存,直接解析数据analysisCourseListHotJsonData");
-                    analysisCourseListHotJsonData(cache);
-                }
-                L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
-
-                String url = HttpUrl.getInstance().getCourseListUrlNew(mCurrentPage);
-                Map<String, String> params = HttpUrl.getInstance().getCourseListHotParams(mCurrentPage);
-                String result = HttpRequest.getInstance().GET(url, null);
-                L.d("url = "+url);
-                L.d("getCourseListHotParams,result =  "+result);
-
-                return result;
-            } catch (Exception e){
-                e.getMessage();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            analysisCourseListHotJsonData(s);
-        }
-    }
 
 
     private void showLoading() {

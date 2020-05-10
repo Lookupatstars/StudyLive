@@ -1,205 +1,187 @@
 package com.aaron.studylive.fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.activitys.DetailPlayerActivity;
 import com.aaron.studylive.adapters.CpAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.CpData;
-import com.aaron.studylive.events.PlayNextVideo;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
+import com.aaron.studylive.utils.L;
+import com.aaron.studylive.utils.Loading;
+import com.aaron.studylive.video.LandLayoutVideo;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 
 /**
- * Created by recker on 16/5/31.
+ * Created by Aaron on 2020/5/8
+ * The current project is StudyLive
  *
- * 章节
+ * @Describe:  章节信息界面  类似于课程页面
  *
  */
+
 public class CpFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
-    @Bind(R.id.listview)
+    @Bind(R.id.lv_cp_list)
     ListView mListView;
 
+    LandLayoutVideo detail_player;
+    DetailPlayerActivity detailPlayerActivity;
+
+    private List<CpData> cpDataContent;  //存放章节数据的列表
     private CpAdapter mAdapter;
-
-    private List<CpData> listDatas = new ArrayList<>();
-
+    private int mCourseId;
+    private Loading mLoading;
     private int mCurrentPosition = 1;//当前播放视频的位置
+    private int currentPos;//当前的listView的位置
 
-    private int mId;
+    private boolean isPlay;
+    private boolean isPause;
+    OrientationUtils orientationUtils;
 
-    public void setId(int id) {
-        this.mId = id;
-    }
+    private OnFragmentInteractionListener interactionListener;
+    String result;
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_cp;
-    }
-
-    @Override
-    protected void init() {
-        EventBus.getDefault().register(this);
-
-        //关闭view的OverScroll
-        mListView.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
-        mAdapter = new CpAdapter(getActivity(), listDatas);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-
-        new CpAsyncTask().execute();
-    }
+    private static final String homeUrl = "http://course-api.zzu.gdatacloud.com:890/";
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    private void analysisJsonData(String s) {
-        try {
-            JSONObject object = new JSONObject(s);
-            int errorCode = object.getInt("errorCode");
-
-            if (errorCode == 1000) {
-                JSONArray array = object.getJSONArray("data");
-                for (int i = 0; i < array.length(); i++) {
-                    object = array.getJSONObject(i);
-                    JSONObject object1 = object.getJSONObject("chapter");
-                    JSONArray array1 = object.getJSONArray("media");
-                    CpData data = new CpData();
-//                    Chapter chapter = new Chapter();
-
-                    data.setId(object1.getInt("id"));
-                    data.setChapterName(object1.getString("name"));
-                    data.setCid(object1.getInt("cid"));
-                    data.setSeq(object1.getInt("seq"));
-                    data.setTitle(true);
-//                    debug(data.toString());
-                    listDatas.add(data);
-
-                    for (int j = 0; j < array1.length(); j++) {
-                        object = array1.getJSONObject(j);
-                        CpData data1 = new CpData();
-
-                        data1.setMediaId(object.getInt("id"));
-                        data1.setName(object.getString("name"));
-                        data1.setType(object.getInt("type"));
-                        data1.setChapterSeq(object.getInt("chapter_seq"));
-                        data1.setChapterId(object.getInt("chapter_id"));
-                        data1.setMediaSeq(object.getInt("media_seq"));
-                        data1.setMediaUrl(object.getString("media_url"));
-                        data1.setMediaDownUrl(object.getString("media_down_url"));
-                        data1.setDuration(object.getInt("duration"));
-                        data1.setLastTime(object.getInt("last_time"));
-                        data1.setLastDate(object.getLong("last_date"));
-                        data1.setShareUrl(object.getString("share_url"));
-                        data1.setHaveQues(object.getInt("have_ques"));
-                        data1.setMediaSize(object.getLong("media_size"));
-                        data1.setMediaDownSize(object.getLong("media_down_size"));
-                        data1.setStatus(object.getInt("status"));
-
-                        if (i == 0 && j == 0) {
-                            data1.setSeleted(true);
-                        }
-//                        debug(data1.toString());
-                        listDatas.add(data1);
-                    }//for end
-                }//for end
-                mAdapter.notifyDataSetChanged();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            interactionListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        CpData data = listDatas.get(i);
-        mCurrentPosition = i;
-        if (!data.isTitle()) {
-            clearListSelected();
-            data.setSeleted(true);
-            mAdapter.notifyDataSetChanged();
-            if (mListener != null) {
-                mListener.onPlayVideo(data.getMediaUrl());
-            }
-        }
-    }
+     @Override
+     protected int getLayoutId() {
+         return R.layout.fragment_cp;
+     }
 
-    @Subscribe
-    public void onEvent(PlayNextVideo event) {
-//        debug("*************");
-        for (int i = mCurrentPosition; i < listDatas.size(); i++) {
-            CpData data = listDatas.get(i);
-            if (!data.isTitle()){//不是标题数据
-                if (i > mCurrentPosition) {//跳到下一个视频
-                    clearListSelected();
-                    data.setSeleted(true);
-                    mAdapter.notifyDataSetChanged();
-                    if (mListener != null) {
-                        mListener.onPlayVideo(data.getMediaUrl());
-                    }
-                    mCurrentPosition = i;
-                    break;
-                }
-            }
-        }
+     @Override
+     protected void init() {
+         Bundle bundle = getArguments();
+         if (bundle != null){
+             mCourseId = bundle.getInt("CourseId");
+         }
 
-    }
+         cpDataContent = new ArrayList<>();
+         mAdapter = new CpAdapter(getContext(), cpDataContent);
+         mListView.setAdapter(mAdapter);
+         mListView.setOnItemClickListener(this);
 
-    private void clearListSelected() {
-        for (CpData data : listDatas)
-            data.setSeleted(false);
-    }
+         new CpAsyncTask().execute();
 
+         L.d("init 不知道执行了米有 mCourseId  = "+mCourseId);
+
+     }
+
+     /*
+     重新解析课程数据，并存储到CPData中
+      */
     private class CpAsyncTask extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... voids) {
 
-            String url = HttpUrl.getInstance().getCpInfo();
-            Map<String,String> params = HttpUrl.getInstance().getCpInfoParams(mId+"");
-
-            return HttpRequest.getInstance().POST(url, params);
+            String url = HttpUrl.getInstance().getMediaInfo(mCourseId);
+            L.d("CpFragment ->  CpAsyncTask + url = "+url);
+            result = HttpRequest.getInstance().GET(url,null);
+            return result;
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            analysisJsonData(s);
+            analysisCpJsonData(s);
         }
     }
 
-    private PlayVideoListener mListener;
+    private void analysisCpJsonData(String s) {
+        L.d("CpFragment ->  analysisCpJsonData + s = "+s);
 
-    public void setPlayVideoListener(PlayVideoListener listener) {
-        mListener = listener;
+        try {
+            JSONObject object = new JSONObject(s);
+            int errorCode = object.getInt("code");
+            if (errorCode == 0) {
+                JSONArray array =object.getJSONObject("content").getJSONArray("records");
+                L.d("CpFragment ->  analysisCpJsonData + array.length = "+array.length());
+                for (int i = 0; i< array.length(); i++){
+                    CpData cpData = new CpData();
+                    object = array.getJSONObject(i);
+
+                    L.d("start:::: CpFragment ->  analysisCpJsonData  =  "+i);
+                    L.d("请求到的播放链接的原始地址 =  "+object.getString("resourceAddress2"));
+                    cpData.setCourseId(object.getInt("courseId"));
+                    cpData.setCourseTime(object.getString("courseTime"));
+                    cpData.setCreateTime(object.getString("createTime"));
+                    cpData.setDownload(object.getInt("download"));
+                    cpData.setDownloadCount(object.getInt("downloadCount"));
+                    cpData.setId(object.getInt("id"));
+                    cpData.setName(object.getString("name"));
+                    cpData.setResourceAddress(homeUrl+object.getString("resourceAddress")); //下载资源地址
+                    cpData.setResourceAddress2(homeUrl+object.getString("resourceAddress2"));  //播放资源地址
+                    cpData.setStatus(object.getInt("status"));
+                    cpData.setSummary(object.getString("summary"));
+                    cpData.setUpdateTime(object.getString("updateTime"));
+                    cpData.setUserId(object.getInt("userId"));
+                    cpData.setViewCount(object.getInt("viewCount"));
+                    cpData.setViewPermissions(object.getInt("viewPermissions"));
+
+                    L.d("end:::: CpFragment ->  analysisCpJsonData ");
+                    cpDataContent.add(cpData);
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    public interface PlayVideoListener {
-        //点击播放视频
-        void onPlayVideo(String url);
+     @Override
+     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+         //当item被点击之后的处理，也就是。直接替换fragment
+         mAdapter.notifyDataSetChanged();//刷新listView
+
+         //侧边蓝点击之后，要修改直播课的FrameLayout的内容
+         L.d("点击了第 "+position+"个？？？" + cpDataContent.get(position).getName());
+         L.d("点击了第  "+position+" 个？？？" + cpDataContent.get(position).getResourceAddress2());
+
+         String url = cpDataContent.get(position).getResourceAddress2();
+
+         L.d("点击了第 "+ result);
+//         this.detail_player = Objects.requireNonNull(getActivity()).findViewById(R.id.detail_player);
+//         detailPlayerActivity.analysisJsonData(result,position);
+
+         if (interactionListener != null) {
+             interactionListener.onFragmentInteraction(position);
+         }
+
+     }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(int s);
     }
 
 
-    private void debug(String str) {
-        Log.d(CpFragment.class.getSimpleName(), str);
-    }
 }

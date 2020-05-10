@@ -3,7 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.aaron.studylive">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:ignore="ProtectedPermissions" />
+
     <application
+        android:appComponentFactory="android.support.v4.app.CoreComponentFactory"
+        tools:replace="android:appComponentFactory"
         android:name=".constant.GlobalVaries"
         android:allowBackup="true"
         android:icon="@drawable/launcher"
@@ -13,7 +23,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppCompatTheme"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:targetApi="n">
+        tools:targetApi="p">
+
+        <activity
+            android:name=".activitys.DetailPlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:screenOrientation="fullSensor" />
         <activity android:name=".activitys.SettingActivity" />
         <activity android:name=".activitys.AboutActivity"/>
         <activity android:name=".fragments.MineFragment" />
@@ -23,7 +38,6 @@
         <activity android:name=".activitys.FlyMainActivity" />
         <activity android:name=".activitys.ClassifyActivity" />
         <activity android:name=".activitys.ClassifyListActivity" />
-        <activity android:name=".activitys.CoursePlayActivity" />
         <activity android:name=".activitys.ForgetPasswdActivity"/>
         <activity android:name=".HomeActivity" />
         <activity android:name=".activitys.LoginActivity" />
@@ -48,10 +62,6 @@
         </activity>
         <activity android:name=".MainActivityWithTab" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

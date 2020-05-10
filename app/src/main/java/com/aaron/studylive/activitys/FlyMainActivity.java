@@ -2,10 +2,6 @@ package com.aaron.studylive.activitys;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +16,11 @@ import com.aaron.studylive.view.NoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by Aaron on 2020/2/24
@@ -67,7 +68,6 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         setupContent();
         //设置底部Tab的点击事件
         setupTabClick();
-
     }
 
     //初始化布局

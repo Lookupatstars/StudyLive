@@ -1,255 +1,168 @@
 package com.aaron.studylive.bean;
 
 /**
- * Created by recker on 16/5/31.
+ * Created by Aaron on 2020/5/7
+ * The current project is StudyLive
+ *
+ * @Describe:   等同于MediaData，只不过用于章节列表
  */
 public class CpData {
 
-
+    private int courseId;   //课程ID
+    private String courseTime;  //时长（分钟）
+    private String createTime;  //创建时间
+    private int download;   //是否允许下载（1：允许 0：禁止）
+    private int downloadCount;  //下载量
     private int id;
+    private String name;  //课时名称
+    private String resourceAddress;     //下载资源地址
+    private String resourceAddress2;     //播放资源地址
+    private int status;     //状态（0:待审核，1：已通过，2：未通过）
+    private String summary;     //摘要
+    private String updateTime;  //最后一次修改时间
+    private int  userId;        //主表ID
+    private int viewCount;      //观看量
+    private int viewPermissions;    //观看权限（0：不限，1：注册用户）
 
-    private String chapterName;
 
-    private int cid;
-
-    private int seq;
-
-    private int mediaId;
-
-    private String name;
-
-    private int type;
-
-    private String shareUrl;
-
-    private int chapterId;
-
-    private int chapterSeq;
-
-    private int mediaSeq;
-
-    private int lastTime;
-
-    private long lastDate;
-
-    private int status;
-
-    private int haveQues;
-
-    private int duration;
-
-    private long mediaSize;
-
-    private long mediaDownSize;
-
-    private String mediaUrl;
-
-    private String mediaDownUrl;
-
-    private boolean isTitle = false;//是否是标题
-
-    private boolean isSeleted = false;//是否被选中
-
-    public boolean isSeleted() {
-        return isSeleted;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setSeleted(boolean seleted) {
-        isSeleted = seleted;
+    public String getCourseTime() {
+        return courseTime;
     }
 
-    public boolean isTitle() {
-        return isTitle;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setTitle(boolean title) {
-        isTitle = title;
+    public int getDownload() {
+        return download;
+    }
+
+    public int getDownloadCount() {
+        return downloadCount;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getChapterName() {
-        return chapterName;
-    }
-
-    public void setChapterName(String chapterName) {
-        this.chapterName = chapterName;
-    }
-
-    public int getCid() {
-        return cid;
-    }
-
-    public void setCid(int cid) {
-        this.cid = cid;
-    }
-
-    public int getSeq() {
-        return seq;
-    }
-
-    public void setSeq(int seq) {
-        this.seq = seq;
-    }
-
-    public int getMediaId() {
-        return mediaId;
-    }
-
-    public void setMediaId(int mediaId) {
-        this.mediaId = mediaId;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getResourceAddress() {
+        return resourceAddress;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getShareUrl() {
-        return shareUrl;
-    }
-
-    public void setShareUrl(String shareUrl) {
-        this.shareUrl = shareUrl;
-    }
-
-    public int getChapterId() {
-        return chapterId;
-    }
-
-    public void setChapterId(int chapterId) {
-        this.chapterId = chapterId;
-    }
-
-    public int getChapterSeq() {
-        return chapterSeq;
-    }
-
-    public void setChapterSeq(int chapterSeq) {
-        this.chapterSeq = chapterSeq;
-    }
-
-    public int getMediaSeq() {
-        return mediaSeq;
-    }
-
-    public void setMediaSeq(int mediaSeq) {
-        this.mediaSeq = mediaSeq;
-    }
-
-    public int getLastTime() {
-        return lastTime;
-    }
-
-    public void setLastTime(int lastTime) {
-        this.lastTime = lastTime;
-    }
-
-    public long getLastDate() {
-        return lastDate;
-    }
-
-    public void setLastDate(long lastDate) {
-        this.lastDate = lastDate;
+    public String getResourceAddress2() {
+        return resourceAddress2;
     }
 
     public int getStatus() {
         return status;
     }
 
+    public String getSummary() {
+        return summary;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public int getViewPermissions() {
+        return viewPermissions;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
+
+    public void setCourseTime(String courseTime) {
+        this.courseTime = courseTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setDownload(int download) {
+        this.download = download;
+    }
+
+    public void setDownloadCount(int downloadCount) {
+        this.downloadCount = downloadCount;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setResourceAddress(String resourceAddress) {
+        this.resourceAddress = resourceAddress;
+    }
+
+    public void setResourceAddress2(String resourceAddress2) {
+        this.resourceAddress2 = resourceAddress2;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setStatus(int status) {
         this.status = status;
     }
 
-    public int getHaveQues() {
-        return haveQues;
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
     }
 
-    public void setHaveQues(int haveQues) {
-        this.haveQues = haveQues;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public long getMediaSize() {
-        return mediaSize;
-    }
-
-    public void setMediaSize(long mediaSize) {
-        this.mediaSize = mediaSize;
-    }
-
-    public long getMediaDownSize() {
-        return mediaDownSize;
-    }
-
-    public void setMediaDownSize(long mediaDownSize) {
-        this.mediaDownSize = mediaDownSize;
-    }
-
-    public String getMediaUrl() {
-        return mediaUrl;
-    }
-
-    public void setMediaUrl(String mediaUrl) {
-        this.mediaUrl = mediaUrl;
-    }
-
-    public String getMediaDownUrl() {
-        return mediaDownUrl;
-    }
-
-    public void setMediaDownUrl(String mediaDownUrl) {
-        this.mediaDownUrl = mediaDownUrl;
+    public void setViewPermissions(int viewPermissions) {
+        this.viewPermissions = viewPermissions;
     }
 
     @Override
     public String toString() {
         return "CpData{" +
-                "id=" + id +
-                ", chapterName='" + chapterName + '\'' +
-                ", cid=" + cid +
-                ", seq=" + seq +
-                ", mediaId=" + mediaId +
-                ", name='" + name + '\'' +
-                ", type=" + type +
-                ", shareUrl='" + shareUrl + '\'' +
-                ", chapterId=" + chapterId +
-                ", chapterSeq=" + chapterSeq +
-                ", mediaSeq=" + mediaSeq +
-                ", lastTime=" + lastTime +
-                ", lastDate=" + lastDate +
+                "courseId=" + courseId +
+                ", courseTime='" + courseTime + '\'' +
+                ", createTime=" + createTime + '\'' +
+                ", download=" + download +
+                ", downloadCount=" + downloadCount +
+                ", id=" + id +
+                ", name=" + name + '\'' +
+                ", resourceAddress=" + resourceAddress + '\'' +
+                ", resourceAddress2=" + resourceAddress2 + '\'' +
                 ", status=" + status +
-                ", haveQues=" + haveQues +
-                ", duration=" + duration +
-                ", mediaSize=" + mediaSize +
-                ", mediaDownSize=" + mediaDownSize +
-                ", mediaUrl='" + mediaUrl + '\'' +
-                ", mediaDownUrl='" + mediaDownUrl + '\'' +
-                ", isTitle=" + isTitle +
+                ", summary='" + summary + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", userId=" + userId +
+                ", viewCount=" + viewCount +
+                ", viewPermissions=" + viewPermissions +
                 '}';
     }
 

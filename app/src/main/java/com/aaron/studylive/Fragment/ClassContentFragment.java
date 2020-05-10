@@ -1,15 +1,7 @@
 package com.aaron.studylive.fragment;
 
 import android.app.ProgressDialog;
-import android.support.v4.app.Fragment;
-
-import com.aaron.studylive.utils.HttpUtil;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by Aaron on 2020/4/6

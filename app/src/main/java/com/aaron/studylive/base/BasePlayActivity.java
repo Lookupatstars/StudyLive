@@ -1,13 +1,12 @@
 package com.aaron.studylive.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.aaron.studylive.R;
 
 import butterknife.ButterKnife;
-import io.vov.vitamio.Vitamio;
 
 /**
  * Created by recker on 16/5/31.
@@ -21,7 +20,8 @@ public abstract class BasePlayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Vitamio.isInitialized(this);
+//        Vitamio.isInitialized(this);
+
         setContentView(getLayoutId());
         ButterKnife.bind(this);
 

@@ -3,9 +3,6 @@ package com.aaron.studylive.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -19,6 +16,10 @@ import com.aaron.studylive.R;
 import com.aaron.studylive.utils.PrefUtils;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * 第一次启动显示页  新手引导页
@@ -132,7 +133,6 @@ public class GuideActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     //初始化数据，设置图片

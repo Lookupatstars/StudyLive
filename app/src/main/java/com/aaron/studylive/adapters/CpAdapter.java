@@ -1,5 +1,6 @@
 package com.aaron.studylive.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.bean.CpData;
+import com.aaron.studylive.utils.L;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -50,95 +52,37 @@ public class CpAdapter extends BaseAdapter {
         return i;
     }
 
-
-    @Override
-    public int getViewTypeCount() {
-        return 2;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-
-        if (listDatas.get(position).isTitle())
-            return 0;
-
-        return 1;
-    }
-
+    @SuppressLint("DefaultLocale")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         CpData data = listDatas.get(i);
-
-        if (getItemViewType(i) == 0)
-            return getTitleView(view, data);
-
-        return getContentView(view, data);
-    }
-
-
-    private View getTitleView(View view, CpData data) {
-
-        ViewHolderTitle holder = null;
+        ViewHodler hodler = null;
 
         if (view == null) {
-            holder = new ViewHolderTitle();
-            view = inflater.inflate(R.layout.fragment_cp_title, null);
-
-            holder.title = ButterKnife.findById(view, R.id.tv_title);
-
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolderTitle) view.getTag();
-        }
-
-        holder.title.setText(data.getChapterName()+"");
-
-        return view;
-    }
-
-    private View getContentView(View view, CpData data) {
-
-        ViewHolderContent holder = null;
-
-        if (view == null) {
-            holder = new ViewHolderContent();
+            hodler = new ViewHodler();
             view = inflater.inflate(R.layout.fragment_cp_content, null);
 
-            holder.title = ButterKnife.findById(view, R.id.tv_content);
-            holder.image = ButterKnife.findById(view, R.id.iv_play);
-            holder.time = ButterKnife.findById(view, R.id.tv_time);
+            hodler.playImage = ButterKnife.findById(view, R.id.iv_cp_play);
+            hodler.title = ButterKnife.findById(view, R.id.tv_cp_title);
+            hodler.time = ButterKnife.findById(view, R.id.tv_cp_time);
 
-            view.setTag(holder);
+            L.d("CpAdapter =  "+data.getName());
+            L.d("CpAdapter 播放地址getResourceAddress2 =  "+data.getResourceAddress2());
+            view.setTag(hodler);
         } else {
-            holder = (ViewHolderContent) view.getTag();
+            hodler = (ViewHodler) view.getTag();
         }
 
-        holder.title.setText(data.getChapterSeq()+"-"+data.getMediaSeq()
-                +"   "+data.getName()+"");
-        holder.time.setText(sec2time(data.getDuration()));
-        if (data.isSeleted()) {
-            holder.image.setImageResource(R.drawable.cp_play_press);
-            holder.title.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
-            holder.time.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
-        } else {
-            holder.image.setImageResource(R.drawable.cp_play_normal);
-            holder.title.setTextColor(mContext.getResources().getColor(R.color.cp_second_text));
-            holder.time.setTextColor(mContext.getResources().getColor(R.color.cp_second_text));
-        }
-
+//        Picasso.with(mContext).load(data.getName()).placeholder("R.drawable.bg_default").into((Target) hodler.title);
+        hodler.title.setText(String.format("%d %s", i+1, data.getName()));
+        hodler.time.setText(String.format("%s 分钟", data.getCourseTime()));
 
         return view;
     }
 
-
-
-    private static class ViewHolderTitle {
-        TextView title;
-    }
-
-    private static class ViewHolderContent {
-        ImageView image;
+    private static class ViewHodler {
+        ImageView playImage;
         TextView title;
         TextView time;
     }

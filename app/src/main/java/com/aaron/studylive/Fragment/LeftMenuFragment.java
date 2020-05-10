@@ -1,15 +1,11 @@
 package com.aaron.studylive.fragment;
 
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.aaron.studylive.MainActivityWithTab;
@@ -20,7 +16,7 @@ import com.aaron.studylive.widget.implement.ClassPager;
 import java.util.ArrayList;
 
 /**
- * Created by Aaron on 2020/3/29
+ * Created by Aaron on 2020/5/8
  * The current project is StudyLive
  *
  * @Describe:  侧边栏的fragment

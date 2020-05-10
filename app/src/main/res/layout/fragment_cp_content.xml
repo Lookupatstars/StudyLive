@@ -9,17 +9,17 @@
     android:background="@android:color/white">
 
     <ImageView
-        android:id="@+id/iv_play"
+        android:id="@+id/iv_cp_play"
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:src="@drawable/cp_play_normal"
         android:layout_centerVertical="true"/>
 
     <TextView
-        android:id="@+id/tv_content"
+        android:id="@+id/tv_cp_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/iv_play"
+        android:layout_toRightOf="@+id/iv_cp_play"
         android:layout_toLeftOf="@+id/tv_time"
         android:singleLine="true"
         android:text="1-1 课程导学"
@@ -30,7 +30,7 @@
         android:layout_centerVertical="true" />
 
     <TextView
-        android:id="@+id/tv_time"
+        android:id="@+id/tv_cp_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00:40"

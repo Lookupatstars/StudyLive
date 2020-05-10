@@ -1,9 +1,5 @@
 package com.aaron.studylive.fragments;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-
 import com.aaron.studylive.R;
 import com.aaron.studylive.base.BaseFragment;
 

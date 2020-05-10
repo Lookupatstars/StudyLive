@@ -9,22 +9,15 @@ package com.aaron.studylive.bean;
 public class CourseListData {
 
     private int id;
-    private String name;
-    private String pic;
-    private String desc;
+    private String name;  //课程名
+    private String pic;  //封面图片
+    private String thumb; //缩略图
+    private String desc; //描述
     private int isLearned;//是否学习
-    private int companyId;
     private int numbers;//学习人数
+    private int numLession;  //课时数
     private long updateTime;//更新时间(时间戳)
-    private int coursetype;
-    private long duration;
-    private int finished;//课程是否完结
-    private int isFollow;
-    private int maxChapterSeq;
-    private int maxMediaSeq;
-    private long lastTime;
-    private int chapterSeq;
-    private int mediaSeq;
+
 
 
     public int getId() {
@@ -51,6 +44,14 @@ public class CourseListData {
         this.pic = pic;
     }
 
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
+    }
+
     public String getDesc() {
         return desc;
     }
@@ -67,13 +68,6 @@ public class CourseListData {
         this.isLearned = isLearned;
     }
 
-    public int getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
-    }
 
     public int getNumbers() {
         return numbers;
@@ -91,76 +85,12 @@ public class CourseListData {
         this.updateTime = updateTime;
     }
 
-    public int getCoursetype() {
-        return coursetype;
+    public int getNumLession() {
+        return numLession;
     }
 
-    public void setCoursetype(int coursetype) {
-        this.coursetype = coursetype;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public int getFinished() {
-        return finished;
-    }
-
-    public void setFinished(int finished) {
-        this.finished = finished;
-    }
-
-    public int getIsFollow() {
-        return isFollow;
-    }
-
-    public void setIsFollow(int isFollow) {
-        this.isFollow = isFollow;
-    }
-
-    public int getMaxChapterSeq() {
-        return maxChapterSeq;
-    }
-
-    public void setMaxChapterSeq(int maxChapterSeq) {
-        this.maxChapterSeq = maxChapterSeq;
-    }
-
-    public int getMaxMediaSeq() {
-        return maxMediaSeq;
-    }
-
-    public void setMaxMediaSeq(int maxMediaSeq) {
-        this.maxMediaSeq = maxMediaSeq;
-    }
-
-    public long getLastTime() {
-        return lastTime;
-    }
-
-    public void setLastTime(long lastTime) {
-        this.lastTime = lastTime;
-    }
-
-    public int getChapterSeq() {
-        return chapterSeq;
-    }
-
-    public void setChapterSeq(int chapterSeq) {
-        this.chapterSeq = chapterSeq;
-    }
-
-    public int getMediaSeq() {
-        return mediaSeq;
-    }
-
-    public void setMediaSeq(int mediaSeq) {
-        this.mediaSeq = mediaSeq;
+    public void setNumLession(int numLession) {
+        this.numLession = numLession;
     }
 
     @Override
@@ -171,18 +101,8 @@ public class CourseListData {
                 ", pic='" + pic + '\'' +
                 ", desc='" + desc + '\'' +
                 ", isLearned=" + isLearned +
-                ", companyId=" + companyId +
                 ", numbers=" + numbers +
                 ", updateTime=" + updateTime +
-                ", coursetype=" + coursetype +
-                ", duration=" + duration +
-                ", finished=" + finished +
-                ", isFollow=" + isFollow +
-                ", maxChapterSeq=" + maxChapterSeq +
-                ", maxMediaSeq=" + maxMediaSeq +
-                ", lastTime=" + lastTime +
-                ", chapterSeq=" + chapterSeq +
-                ", mediaSeq=" + mediaSeq +
                 '}';
     }
 }

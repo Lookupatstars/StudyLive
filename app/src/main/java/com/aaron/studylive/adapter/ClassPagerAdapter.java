@@ -1,8 +1,8 @@
 package com.aaron.studylive.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.aaron.studylive.fragment.HotdisFragment;
 import com.aaron.studylive.fragment.NewdisFragment;

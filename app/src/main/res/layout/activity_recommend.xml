@@ -11,16 +11,16 @@
         android:gravity="center|top"
         android:orientation="vertical">
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/vp_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v4.view.PagerTabStrip
+            <androidx.viewpager.widget.PagerTabStrip
                 android:id="@+id/pts_calendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </android.support.v4.view.ViewPager>
+        </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
 
 </ScrollView>

@@ -2,13 +2,12 @@ package com.aaron.studylive.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
-import com.aaron.studylive.bean.LiveClassInfo;
 import com.aaron.studylive.bean.LoveClassInfo;
 import com.aaron.studylive.widget.RecyclerExtras.OnItemClickListener;
 import com.aaron.studylive.widget.RecyclerExtras.OnItemLongClickListener;

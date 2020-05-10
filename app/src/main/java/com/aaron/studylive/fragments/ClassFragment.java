@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.activitys.ClassifyActivity;
-import com.aaron.studylive.activitys.CoursePlayActivity;
+import com.aaron.studylive.activitys.DetailPlayerActivity;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.CourseListData;
@@ -123,10 +123,29 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
     }
 
 
+    private class CourseListNewAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String url = HttpUrl.getInstance().getCourseListUrlNew(mCurrentPage);
+//            Map<String, String> params = HttpUrl.getInstance().getCourseListNewParams();
+            String result = HttpRequest.getInstance().GET(url,null);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            analysisCourseListNewJsonData(s);
+        }
+    }
+
     /**
      * 解析课程列表数据
      * @param s
      */
+
     private void analysisCourseListNewJsonData(String s) {
         L.d("analysisCourseListNewJsonData::直接"+s);
         try {
@@ -136,26 +155,26 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
             if (errorCode == 0) {
                 L.d("object.getJSONObject(\"content\")::直接"+object.getJSONObject("content"));
                 JSONArray array =object.getJSONObject("content").getJSONArray("records");
-                L.d("classFragmente::analysisCourseListNewJsonData = array:::+2::"+array.length());
                 for (int i = 0; i< array.length(); i++) {
                     CourseListData data = new CourseListData();
                     object = array.getJSONObject(i);
 
-                    L.d("analysisCourseListNewJsonData::"+i);
+
                     L.d("id::"+object.getInt("id"));
                     L.d("summary:::"+object.getString("summary"));
                     L.d("viewCount::"+object.getInt("viewCount"));
                     L.d("name:::"+object.getString("name"));
-                    L.d("updateTime::"+object.getString("updateTime"));
-                    L.d("type:::"+object.getInt("type"));
                     L.d("img::"+ ImgUrl + object.getString("img"));
+                    L.d("img2::"+ ImgUrl + object.getString("img2"));
+                    L.d("lessonNum::"+ object.getInt("lessonNum"));
 
                     data.setId(object.getInt("id"));
                     data.setName(object.getString("name"));
                     data.setDesc(object.getString("summary"));
                     data.setNumbers(object.getInt("viewCount"));
-                    data.setCoursetype(object.getInt("type"));
                     data.setPic(ImgUrl + object.getString("img"));
+                    data.setThumb(ImgUrl + object.getString("img2"));
+                    data.setNumLession(object.getInt("lessonNum"));
                     mCourseDatas.add(data);
                 }
                 hideLoading();
@@ -196,31 +215,21 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
     //点击之后打开视频播放界面
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toast("ClassFragment = 点击了视频，正在实现视频播放");
         CourseListData data = mCourseDatas.get(position-1);
-        Intent intent = new Intent(getActivity(), CoursePlayActivity.class);
+        Intent intent = new Intent(getActivity(), DetailPlayerActivity.class);
+        L.d("onItemClick::data  = "+data);
         intent.putExtra("id", data.getId());
         intent.putExtra("title", data.getName());
+        intent.putExtra("lessionNum", data.getNumLession());
+        intent.putExtra("thumb",data.getThumb());
+
+
+        L.d("onItemClick::data.getId()  = "+data.getId());
+        L.d("onItemClick::data.getName()  = "+data.getName());
+        L.d("onItemClick::data.getThumb()  = "+data.getThumb());
+        L.d("onItemClick::data.getNumLession()  = "+data.getNumLession());
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
-    }
-
-    private class CourseListNewAsyncTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-
-            String url = HttpUrl.getInstance().getCourseListUrlNew(mCurrentPage);
-//            Map<String, String> params = HttpUrl.getInstance().getCourseListNewParams();
-            String result = HttpRequest.getInstance().GET(url,null);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            analysisCourseListNewJsonData(s);
-        }
     }
 
 

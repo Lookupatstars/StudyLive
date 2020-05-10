@@ -18,14 +18,19 @@ public class HttpUrl {
     //Banner请求URL  Banner
     private String mBannerUrl = "http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1";
 
-    //课程列表请求URL（最新）    http://218.28.238.170:8995/course/courses?current=1&paging=true&size=10
+    //课程列表请求URL（最新）    http://218.28.238.170:8995/course/courses?current=1&orderBy=time&paging=true&size=10
     // http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1
-    private String start = mHostName + "/course/courses?current=";
-    private String end = "&paging=true&size=10";
+    private String startNew = mHostName + "/course/courses?current=";
+    private String endNew = "&orderBy=time&paging=true&size=10";
     private String mCourseListUrlNew;
 
-    //课程列表请求URL（最新）
-    private String mCourseListUrlHot ;
+
+    //课程列表请求URL（最热）    http://218.28.238.170:8995/course/courses?current=1&orderBy=hot&paging=true&size=10
+    // http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1
+    private String startHot = mHostName + "/course/courses?current=";
+    private String endHot = "&orderBy=hot&paging=true&size=10";
+    private String mCourseListUrlHot;
+
 
     //课程分类列表URL http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getSort
     private String mClassifyCourseUrl = "http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getSort";
@@ -68,12 +73,12 @@ public class HttpUrl {
     }
 
     public String getCourseListUrlNew(int current) {
-        mCourseListUrlNew = start+ current + end;
+        mCourseListUrlNew = startNew+ current + endNew;
         return mCourseListUrlNew;
     }
 
-    public String getCourseListUrlHot() {
-        mCourseListUrlHot = mCourseListUrlNew;
+    public String getCourseListUrlHot(int current) {
+        mCourseListUrlHot = startHot+ current + endHot;
         return mCourseListUrlHot;
     }
 
@@ -128,14 +133,14 @@ public class HttpUrl {
      * http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1
      * 是否是通过不同的值  put（）的参数 进行不同的区别
      */
-    public Map<String, String> getCourseListNewParams(int page) {
-        Map<String, String> params = new HashMap<>();
-        params.put("date", System.currentTimeMillis()+"");
-        params.put("page", page+"");
-        params.put("uid", "2902109");
-        params.put("token", "933b40289b2a668bb882e2261a759267");
-        return params;
-    }
+//    public Map<String, String> getCourseListNewParams(int page) {
+//        Map<String, String> params = new HashMap<>();
+//        params.put("date", System.currentTimeMillis()+"");
+//        params.put("page", page+"");
+//        params.put("uid", "2902109");
+//        params.put("token", "933b40289b2a668bb882e2261a759267");
+//        return params;
+//    }
 
 
     /**
@@ -143,15 +148,15 @@ public class HttpUrl {
      * @param page
      * @return
      */
-    public Map<String, String> getCourseListHotParams(int page) {
-        Map<String, String> params = new HashMap<>();
-        params.put("timestamp", System.currentTimeMillis()+"");
-        params.put("page", page+"");
-        params.put("uid", "2902109");
-        params.put("token", "933b40289b2a668bb882e2261a759267");
-
-        return params;
-    }
+//    public Map<String, String> getCourseListHotParams(int page) {
+//        Map<String, String> params = new HashMap<>();
+//        params.put("timestamp", System.currentTimeMillis()+"");
+//        params.put("page", page+"");
+//        params.put("uid", "2902109");
+//        params.put("token", "933b40289b2a668bb882e2261a759267");
+//
+//        return params;
+//    }
 
     /**
      * 获取课程分类列表参数

@@ -2,16 +2,14 @@ package com.aaron.studylive.widget.implement;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +17,6 @@ import com.aaron.studylive.R;
 import com.aaron.studylive.bean.ClassMenu;
 import com.aaron.studylive.bean.TabMenuList;
 import com.aaron.studylive.constant.AppContants;
-import com.aaron.studylive.constant.ImageList;
 import com.aaron.studylive.utils.CacheUtils;
 import com.aaron.studylive.utils.L;
 import com.aaron.studylive.utils.Utils;
@@ -28,19 +25,12 @@ import com.aaron.studylive.widget.BasePager;
 import com.aaron.studylive.widget.implement.menu.TabDetailPager;
 import com.google.gson.Gson;
 
-import org.xutils.common.Callback;
-import org.xutils.ex.HttpException;
-import org.xutils.http.HttpMethod;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 /**
  * Created by Aaron on 2020/3/29

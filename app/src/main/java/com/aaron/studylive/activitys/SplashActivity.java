@@ -2,7 +2,6 @@ package com.aaron.studylive.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -11,6 +10,8 @@ import android.widget.RelativeLayout;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.utils.PrefUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by Aaron on 2020/2/25

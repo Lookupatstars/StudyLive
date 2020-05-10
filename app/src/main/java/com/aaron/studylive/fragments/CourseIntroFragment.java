@@ -155,10 +155,10 @@ public class CourseIntroFragment extends BaseFragment {
                     data.setName(object.getString("name"));
                     data.setPic(object.getString("pic"));
                     data.setNumbers(object.getInt("numbers"));
-                    data.setDuration(object.getLong("duration"));
-                    data.setIsFollow(object.getInt("is_follow"));
-                    data.setMaxChapterSeq(object.getInt("max_chapter_seq"));
-                    data.setMaxMediaSeq(object.getInt("max_media_seq"));
+//                    data.setDuration(object.getLong("duration"));
+//                    data.setIsFollow(object.getInt("is_follow"));
+//                    data.setMaxChapterSeq(object.getInt("max_chapter_seq"));
+//                    data.setMaxMediaSeq(object.getInt("max_media_seq"));
 
                     listDatas.add(data);
                 }

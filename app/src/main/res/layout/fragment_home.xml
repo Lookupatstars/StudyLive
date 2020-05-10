@@ -11,15 +11,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary">
 
-<!--        <ImageView-->
-<!--            android:id="@+id/iv_study_latest"-->
-<!--            android:layout_width="26dp"-->
-<!--            android:layout_height="26dp"-->
-<!--            android:src="@drawable/study_latest_selected"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_marginRight="10dp"/>-->
-
         <ImageView
             android:id="@+id/iv_search"
             android:layout_width="26dp"
