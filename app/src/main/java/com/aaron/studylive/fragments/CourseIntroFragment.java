@@ -1,21 +1,23 @@
 package com.aaron.studylive.fragments;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.CourseListData;
-import com.aaron.studylive.bean.TeacherData;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
-import com.squareup.picasso.Picasso;
+import com.aaron.studylive.utils.L;
+import com.aaron.studylive.utils.Loading;
+import com.aaron.studylive.views.RefreshListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,49 +25,41 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 /**
- * Created by recker on 16/5/31.
+ * Created by Aaron on 2020/5/8
+ * The current project is StudyLive
  *
- * 课程介绍
+ * @Describe:  章节介绍信息界面
  *
  */
-public class CourseIntroFragment extends BaseFragment {
+public class CourseIntroFragment extends BaseFragment implements RefreshListView.OnRefreshListener ,
+        AdapterView.OnItemClickListener {
 
-    @Bind(R.id.listview)
-    ListView mListView;
+    @Bind(R.id.rfl_listview)
+    RefreshListView mListView;
 
     private List<CourseListData> listDatas = new ArrayList<>();
-
     private CourseListAdapter mAdapter;
 
-    private int mId;
-
-    public void setId(int id) {
-        mId = id;
-    }
-
     private View mHeaderView;
-
     private TextView mTvTitle;
-
-    private ImageView mIvIsFinish;
-
     private TextView mTvContent;
-
-    private ImageView mImage;
-
-    private TextView mTvName;
-
     private TextView mTvIntro;
 
-    private RelativeLayout mTeachAllCourse;
 
-    private TeacherData mTeachData;
+    private String mTitle;  //课程名
+    private String summary; //课程简介
+    private int classType;
+
+    private int mCurrentPage = 1;//当前页面
+    private Loading mLoading;
+    private boolean mIsRefshing = false;//是否正在刷新
+    private boolean mIsLoadingMore = false;//是否正在加载更多
+
+    private static final String ImgUrl = "http://course-api.zzu.gdatacloud.com:890/";
 
     @Override
     protected int getLayoutId() {
@@ -75,136 +69,153 @@ public class CourseIntroFragment extends BaseFragment {
     @Override
     protected void init() {
 
-        listDatas.clear();
-        //关闭view的OverScroll
-        mListView.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
-        mAdapter = new CourseListAdapter(getActivity(), listDatas);
-        mListView.setAdapter(mAdapter);
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            mTitle = bundle.getString("title");
+            summary = bundle.getString("summary");
+            classType = bundle.getInt("type");
+        }
 
         setupHeaderView();
-        new HeaderAsyncTask().execute();
-        new ContentAsyncTask().execute();
+        setIntroContent();
+
+        listDatas.clear();
+
+        mAdapter = new CourseListAdapter(getActivity(), listDatas);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnRefreshListener(this);
+        mListView.setOnItemClickListener(this);
+        //关闭view的OverScroll
+        mListView.setOverScrollMode(ListView.OVER_SCROLL_NEVER);
+        mLoading = Loading.getInstance(getActivity());
+        showLoading();
+
+        new CourseListHotAsyncTask().execute();
     }
 
     private void setupHeaderView() {
         mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_intro_header, null);
 
-        mTvTitle = ButterKnife.findById(mHeaderView, R.id.tv_title);
-//        mIvIsFinish = ButterKnife.findById(mHeaderView, R.id.iv_finish);
-        mTvContent = ButterKnife.findById(mHeaderView, R.id.tv_content);
-//        mImage = ButterKnife.findById(mHeaderView, R.id.iv_img);
-//        mTvName = ButterKnife.findById(mHeaderView, R.id.tv_name);
-        mTvIntro = ButterKnife.findById(mHeaderView, R.id.tv_intro);
-//        mTeachAllCourse = ButterKnife.findById(mHeaderView, R.id.teacher_all_course);
+        mTvTitle = ButterKnife.findById(mHeaderView, R.id.tv_title); //课程简介的课程名
+        mTvContent = ButterKnife.findById(mHeaderView, R.id.tv_summary);    //课程简介
+        mTvIntro = ButterKnife.findById(mHeaderView, R.id.tv_intro);  //课程须知
 
         mListView.addHeaderView(mHeaderView);
     }
 
-    private void analysisHeaderJsonData(String s) {
-        try {
-            JSONObject object = new JSONObject(s);
-            int errorCode = object.getInt("code");
+    private void setIntroContent(){
+        mTvTitle.setText(mTitle);
+        mTvContent.setText(summary);
+        mTvIntro.setText("等待老师添加！");
+    }
 
-            if (errorCode == 1000) {
-                JSONArray array = object.getJSONArray("data");
-                object = array.getJSONObject(0);
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                mTvTitle.setText(object.getString("course_name"));
-                mTvContent.setText(object.getString("course_des"));
-                //如果课程未完成，隐藏图标
-//                if (!object.getString("finished").equals("1")){
-//                    mIvIsFinish.setVisibility(View.GONE);
-//                }
+    }
 
-                array = object.getJSONArray("teacher_list");
-                object = array.getJSONObject(0);
-                mTeachData = new TeacherData();
-                mTeachData.setUid(object.getInt("uid"));
-                mTeachData.setNickname(object.getString("nickname"));
-                mTeachData.setAboutme(object.getString("aboutme"));
-                mTeachData.setPic(object.getString("pic"));
-//                mTeachData.setSex(object.getInt("sex"));
-                mTeachData.setIsV(object.getInt("is_v"));
-
-                Picasso.with(getActivity()).load(mTeachData.getPic())
-                        .into(mImage);
-                mTvName.setText(mTeachData.getNickname()+"");
-                mTvIntro.setText(mTeachData.getAboutme()+"");
+    private class CourseListHotAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String url = HttpUrl.getInstance().getRelevantCourse();
+                String result = HttpRequest.getInstance().GET(url, null);
+                return result;
+            } catch (Exception e){
+                e.getMessage();
             }
+            return null;
+        }
 
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            analysisCourseListHotJsonData(s);
         }
     }
 
-
-    private void analysisContentJsonData(String s) {
+    /**
+     * 解析课程列表数据
+     * @param s
+     */
+    private void analysisCourseListHotJsonData(String s) {
+        L.d("analysisCourseListJsonData::SSS"+s);
         try {
             JSONObject object = new JSONObject(s);
             int errorCode = object.getInt("code");
+            mListView.refreshComplete();
 
-            if (errorCode == 1000) {
-                JSONArray array = object.getJSONArray("content");
-
-                for (int i = 0; i < array.length(); i++) {
+            if (errorCode == 0) {
+                JSONArray array =object.getJSONObject("content").getJSONArray("records");
+                L.d("+2::"+array);
+                for (int i = 0; i< array.length(); i++) {
                     CourseListData data = new CourseListData();
                     object = array.getJSONObject(i);
 
-                    data.setId(object.getInt("id"));
-                    data.setName(object.getString("name"));
-                    data.setPic(object.getString("pic"));
-                    data.setNumbers(object.getInt("numbers"));
-//                    data.setDuration(object.getLong("duration"));
-//                    data.setIsFollow(object.getInt("is_follow"));
-//                    data.setMaxChapterSeq(object.getInt("max_chapter_seq"));
-//                    data.setMaxMediaSeq(object.getInt("max_media_seq"));
+                    if (object.getInt("type") == classType && !object.getString("name").equals(mTitle)){
 
-                    listDatas.add(data);
-                }
+                        data.setId(object.getInt("id"));
+                        data.setName(object.getString("name"));
+                        data.setDesc(object.getString("summary"));
+                        data.setNumbers(object.getInt("viewCount"));
+                        data.setPic(ImgUrl + object.getString("img"));
+                        data.setThumb(ImgUrl + object.getString("img2"));
+                        data.setNumLession(object.getInt("lessonNum"));
+                        data.setClassType(object.getInt("type"));
 
+                        L.d("Home    name:::"+object.getString("name"));
+                        L.d("Home     lessonNum::"+ object.getInt("lessonNum"));
+                        L.d("Home     setClassType::"+ object.getInt("type"));
+
+                        listDatas.add(data);
+                    } //End if
+                } //End for
+
+                hideLoading();
                 mAdapter.notifyDataSetChanged();
+
+                if (mIsRefshing == true) {
+                    Toast.makeText(getActivity(),"刷新成功",Toast.LENGTH_SHORT).show();
+                }
+                mIsRefshing = false;
+                mIsLoadingMore = false;
+
             }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
+            mListView.refreshComplete();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        mCurrentPage = 1;
+        mIsRefshing = true;
+        listDatas.clear();
+        new CourseListHotAsyncTask().execute();
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (!mIsLoadingMore) {
+            mCurrentPage++;
+            mIsLoadingMore = true;
+            new CourseListHotAsyncTask().execute();
         }
     }
 
 
-    private class HeaderAsyncTask extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... voids) {
-
-            String url = HttpUrl.getInstance().getCourseIntro();
-            Map<String, String> params = HttpUrl.getInstance().getCourseIntroParams(mId+"");
-
-            return HttpRequest.getInstance().POST(url, params);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            analysisHeaderJsonData(s);
-        }
+    private void showLoading() {
+        mLoading.show();
+        mListView.setVisibility(View.GONE);
     }
 
-
-    private class ContentAsyncTask extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... voids) {
-
-            String url = HttpUrl.getInstance().getRelevantCourse();
-            Map<String, String> params = HttpUrl.getInstance().getRelevantCourseParams(mId+"");
-
-            return HttpRequest.getInstance().POST(url, params);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            analysisContentJsonData(s);
-        }
+    private void hideLoading() {
+        mLoading.hide();
+        mListView.setVisibility(View.VISIBLE);
     }
+
 
 }

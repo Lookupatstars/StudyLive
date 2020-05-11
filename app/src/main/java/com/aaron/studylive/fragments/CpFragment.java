@@ -8,16 +8,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.aaron.studylive.R;
-import com.aaron.studylive.activitys.DetailPlayerActivity;
 import com.aaron.studylive.adapters.CpAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.CpData;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
-import com.aaron.studylive.utils.Loading;
-import com.aaron.studylive.video.LandLayoutVideo;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,19 +37,9 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
     @Bind(R.id.lv_cp_list)
     ListView mListView;
 
-    LandLayoutVideo detail_player;
-    DetailPlayerActivity detailPlayerActivity;
-
     private List<CpData> cpDataContent;  //存放章节数据的列表
     private CpAdapter mAdapter;
     private int mCourseId;
-    private Loading mLoading;
-    private int mCurrentPosition = 1;//当前播放视频的位置
-    private int currentPos;//当前的listView的位置
-
-    private boolean isPlay;
-    private boolean isPause;
-    OrientationUtils orientationUtils;
 
     private OnFragmentInteractionListener interactionListener;
     String result;
@@ -146,6 +132,9 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
                     cpData.setViewPermissions(object.getInt("viewPermissions"));
 
                     L.d("end:::: CpFragment ->  analysisCpJsonData ");
+                    if (i == 0) {
+                        cpData.setSeleted(true);
+                    }
                     cpDataContent.add(cpData);
                 }
                 mAdapter.notifyDataSetChanged();
@@ -158,25 +147,29 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
 
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-         //当item被点击之后的处理，也就是。直接替换fragment
+//当item被点击之后的处理，也就是。直接替换fragment
          mAdapter.notifyDataSetChanged();//刷新listView
-
+         clearListSelected();
+         cpDataContent.get(0).setSeletedEnd(true);
          //侧边蓝点击之后，要修改直播课的FrameLayout的内容
          L.d("点击了第 "+position+"个？？？" + cpDataContent.get(position).getName());
          L.d("点击了第  "+position+" 个？？？" + cpDataContent.get(position).getResourceAddress2());
 
          String url = cpDataContent.get(position).getResourceAddress2();
-
+         cpDataContent.get(position).setSeleted(true);
+         cpDataContent.get(position).setSeletedEnd(true);
          L.d("点击了第 "+ result);
-//         this.detail_player = Objects.requireNonNull(getActivity()).findViewById(R.id.detail_player);
-//         detailPlayerActivity.analysisJsonData(result,position);
 
          if (interactionListener != null) {
              interactionListener.onFragmentInteraction(position);
          }
 
      }
+
+    private void clearListSelected() {
+        for (CpData data : cpDataContent)
+            data.setSeleted(false);
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

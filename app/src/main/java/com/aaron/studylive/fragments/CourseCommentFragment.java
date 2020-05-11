@@ -61,7 +61,7 @@ public class CourseCommentFragment extends BaseFragment implements AdapterView.O
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
-        new CommentAsyncTask().execute();
+//        new CommentAsyncTask().execute();
     }
 
     @Override
@@ -110,7 +110,7 @@ public class CourseCommentFragment extends BaseFragment implements AdapterView.O
         @Override
         protected String doInBackground(Void... voids) {
 
-            String url = HttpUrl.getInstance().getCourseCommentList();
+            String url = HttpUrl.getInstance().getRelevantCourse();
             Map<String, String> params = HttpUrl.getInstance()
                     .getCourseCommentListParams(mId+"", mPage);
 

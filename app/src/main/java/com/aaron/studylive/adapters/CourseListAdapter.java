@@ -79,16 +79,6 @@ public class CourseListAdapter extends BaseAdapter {
         hodler.des.setText(String.format("%s", data.getDesc()));
         hodler.numbers.setText(String.format("%d", data.getNumbers()));
 
-
-//        if (data.getFinished() == 0) {
-//            hodler.finished.setTextColor(mContext.getResources().getColor(R.color.course_update_text));
-//            String update = "更新至"+data.getMaxChapterSeq()+"-"+data.getMaxMediaSeq();
-//            hodler.finished.setText(update);
-//        } else {
-//            hodler.finished.setTextColor(mContext.getResources().getColor(R.color.course_second_text));
-//            hodler.finished.setText("更新完成");
-//        }
-
         return view;
     }
 

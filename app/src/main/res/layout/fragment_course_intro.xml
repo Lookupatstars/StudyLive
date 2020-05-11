@@ -5,8 +5,8 @@
     android:layout_height="match_parent">
 
 
-    <ListView
-        android:id="@+id/listview"
+    <com.aaron.studylive.views.RefreshListView
+        android:id="@+id/rfl_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"

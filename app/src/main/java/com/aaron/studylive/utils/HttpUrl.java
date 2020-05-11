@@ -44,14 +44,8 @@ public class HttpUrl {
     private String mMediaInfo;
 
 
-    //获取视频章节信息
-    private String mCpInfo = mHostName + "/api3/getcpinfo_ver2";
-    //获取课程评论列表
-    private String mCourseCommentList = mHostName + "/api3/coursecommentlist";
-    //获取课程简介信息
-    private String mCourseIntro = mHostName + "/api3/getcourseintro";
-    //获取推荐课程列表
-    private String mRelevantCourse = mHostName + "/api3/getrelevantcourse";
+    //获取推荐课程列表  http://218.28.238.170:8995/course/courses?current=1&orderBy=time&paging=true&size=100
+    private String mRelevantCourse = mHostName + "/course/courses?current=1&orderBy=time&paging=true&size=1000";
 
     private HttpUrl() {
 
@@ -96,17 +90,6 @@ public class HttpUrl {
         return mMediaInfo;
     }
 
-    public String getCpInfo() {
-        return mCpInfo;
-    }
-
-    public String getCourseCommentList() {
-        return mCourseCommentList;
-    }
-
-    public String getCourseIntro() {
-        return mCourseIntro;
-    }
 
     public String getRelevantCourse() {
         return mRelevantCourse;

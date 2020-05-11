@@ -4,7 +4,6 @@ package com.aaron.studylive.fragments;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +20,7 @@ import com.aaron.studylive.bean.CourseListData;
 import com.aaron.studylive.bean.LiveClassInfo;
 import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.CacheUtils;
+import com.aaron.studylive.utils.Class2detail;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
@@ -175,10 +175,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
                     L.d("name:::"+object.getString("name"));
                     L.d("img::"+object.getString("img"));
                     //每当数据不对的时候，总是会停止，
-
                     data.setName(object.getString("name"));
-//                    data.setPic(object.getString("img"));
-//                    debug(data.toString());
                     mBannerDatas.add(data);
                 }
                 setBanner();
@@ -264,6 +261,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
                     CourseListData data = new CourseListData();
                     object = array.getJSONObject(i);
 
+                    L.d("Home    name:::"+object.getString("name"));
+                    L.d("Home     lessonNum::"+ object.getInt("lessonNum"));
+
                     data.setId(object.getInt("id"));
                     data.setName(object.getString("name"));
                     data.setDesc(object.getString("summary"));
@@ -271,6 +271,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
                     data.setPic(ImgUrl + object.getString("img"));
                     data.setThumb(ImgUrl + object.getString("img2"));
                     data.setNumLession(object.getInt("lessonNum"));
+                    data.setClassType(object.getInt("type"));
+
+                    L.d("Home     setClassType::"+ object.getInt("type"));
 
                     mCourseDatas.add(data);
                 }
@@ -326,18 +329,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        CourseListData data = mCourseDatas.get(position-1);
-        Intent intent = new Intent(getActivity(), DetailPlayerActivity.class);
-        L.d("onItemClick::data  = "+data);
-        intent.putExtra("id", data.getId());
-        intent.putExtra("title", data.getName());
-        intent.putExtra("lessionNum", data.getNumLession());
-        intent.putExtra("thumb",data.getThumb());
 
-        L.d("onItemClick::data.getId()  = "+data.getId());
-        L.d("onItemClick::data.getName()  = "+data.getName());
-        L.d("onItemClick::data.getThumb()  = "+data.getThumb());
-        L.d("onItemClick::data.getNumLession()  = "+data.getNumLession());
+        CourseListData data = mCourseDatas.get(position-2);
+        Intent intent = new Intent(getActivity(), DetailPlayerActivity.class);
+        if (data.getNumLession()==0){
+            Toast.makeText(getActivity(),"敬请期待",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Class2detail class2detail = new Class2detail();
+        intent = class2detail.TransformData(intent,data);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
     }
@@ -371,10 +371,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     private void toast(String str) {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
-    }
-
-    private void debug(String str) {
-        Log.d(CourseFragment.class.getSimpleName(), str);
     }
 
     @Override

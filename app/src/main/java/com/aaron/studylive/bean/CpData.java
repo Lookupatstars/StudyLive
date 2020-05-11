@@ -24,6 +24,8 @@ public class CpData {
     private int viewCount;      //观看量
     private int viewPermissions;    //观看权限（0：不限，1：注册用户）
 
+    private boolean isSeleted = false;//是否被选中
+    private boolean isSeletedEnd = false;//是否播放过
 
     public int getCourseId() {
         return courseId;
@@ -143,6 +145,22 @@ public class CpData {
 
     public void setViewPermissions(int viewPermissions) {
         this.viewPermissions = viewPermissions;
+    }
+
+    public boolean isSeleted() {
+        return isSeleted;
+    }
+
+    public void setSeleted(boolean seleted) {
+        isSeleted = seleted;
+    }
+
+    public boolean isSeletedEnd() {
+        return isSeletedEnd;
+    }
+
+    public void setSeletedEnd(boolean seletedEnd) {
+        isSeletedEnd = seletedEnd;
     }
 
     @Override

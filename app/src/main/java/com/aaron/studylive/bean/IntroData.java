@@ -1,13 +1,12 @@
 package com.aaron.studylive.bean;
 
 /**
- * Created by recker on 16/5/24.
+ * Created by Aaron on 2020/4/27
+ * The current project is StudyLive
  *
- * 课程列表数据
- *
+ * @Describe:   点击课程之后请求的课程数据
  */
-public class CourseListData {
-
+public class IntroData {
     private int id;
     private String name;  //课程名
     private String pic;  //封面图片
@@ -102,7 +101,7 @@ public class CourseListData {
 
     @Override
     public String toString() {
-        return "CourseListData{" +
+        return "IntroData{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", pic='" + pic + '\'' +

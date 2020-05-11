@@ -13,6 +13,7 @@ import com.aaron.studylive.activitys.DetailPlayerActivity;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.CourseListData;
+import com.aaron.studylive.utils.Class2detail;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
@@ -175,6 +176,10 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
                     data.setPic(ImgUrl + object.getString("img"));
                     data.setThumb(ImgUrl + object.getString("img2"));
                     data.setNumLession(object.getInt("lessonNum"));
+                    data.setClassType(object.getInt("type"));
+
+                    L.d("Home     setClassType::"+ object.getInt("type"));
+
                     mCourseDatas.add(data);
                 }
                 hideLoading();
@@ -215,23 +220,20 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
     //点击之后打开视频播放界面
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         CourseListData data = mCourseDatas.get(position-1);
+        if (data.getNumLession()==0){
+            Toast.makeText(getActivity(),"敬请期待",Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(getActivity(), DetailPlayerActivity.class);
-        L.d("onItemClick::data  = "+data);
-        intent.putExtra("id", data.getId());
-        intent.putExtra("title", data.getName());
-        intent.putExtra("lessionNum", data.getNumLession());
-        intent.putExtra("thumb",data.getThumb());
 
+        Class2detail class2detail = new Class2detail();
+        intent = class2detail.TransformData(intent,data);
 
-        L.d("onItemClick::data.getId()  = "+data.getId());
-        L.d("onItemClick::data.getName()  = "+data.getName());
-        L.d("onItemClick::data.getThumb()  = "+data.getThumb());
-        L.d("onItemClick::data.getNumLession()  = "+data.getNumLession());
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
     }
-
 
     private void showLoading() {
         mLoading.show();

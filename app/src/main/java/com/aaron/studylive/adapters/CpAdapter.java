@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aaron.studylive.R;
@@ -43,7 +44,7 @@ public class CpAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public CpData getItem(int i) {
         return listDatas.get(i);
     }
 
@@ -63,6 +64,7 @@ public class CpAdapter extends BaseAdapter {
             hodler = new ViewHodler();
             view = inflater.inflate(R.layout.fragment_cp_content, null);
 
+            hodler.rl_cp_list = ButterKnife.findById(view,R.id.rl_cp_list);
             hodler.playImage = ButterKnife.findById(view, R.id.iv_cp_play);
             hodler.title = ButterKnife.findById(view, R.id.tv_cp_title);
             hodler.time = ButterKnife.findById(view, R.id.tv_cp_time);
@@ -74,14 +76,37 @@ public class CpAdapter extends BaseAdapter {
             hodler = (ViewHodler) view.getTag();
         }
 
-//        Picasso.with(mContext).load(data.getName()).placeholder("R.drawable.bg_default").into((Target) hodler.title);
-        hodler.title.setText(String.format("%d %s", i+1, data.getName()));
+        if (data.getName().contains("-")){
+            hodler.title.setText(String.format("%s", data.getName()));
+        }else {
+            hodler.title.setText(String.format("%d %s", i+1, data.getName()));
+        }
+
         hodler.time.setText(String.format("%s 分钟", data.getCourseTime()));
+        if (data.isSeleted()){
+
+            hodler.playImage.setImageResource(R.drawable.cp_play_press);
+            hodler.title.setTextColor(mContext.getResources().getColor(R.color.red));
+            hodler.time.setTextColor(mContext.getResources().getColor(R.color.red));
+        }else {
+            if (data.isSeletedEnd()){
+                hodler.playImage.setImageResource(R.drawable.cp_play_normal);
+                hodler.title.setTextColor(mContext.getResources().getColor(R.color.grey));
+                hodler.time.setTextColor(mContext.getResources().getColor(R.color.grey));
+            }else {
+                hodler.playImage.setImageResource(R.drawable.cp_play_normal);
+                hodler.title.setTextColor(mContext.getResources().getColor(R.color.black));
+                hodler.time.setTextColor(mContext.getResources().getColor(R.color.black));
+            }
+
+        }
+
 
         return view;
     }
 
     private static class ViewHodler {
+        RelativeLayout rl_cp_list;
         ImageView playImage;
         TextView title;
         TextView time;
