@@ -69,7 +69,7 @@ public class CourseCommentAdapter extends BaseAdapter {
             holder.name = ButterKnife.findById(view, R.id.tv_comment_name);
             holder.time = ButterKnife.findById(view, R.id.tv_comment_time);
             holder.content = ButterKnife.findById(view, R.id.tv_comment_content);
-            holder.lv_replay = ButterKnife.findById(view,R.id.lv_replay);
+//            holder.lv_replay = ButterKnife.findById(view,R.id.lv_replay);
 
             view.setTag(holder);
         } else {
@@ -103,19 +103,19 @@ public class CourseCommentAdapter extends BaseAdapter {
 
         ViewHolder viewHolder = new ViewHolder();
         if(!content.equals("")){
-            CommentContent.CommentContentRecords.CommentContentRecordsReplays data = new CommentContent.CommentContentRecords.CommentContentRecordsReplays();
-            data.name =name;
-            data.content = content;
+                CommentContent.CommentContentRecords.CommentContentRecordsReplays data = new CommentContent.CommentContentRecords.CommentContentRecordsReplays(name,content);
+//                data.name =name;
+//                data.content = content;
 
-            listDatas.get(0).records.get(position).replys.add(data);
+                listDatas.get(0).records.get(position).replys.add(data);
 
-            ViewGroup.LayoutParams params1 = viewHolder.lv_replay.getLayoutParams();
+                ViewGroup.LayoutParams params1 = viewHolder.lv_replay.getLayoutParams();
 
 //            L.d("高度  cp "+(150*h));
-            params1.height= Utils.dip2px(Objects.requireNonNull(mContext),150)*1;
+                params1.height= Utils.dip2px(Objects.requireNonNull(mContext),150)*1;
 
-            viewHolder.lv_replay.setLayoutParams(params1);
-            notifyDataSetChanged();
+                viewHolder.lv_replay.setLayoutParams(params1);
+                notifyDataSetChanged();
         }else {
             throw new IllegalArgumentException("评论数据为空!");
         }

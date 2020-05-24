@@ -12,27 +12,24 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
-import com.aaron.studylive.adapters.CourseCommentAdapter;
+import com.aaron.studylive.adapters.CommentExpandAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.ClassInCommentData;
-import com.aaron.studylive.bean.CommentContent;
+import com.aaron.studylive.bean.CommentContentRecordsReplays;
 import com.aaron.studylive.bean.LoginData;
 import com.aaron.studylive.utils.DateUtil;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
-import com.aaron.studylive.utils.Utils;
+import com.aaron.studylive.views.CommentExpandableListView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
@@ -43,7 +40,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.Bind;
 import okhttp3.MediaType;
@@ -61,8 +57,368 @@ import static android.content.Context.MODE_PRIVATE;
  * @Describe:  课程评论
  *
  */
-public class CourseCommentFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class CourseCommentFragment extends BaseFragment implements View.OnClickListener
+//        , AdapterView.OnItemClickListener
+{
 
+    @Bind(R.id.ll_comment_height)
+    LinearLayout ll_comment_height;
+
+    @Bind(R.id.detail_page_lv_comment)
+    CommentExpandableListView expandableListView;
+
+    @Bind(R.id.tv_no_comment)
+    TextView tv_no_comment;
+
+    @Bind(R.id.et_send_comment)
+    TextView et_send_comment;
+
+    @Bind(R.id.btn_up_comment)
+    Button btn_up_comment;
+
+    private List<ClassInCommentData> contentList = new ArrayList<>();
+    private int mCourseId;
+    LoginData LoginData = new LoginData();
+        private CommentExpandAdapter adapter;
+//    private CourseCommentAdapter mAdapter;
+    private CpFragment cpFragment = new CpFragment();
+    private int mPage = 1;
+    private int lessonId;
+    private int h=1;
+    private BottomSheetDialog dialog;
+    private static final String homeUrl = "http://course-api.zzu.gdatacloud.com:890/";
+
+    private Context mContext;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_course_comment;
+    }
+
+    @Override
+    protected void init() {
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            mCourseId = bundle.getInt("CourseId");
+        }
+        new ClassInCommentAsyncTask().execute();
+
+//        initExpandableListView(listDatas);
+        et_send_comment.setOnClickListener(this);
+
+    }
+
+    private void initExpandableListView(final List<ClassInCommentData> commentList){
+        expandableListView.setGroupIndicator(null);
+        //默认展开所有回复
+        adapter = new CommentExpandAdapter(getActivity(), commentList);
+        expandableListView.setAdapter(adapter);
+        for(int i = 0; i<commentList.get(0).records.size(); i++){
+            expandableListView.expandGroup(i);
+        }
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
+                boolean isExpanded = expandableListView.isGroupExpanded(groupPosition);
+//                Log.e(TAG, "onGroupClick: 当前的评论id>>>"+commentList.get(groupPosition).getId());
+//                if(isExpanded){
+//                    expandableListView.collapseGroup(groupPosition);
+//                }else {
+//                    expandableListView.expandGroup(groupPosition, true);
+//                }
+                showReplyDialog(groupPosition);
+                return true;
+            }
+        });
+
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
+                Toast.makeText(getActivity(),"点击了回复",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                //toast("展开第"+groupPosition+"个分组");
+
+            }
+        });
+
+    }
+
+    //所有课程
+    private class ClassInCommentAsyncTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            String url = HttpUrl.getInstance().getMediaInfo(mCourseId);
+            L.d("CpFragment ->  CpAsyncTask + url = "+url);
+            return HttpRequest.getInstance().GET(getContext(),url,null);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            analysisClassInCommentJsonData(s);
+        }
+    }
+
+    //解析课程列表
+    private void analysisClassInCommentJsonData(String s) {
+        L.d("analysisClassInCommentJsonData   = "+s);
+        try {
+            JSONObject object = new JSONObject(s);
+            int errorCode = object.getInt("code");
+            if (errorCode == 0) {
+                JSONArray array =object.getJSONObject("content").getJSONArray("records");
+
+                L.d("第一节课的id是多少 = "+array.getJSONObject(0).getInt("id"));
+                lessonId = array.getJSONObject(0).getInt("id");
+                new DisplayCommentAsyncTask().execute();
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    //end  所有课程
+
+    //只查询本门课程的第一节课的评论，只需要把所有的评论都集中在第一节课就可以了
+    private class DisplayCommentAsyncTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            String url = HttpUrl.getInstance().getCommentUrl(lessonId);
+            L.d("请求评论列表的  url = "+url);
+            String str =  HttpRequest.getInstance().GET(getContext(),url, null);
+            return str;
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            analysisDisplayCommentJsonData(s);
+        }
+    }
+
+    //解析评论列表
+    private void analysisDisplayCommentJsonData(String json) {
+
+        try {
+            JSONObject object = new JSONObject(json).getJSONObject("content");
+            Gson gson = new Gson();
+            ClassInCommentData data = gson.fromJson(object.toString(), ClassInCommentData.class);
+            L.d("看卡你新的data 是个啥 "+data);
+            L.d("看看有多少个回复 = "+h);
+            contentList.add(data);
+            h = contentList.size();
+            L.d("第一次设置高度 h 的个数  analysisDisplayCommentJsonData = "+h);
+
+            L.d("contentList = "+contentList);
+
+            if (contentList.get(0).total == 0){
+                tv_no_comment.setVisibility(View.VISIBLE);
+            }
+
+            initExpandableListView(contentList);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //评论回复
+    private void SendCommentWithOkHttp(String content ,int courseId,int lessonId,int pid,int type ) {
+        new Thread(new Runnable() {
+            public void run() {
+                JSONObject object = new JSONObject();
+
+                try {
+                    object.put("content",content);
+                    object.put("courseId",courseId);
+                    object.put("lessonId",lessonId);
+                    object.put("pid", pid);
+                    object.put("type", type);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                MediaType type = MediaType.parse("application/json;charset=UTF-8");
+                RequestBody requestBody = RequestBody.create(type, "" + object.toString());
+
+                try {
+                    SharedPreferences share =  getContext().getSharedPreferences("Session",MODE_PRIVATE);
+                    String sessionid= share.getString("sessionid","null");
+
+                    String url = HttpUrl.getInstance().getSendComment(lessonId);
+                    L.d("url = "+url);
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .addHeader("cookie",sessionid)
+                            // 指定访问的服务器地址
+                            .url(url).post(requestBody)
+                            .build();
+                    L.d("2");
+                    Response response = client.newCall(request).execute();
+                    L.d("3");
+                    String responseData = response.body().string();
+                    L.d("评论的返回结果 = "+responseData);
+                    JSONObject data = new JSONObject(responseData);
+                    L.d("data "+ data);
+                    int code = data.getInt("code");
+                    if (code == 0){
+
+                    }else if (code ==1){
+                        Looper.prepare();
+                        Toast.makeText(getActivity().getApplicationContext(),"登录信息已失效，请重新登陆！ ",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }else {
+                        Looper.prepare();
+                        Toast.makeText(getActivity().getApplicationContext(),"评论失败",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            getActivity().finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //评论点击
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.et_send_comment){
+            showCommentDialog();
+        }
+    }
+
+    // 弹出评论框
+    private void showCommentDialog(){
+        dialog = new BottomSheetDialog(getActivity());
+        View commentView = LayoutInflater.from(getActivity()).inflate(R.layout.comment_dialog_layout,null);
+        final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
+        final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
+        dialog.setContentView(commentView);
+
+        //解决bsd显示不全的情况
+        View parent = (View) commentView.getParent();
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
+        commentView.measure(0,0);
+        behavior.setPeekHeight(commentView.getMeasuredHeight());
+
+        bt_comment.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                String commentContent = commentText.getText().toString().trim();
+                if(!TextUtils.isEmpty(commentContent)){
+                    dialog.dismiss();
+
+                    ClassInCommentData.CommentContentRecords commentData =new ClassInCommentData.CommentContentRecords(LoginData.getName()
+                            ,commentContent,DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss"));
+                    adapter.addTheCommentData(commentData);
+                    SendCommentWithOkHttp(commentContent,mCourseId,lessonId,0,0);
+                    //去掉暂无评论显示
+                    tv_no_comment.setVisibility(View.GONE);
+//                    new DisplayCommentAsyncTask().execute();
+
+                    Toast.makeText(getActivity(),"评论成功",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getActivity(),"评论内容不能为空",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        commentText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
+                    bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
+                }else {
+                    bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        dialog.show();
+    }
+
+    //弹出回复框
+    private void showReplyDialog(final int position){
+        dialog = new BottomSheetDialog(getActivity());
+        View commentView = LayoutInflater.from(getActivity()).inflate(R.layout.comment_dialog_layout,null);
+        final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
+        final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
+        commentText.setHint("回复 " + contentList.get(0).records.get(position).name + " 的评论:");
+        dialog.setContentView(commentView);
+        bt_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String replyContent = commentText.getText().toString().trim();
+                if(!TextUtils.isEmpty(replyContent)){
+
+                    dialog.dismiss();
+                    L.d("针对这个id的评论回复 listDatas.get(0).content.records.get(position).id " +contentList.get(0).records.get(position).id);
+                    CommentContentRecordsReplays detailBean = new CommentContentRecordsReplays(LoginData.getName(),replyContent);
+                    adapter.addTheReplyData(detailBean,position);
+                    //SendCommentWithOkHttp(String content ,int courseId,int lessonId,int pid,int type )
+                    SendCommentWithOkHttp(replyContent,mCourseId,lessonId
+                            ,contentList.get(0).records.get(position).id,0);
+                    expandableListView.expandGroup(position);
+                    Toast.makeText(getActivity(),"回复成功",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getActivity(),"回复内容不能为空",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        commentText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
+                    bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
+                }else {
+                    bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        dialog.show();
+    }
+
+
+    /*
     @Bind(R.id.ll_comment_height)
     LinearLayout ll_comment_height;
 
@@ -78,7 +434,6 @@ public class CourseCommentFragment extends BaseFragment implements View.OnClickL
     @Bind(R.id.btn_up_comment)
     Button btn_up_comment;
 
-    private List<ClassInCommentData> classInCommentData = new ArrayList<>();
     private List<CommentContent> contentList = new ArrayList<>();
     private int mCourseId;
     LoginData LoginData = new LoginData();
@@ -371,19 +726,15 @@ public class CourseCommentFragment extends BaseFragment implements View.OnClickL
     }
 
 
-    /**
-     * by moos on 2018/04/20
-     * func:弹出评论框
-     */
+    // 弹出评论框
     private void showCommentDialog(){
         dialog = new BottomSheetDialog(getActivity());
         View commentView = LayoutInflater.from(getActivity()).inflate(R.layout.comment_dialog_layout,null);
         final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
         final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
         dialog.setContentView(commentView);
-        /**
-         * 解决bsd显示不全的情况
-         */
+
+        //解决bsd显示不全的情况
         View parent = (View) commentView.getParent();
         BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
         commentView.measure(0,0);
@@ -435,10 +786,7 @@ public class CourseCommentFragment extends BaseFragment implements View.OnClickL
         dialog.show();
     }
 
-    /**
-     * by moos on 2018/04/20
-     * func:弹出回复框
-     */
+    //弹出回复框
     private void showReplyDialog(final int position){
         dialog = new BottomSheetDialog(getActivity());
         View commentView = LayoutInflater.from(getActivity()).inflate(R.layout.comment_dialog_layout,null);
@@ -494,5 +842,7 @@ public class CourseCommentFragment extends BaseFragment implements View.OnClickL
         super.onResume();
     }
 
+
+     */
 
 }

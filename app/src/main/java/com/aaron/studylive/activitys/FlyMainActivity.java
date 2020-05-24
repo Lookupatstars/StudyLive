@@ -480,6 +480,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
                                     intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     intent1.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
                                     mContext.startActivity(intent1);
+                                    restartAPP(mContext);
                                     return;
                                 }
 //                            }
@@ -503,6 +504,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
         mContext.startActivity(intent);
+        restartAPP(mContext);
     }
 
 

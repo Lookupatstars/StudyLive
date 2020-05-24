@@ -223,7 +223,7 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
 
     public void setupPlay() {
         try {
-            String url = mMediaDatas.get(position).getResourceAddress2();
+            String url = mMediaDatas.get(position).getResourceAddress();
 
 //        //增加封面
 //        ImageView imageView = new ImageView(this);
@@ -239,21 +239,18 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
 
             Map<String, String> header = new HashMap<>();
             header.put("ee", "33");
-            header.put("allowCrossProtocolRedirects", "true");
+//            header.put("allowCrossProtocolRedirects", "true");
             GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
-            gsyVideoOption
+            gsyVideoOption.setUrl(url)
 //                .setThumbImageView(imageView)
-                    .setNeedShowWifiTip(true)
-                    .setStartAfterPrepared(true)
+
                     .setIsTouchWiget(true)
                     .setRotateViewAuto(false)
+                    .setRotateWithSystem(true)
                     .setLockLand(false)
-                    .setAutoFullWithSize(false)
                     .setShowFullAnimation(false)
                     .setNeedLockFull(true)
-                    .setUrl(url)
                     .setMapHeadData(header)
-                    .setCacheWithPlay(false)
                     .setVideoTitle(mTitle)
                     .setVideoAllCallBack(new GSYSampleCallBack() {
                         @Override

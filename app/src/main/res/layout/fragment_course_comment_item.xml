@@ -53,28 +53,28 @@
         android:layout_marginBottom="12dp"
         android:layout_marginLeft="8dp"/>
 
-    <LinearLayout
-        android:id="@+id/ll_reply"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_comment_content"
-        android:layout_marginBottom="10dp"
-        >
+<!--    <LinearLayout-->
+<!--        android:id="@+id/ll_reply"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/tv_comment_content"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        >-->
 
-        <ListView
-            android:id="@+id/lv_replay"
-            android:layout_marginLeft="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="5dp"
-            />
-    </LinearLayout>
+<!--        <ListView-->
+<!--            android:id="@+id/lv_replay"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            />-->
+<!--    </LinearLayout>-->
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/ll_reply"
-        android:background="#80888888"
-        android:layout_marginLeft="8dp"/>
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_below="@+id/ll_reply"-->
+<!--        android:background="#80888888"-->
+<!--        android:layout_marginLeft="8dp"/>-->
 
 </RelativeLayout>

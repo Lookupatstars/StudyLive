@@ -29,7 +29,7 @@ public class CommentContent {
         public String name;
         public ArrayList<CommentContentRecordsReplays> replys;
 
-        public static class CommentContentRecordsReplays{
+        public static class CommentContentRecordsReplays  {
             public String content="";
             public int courseId =0;
             public String createTime ="";
@@ -40,6 +40,11 @@ public class CommentContent {
             public int userId= 0;
             public String name ="";
             public String img ="";
+
+            public CommentContentRecordsReplays(String name, String replyContent) {
+                this.name = name;
+                this.content = replyContent;
+            }
 
             @Override
             public String toString() {

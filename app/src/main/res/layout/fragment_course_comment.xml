@@ -61,14 +61,24 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
-                <ListView
-                    android:id="@+id/comment_list"
+<!--                <ListView-->
+<!--                    android:id="@+id/comment_list"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:listSelector="@android:color/transparent"-->
+<!--                    android:layout_marginBottom="70dp"-->
+<!--                    android:scrollbars="none"-->
+<!--                    android:divider="@null"/>-->
+
+                <com.aaron.studylive.views.CommentExpandableListView
+                    android:id="@+id/detail_page_lv_comment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:divider="@null"
+                    android:layout_marginBottom="64dp"
                     android:listSelector="@android:color/transparent"
-                    android:layout_marginBottom="70dp"
-                    android:scrollbars="none"
-                    android:divider="@null"/>
+                    android:scrollbars="none"/>
+
             </LinearLayout>
 
         </LinearLayout>

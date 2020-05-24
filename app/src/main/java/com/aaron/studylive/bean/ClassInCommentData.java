@@ -1,5 +1,8 @@
 package com.aaron.studylive.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Aaron on 2020/5/20
  * The current project is StudyLive
@@ -7,160 +10,68 @@ package com.aaron.studylive.bean;
  * @Describe:  在评论界面中，再次获取的课程数据
  */
 public class ClassInCommentData {
-    private int courseId;   //课程ID
-    private String courseTime;  //时长（分钟）
-    private String createTime;  //创建时间
-    private int download;   //是否允许下载（1：允许 0：禁止）
-    private int downloadCount;  //下载量
-    private int id;
-    private String name;  //课时名称
-    private String resourceAddress;     //下载资源地址
-    private String resourceAddress2;     //播放资源地址
-    private int status;     //状态（0:待审核，1：已通过，2：未通过）
-    private String summary;     //摘要
-    private String updateTime;  //最后一次修改时间
-    private int  userId;        //主表ID
-    private int viewCount;      //观看量
-    private int viewPermissions;    //观看权限（0：不限，1：注册用户）
 
-    private boolean isSeleted = false;//是否被选中
-    private boolean isSeletedEnd = false;//是否播放过
+    public int current;
+    public int pages;
+    public int size;
+    public int total;
+    public ArrayList<CommentContentRecords> records;
 
-    public int getCourseId() {
-        return courseId;
+    public static class CommentContentRecords {
+        public String content;
+        public int courseId;
+        public String createTime;
+        public int id;
+        public int lessonId;
+        public int pid;
+        public int type;
+        public int userId;
+        public String img;
+        public String name;
+        public List<CommentContentRecordsReplays> replys;
+
+        public CommentContentRecords(String name , String content, String time){
+            this.name = name;
+            this.content = content;
+            this.createTime = time;
+        }
+
+
+        public List<CommentContentRecordsReplays> getReplys() {
+            return replys;
+        }
+
+        public void setReplys(List<CommentContentRecordsReplays> replys) {
+            this.replys = replys;
+        }
+
+
+
+        @Override
+        public String toString() {
+            return "CommentContentRecords{" +
+                    "content='" + content + '\'' +
+                    ", courseId=" + courseId +
+                    ", createTime='" + createTime + '\'' +
+                    ", id=" + id +
+                    ", lessonId=" + lessonId +
+                    ", pid=" + pid +
+                    ", type=" + type +
+                    ", userId=" + userId +
+                    ", name='" + name + '\'' +
+                    ", replys=" + replys +
+                    '}';
+        }
     }
 
-    public String getCourseTime() {
-        return courseTime;
+    @Override
+    public String toString() {
+        return "ClassInCommentData{" +
+                "current=" + current +
+                ", pages=" + pages +
+                ", size=" + size +
+                ", total=" + total +
+                ", records=" + records +
+                '}';
     }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public int getDownload() {
-        return download;
-    }
-
-    public int getDownloadCount() {
-        return downloadCount;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getResourceAddress() {
-        return resourceAddress;
-    }
-
-    public String getResourceAddress2() {
-        return resourceAddress2;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public int getViewCount() {
-        return viewCount;
-    }
-
-    public int getViewPermissions() {
-        return viewPermissions;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
-
-    public void setCourseTime(String courseTime) {
-        this.courseTime = courseTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public void setDownload(int download) {
-        this.download = download;
-    }
-
-    public void setDownloadCount(int downloadCount) {
-        this.downloadCount = downloadCount;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setResourceAddress(String resourceAddress) {
-        this.resourceAddress = resourceAddress;
-    }
-
-    public void setResourceAddress2(String resourceAddress2) {
-        this.resourceAddress2 = resourceAddress2;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public void setViewCount(int viewCount) {
-        this.viewCount = viewCount;
-    }
-
-    public void setViewPermissions(int viewPermissions) {
-        this.viewPermissions = viewPermissions;
-    }
-
-    public boolean isSeleted() {
-        return isSeleted;
-    }
-
-    public void setSeleted(boolean seleted) {
-        isSeleted = seleted;
-    }
-
-    public boolean isSeletedEnd() {
-        return isSeletedEnd;
-    }
-
-    public void setSeletedEnd(boolean seletedEnd) {
-        isSeletedEnd = seletedEnd;
-    }
-
-
 }
