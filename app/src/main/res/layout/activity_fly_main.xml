@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".activitys.FlyMainActivity">
 
-    <com.aaron.studylive.view.NoScrollViewPager
+    <com.aaron.studylive.views.NoScrollViewPager
         android:id="@+id/vp_fly_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".LoginStudentActivity">
+    android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,6 +18,7 @@
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp"
                 android:background="#99000000">
+
                 <EditText
                     android:id="@+id/et_student_user"
                     android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                     android:layout_marginLeft="50dp"
                     android:textColor="#9F9FA0"
                     android:textColorHint="#9F9FA0"
-                    android:hint="手机号"/>
+                    android:hint="用户名"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -41,18 +41,35 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"/>
 
-                <EditText
-                    android:id="@+id/et_student_passwd"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:layout_gravity="center"
-                    android:hint="密码"
-                    android:inputType="textPassword"
-                    android:textColor="#9F9FA0"
-                    android:textColorHint="#9F9FA0"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"/>
+                    android:orientation="horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/et_student_passwd"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:layout_gravity="center"
+                        android:hint="密码"
+                        android:inputType="textPassword"
+                        android:textColor="#9F9FA0"
+                        android:textColorHint="#9F9FA0"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"/>
+                    <ToggleButton
+                        android:id="@+id/togglePwd"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/toggle_pwd_selector"
+                        android:padding="10dp"
+                        android:textOff=""
+                        android:textOn="" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout

@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/iv_cp_play"
-        android:layout_toLeftOf="@+id/tv_time"
+        android:layout_toLeftOf="@+id/tv_cp_time"
         android:singleLine="true"
         android:text="1-1 课程导学"
         android:textColor="@color/cp_second_text"

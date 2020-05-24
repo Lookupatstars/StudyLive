@@ -20,7 +20,11 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 /**
- * Created by recker on 16/6/1.
+ * Created by Aaron on 2020/5/8
+ * The current project is StudyLive
+ *
+ * @Describe:  章节信息Adapter界面  类似于课程页面
+ *
  */
 public class CpAdapter extends BaseAdapter {
 
@@ -39,7 +43,6 @@ public class CpAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-
         return listDatas.size();
     }
 

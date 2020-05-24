@@ -7,20 +7,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aaron.studylive.activitys.AboutActivity;
 import com.aaron.studylive.R;
+import com.aaron.studylive.activitys.AboutActivity;
 import com.aaron.studylive.activitys.SettingActivity;
 import com.aaron.studylive.base.BaseFragment;
-import com.aaron.studylive.bean.LoginStudentInfo;
+import com.aaron.studylive.bean.LoginData;
 import com.aaron.studylive.database.StudentDBhelper;
-import com.aaron.studylive.utils.L;
 
 import butterknife.Bind;
 
 public class MineFragment extends BaseFragment implements View.OnClickListener {
 
     private StudentDBhelper sDB; // 声明一个用户数据库帮助器对象
-    LoginStudentInfo loginStudentInfo = new LoginStudentInfo();
+    LoginData LoginData = new LoginData();
 
     @Bind(R.id.tv_name)
     TextView tv_name;
@@ -52,16 +51,14 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     //获取到用户名
     @SuppressLint("ResourceAsColor")
     private void setName(){
-        L.d("loginStudentInfo.getName()  = "+loginStudentInfo.getName());
-        L.d("loginStudentInfo.getPhone() = "+loginStudentInfo.getPhone());
-        if ( loginStudentInfo.getName() == null || loginStudentInfo.getName().equals("")){
-            if ( loginStudentInfo.getPhone() == null || loginStudentInfo.getPhone().equals("")){
+        if ( LoginData.getName() == null || LoginData.getName().equals("")){
+            if ( LoginData.getPhone() == null || LoginData.getPhone().equals("")){
                 tv_name.setText("未登录");
             }else {
-                tv_name.setText(loginStudentInfo.getPhone());
+                tv_name.setText(LoginData.getPhone());
             }
         }else {
-            tv_name.setText(loginStudentInfo.getName());
+            tv_name.setText(LoginData.getName());
         }
         tv_name.setTextColor(R.color.raise_bg);
     }
@@ -69,11 +66,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     //通过permission进行判断是学生还是老师
     private void Justice(){
 
-        if (LoginStudentInfo.getPermission() == 1){
+        if (LoginData.getRoleId() == 2){
             //学生
             ll_myupload.setVisibility(View.GONE);
         }
-        if (LoginStudentInfo.getPermission() == 2){
+        if (LoginData.getRoleId() == 3){
             //教师
             ll_myplan.setVisibility(View.GONE);
         }
@@ -89,19 +86,34 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_about_fly:
-                toast("点击了关于我们");
                 Intent intent1 = new Intent(getActivity(), AboutActivity.class);
                 startActivity(intent1);
                 break;
             case R.id.ll_setting:
-                toast("点击了设置");
                 Intent intent2 = new Intent(getActivity(), SettingActivity.class);
                 startActivity(intent2);
                 break;
-
-            default:
-                toast("没有点击住");
+            case R.id.ll_myplan:
+//                Intent intent3 = new Intent(getActivity(), SettingActivity.class);
+//                startActivity(intent3);
                 break;
+            case R.id.ll_myupload:
+//                Intent intent4 = new Intent(getActivity(), SettingActivity.class);
+//                startActivity(intent4);
+                break;
+            case R.id.ll_pinglun:
+//                Intent intent5 = new Intent(getActivity(), SettingActivity.class);
+//                startActivity(intent5);
+                break;
+            case R.id.ll_message:
+//                Intent intent6 = new Intent(getActivity(), SettingActivity.class);
+//                startActivity(intent6);
+                break;
+            case R.id.ll_myfollow:
+//                Intent intent7 = new Intent(getActivity(), SettingActivity.class);
+//                startActivity(intent7);
+                break;
+
         }
     }
 

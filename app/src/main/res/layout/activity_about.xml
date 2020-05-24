@@ -16,9 +16,9 @@
         android:textSize="20sp" />
 
     <TextView
+        android:id="@+id/tv_version_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="版本信息：version 1.0"
         android:textSize="20sp" />
 
 </LinearLayout>

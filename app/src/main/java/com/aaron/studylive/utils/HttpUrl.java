@@ -47,6 +47,28 @@ public class HttpUrl {
     //获取推荐课程列表  http://218.28.238.170:8995/course/courses?current=1&orderBy=time&paging=true&size=100
     private String mRelevantCourse = mHostName + "/course/courses?current=1&orderBy=time&paging=true&size=1000";
 
+    //版本更新
+    //http://218.28.238.170:8995/sys/app/course98765/version
+    private String lineVersion = "http://218.28.238.170:8995/sys/app/course98765/version";
+
+    //登录
+    //http://218.28.238.170:8995/user/userLogin/session
+    private String loginUrl = "http://218.28.238.170:8995/user/userLogin/session";
+
+    //http://218.28.238.170:8995/user/userLogin/user
+    private String register= "http://218.28.238.170:8995/user/userLogin/user";
+
+    //展示评论 http://218.28.238.170:8995/course/courseComments/0/comments?current=1&paging=true&size=20
+    private String startComment = mHostName + "/course/courseComments/";
+    private String endComment = "/comments?current=1&paging=true&size=100";
+    private String commentUrl ;
+
+    //发评论和回复 http://218.28.238.170:8995/course/courseComments/784/comments
+    //          http://218.28.238.170:8995/course/courseComments/37/comments
+    private String startSendComment = mHostName +"/course/courseComments/";
+    private String endSendComment = "/comments";
+    private String sendComment;
+
     private HttpUrl() {
 
     }
@@ -60,6 +82,28 @@ public class HttpUrl {
             }
         }
         return instance;
+    }
+
+    public String getSendComment(int lessonId) {
+        sendComment = startSendComment +lessonId +endSendComment;
+        return sendComment;
+    }
+
+    public String getCommentUrl(int lessonId) {
+        commentUrl = startComment + lessonId + endComment;
+        return commentUrl;
+    }
+
+    public String getRegister() {
+        return register;
+    }
+
+    public String getLoginUrl() {
+        return loginUrl;
+    }
+
+    public String getLineVersion() {
+        return lineVersion;
     }
 
     public String getBannerUrl() {
@@ -108,22 +152,14 @@ public class HttpUrl {
         return params;
     }
 
-
-    /**
-     * 获取课程列表参数 最新  way = 1
-     *
-     * @return http://218.28.238.170:8995/course/courses?current=1&paging=true&size=10
-     * http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1
-     * 是否是通过不同的值  put（）的参数 进行不同的区别
-     */
-//    public Map<String, String> getCourseListNewParams(int page) {
-//        Map<String, String> params = new HashMap<>();
-//        params.put("date", System.currentTimeMillis()+"");
-//        params.put("page", page+"");
-//        params.put("uid", "2902109");
-//        params.put("token", "933b40289b2a668bb882e2261a759267");
-//        return params;
-//    }
+    //登录
+    public Map<String,String> getLoginParams(){
+        Map<String,String> params = new HashMap<>();
+        params.put("password","111111");
+        params.put("rememberMe","false");
+        params.put("username","809011535@qq.com");
+        return params;
+    }
 
 
     /**

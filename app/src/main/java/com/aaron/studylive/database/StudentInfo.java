@@ -8,20 +8,24 @@ package com.aaron.studylive.database;
  */
 public class StudentInfo  {
     public long rowid; //0
-    public int permission;  //权限 5
-    public String name;   //昵称 3
-    public String update_time;  //更新时间 4
-    public String phone;  //手机号 1
-    public String password;   //密码 2
-    public String teacherid;  //职工号 6
+    public String name;   //昵称
+    public String update_time;  //更新时间
+    public String phone;  //手机号
+    public String username;
+    public String password;
+    public int roleId;   //角色Id 3：老师；2：学生
+    public String email;
+    public String create_time;
+
 
     public StudentInfo() {
         rowid = 0L;
-        permission = 0;
         name = "";
         update_time = "";
         phone = "";
-        password = "";
-        teacherid = "";
+        username = "";
+        email = "";
+        create_time = "";
+        roleId = 0;
     }
 }

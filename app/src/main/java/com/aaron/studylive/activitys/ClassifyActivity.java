@@ -2,8 +2,6 @@ package com.aaron.studylive.activitys;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.Bind;
 
 /**
@@ -39,7 +39,7 @@ public class ClassifyActivity extends BaseActivity implements
     @Bind(R.id.iv_back)
     ImageView mIvBack;
 
-    @Bind(R.id.iv_search)
+    @Bind(R.id.iv_search_classify)
     ImageView mIvSearch;
 
     @Bind(R.id.recycler)
@@ -171,7 +171,7 @@ public class ClassifyActivity extends BaseActivity implements
             String url = HttpUrl.getInstance().getClassifyCourseUrl();
             Map<String, String> params = HttpUrl.getInstance().getClassifyCourseParams();
 
-            return HttpRequest.getInstance().POST(url, params);
+            return HttpRequest.getInstance().POST(ClassifyActivity.this,url, params);
         }
 
         @Override

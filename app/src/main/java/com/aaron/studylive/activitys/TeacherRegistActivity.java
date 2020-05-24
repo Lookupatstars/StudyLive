@@ -3,7 +3,6 @@ package com.aaron.studylive.activitys;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,11 +10,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
-import com.aaron.studylive.database.StudentInfo;
 import com.aaron.studylive.constant.GlobalVaries;
 import com.aaron.studylive.database.StudentDBhelper;
+import com.aaron.studylive.database.StudentInfo;
+import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.DateUtil;
 import com.aaron.studylive.utils.L;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class TeacherRegistActivity extends AppCompatActivity {
 
@@ -31,6 +33,7 @@ public class TeacherRegistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist_teacher);
 
+        ActivityCollector.addActivity(this);
         final GlobalVaries globalVaries = (GlobalVaries)this.getApplication(); // 验证码
 
 
@@ -44,7 +47,7 @@ public class TeacherRegistActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String phone = et_reg_phone.getText().toString().trim();
-                StudentInfo byPhoneInfo = sDB.queryByPhone(phone);
+                StudentInfo byPhoneInfo = sDB.queryByEmail(phone);
                 if (v.getId() == R.id.btn_reg_check){
                     if (phone.equals("")){
                         Toast.makeText(TeacherRegistActivity.this,"请输入手机号",Toast.LENGTH_SHORT).show();
@@ -125,10 +128,8 @@ public class TeacherRegistActivity extends AppCompatActivity {
                         StudentInfo studentInfo = new StudentInfo();
                         studentInfo.name =  teacher_name;
                         studentInfo.phone = teacher_phone;
-                        studentInfo.password = teacher_passwd;
                         studentInfo.update_time = DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss");
-                        studentInfo.permission = 2;
-                        studentInfo.teacherid = teacher_id;
+                        studentInfo.roleId = 3;
                         sDB.insert(studentInfo);
 
                         Toast.makeText(TeacherRegistActivity.this,"注册成功，您已同意服务协议",Toast.LENGTH_SHORT).show();

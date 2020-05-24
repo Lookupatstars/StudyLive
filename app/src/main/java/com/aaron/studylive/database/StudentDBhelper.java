@@ -79,12 +79,12 @@ public class StudentDBhelper extends SQLiteOpenHelper {
 
         String create_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + "_id INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL,"
-                + "phone VARCHAR NOT NULL," + "password VARCHAR NOT NULL,"
                 + "name VARCHAR NOT NULL,"  + "update_time VARCHAR NOT NULL,"
-                + "permission INTEGER NOT NULL,"+"teacherid VARCHAR NOT NULL"
+                + "phone VARCHAR NOT NULL," + "username VARCHAR NOT NULL,"
+                + "roleId INTEGER NOT NULL," + "password VARCHAR NOT NULL,"
+                + "email VARCHAR NOT NULL," + "create_time VARCHAR NOT NULL"
                 + ");";
         db.execSQL(create_sql);
-
     }
 
     //修改数据库，执行表结构的变更语句
@@ -133,9 +133,9 @@ public class StudentDBhelper extends SQLiteOpenHelper {
                 }
             }
 
-            // 如果存在同样的手机号码，则更新记录
-            if (info.phone != null && info.phone.length() > 0) {
-                String condition = String.format("phone='%s'", info.phone);
+            // 如果存在同样的邮箱，则更新记录
+            if (info.email != null && info.email.length() > 0) {
+                String condition = String.format("email='%s'", info.email);
                 tempArray = query(condition);
                 if (tempArray.size() > 0) {
                     update(info, condition);
@@ -146,12 +146,14 @@ public class StudentDBhelper extends SQLiteOpenHelper {
 
             // 不存在唯一性重复的记录，则插入新记录
             ContentValues cv = new ContentValues();
-            cv.put("phone", info.phone);
-            cv.put("password", info.password);
             cv.put("name", info.name);
             cv.put("update_time", info.update_time);
-            cv.put("permission",info.permission);
-            cv.put("teacherid",info.teacherid);
+            cv.put("phone", info.phone);
+            cv.put("username",info.username);
+            cv.put("roleId",info.roleId);
+            cv.put("email",info.email);
+            cv.put("create_time",info.create_time);
+
             // 执行插入记录动作，该语句返回插入记录的行号
             result = sDB.insert(TABLE_NAME, "", cv);
             // 添加成功后返回行号，失败后返回-1
@@ -165,10 +167,13 @@ public class StudentDBhelper extends SQLiteOpenHelper {
     // 根据条件更新指定的表记录
     public int update(StudentInfo info, String condition) {
         ContentValues cv = new ContentValues();
-        cv.put("phone", info.phone);
-        cv.put("password", info.password);
         cv.put("name", info.name);
         cv.put("update_time", info.update_time);
+        cv.put("phone", info.phone);
+        cv.put("username",info.username);
+        cv.put("roleId",info.roleId);
+        cv.put("email",info.email);
+        cv.put("create_time",info.create_time);
         // 执行更新记录动作，该语句返回记录更新的数目
         return sDB.update(TABLE_NAME, cv, condition, null);
     }
@@ -191,21 +196,18 @@ public class StudentDBhelper extends SQLiteOpenHelper {
             L.d("3.cursor的结果toString() = "+cursor.toString());
             // 循环取出游标指向的每条记录
             while (cursor.moveToNext()) {
+
                 StudentInfo info = new StudentInfo();
                 info.rowid = cursor.getLong(0); // 取出长整型数 id
-                L.d("cursor.getLong(0)"+cursor.getLong(0));
-                info.phone = cursor.getString(1);
-                L.d("cursor.getString(1)"+cursor.getString(1));
-                info.password = cursor.getString(2);
-                L.d("cursor.getString(2)"+cursor.getString(2));
-                info.name = cursor.getString(3); // 取出字符串
-                L.d("cursor.getString(3)"+cursor.getString(3));
-                info.update_time = cursor.getString(4);
-                L.d("cursor.getString(4)"+cursor.getString(4));
-                info.permission = cursor.getInt(5);
-                L.d("cursor.getInt(5)"+cursor.getInt(5));
-                info.teacherid = cursor.getString(6);
-                L.d("cursor.cursor.getString(6)"+cursor.getString(6));
+                info.name = cursor.getString(1);
+                info.update_time = cursor.getString(2);
+                info.phone = cursor.getString(3);
+                info.username = cursor.getString(4);
+                info.roleId = cursor.getInt(5);
+                info.password = cursor.getString(6);
+                info.email = cursor.getString(7);
+                info.create_time = cursor.getString(8);
+
                 infoArray.add(info);
             }
             cursor.close(); // 查询完毕，关闭游标
@@ -219,11 +221,11 @@ public class StudentDBhelper extends SQLiteOpenHelper {
         return infoArray;
     }
 
-    // 根据手机号码查询指定记录
-    public StudentInfo queryByPhone(String phone) {
-        L.d("1.根据手机号查询queryByPhone 首先获取输入框的手机号码：：:"+phone);
+    // 根据邮箱查询
+    public StudentInfo queryByEmail(String email) {
+        L.d("1.根据手机号查询queryByPhone 首先获取输入框的手机号码：：:"+email);
         StudentInfo info = null;
-        ArrayList<StudentInfo> infoArray = query(String.format("phone='%s'", phone));
+        ArrayList<StudentInfo> infoArray = query(String.format("phone='%s'", email));
         L.d("infoArray :"+infoArray);
 
         if (infoArray.size() > 0) {

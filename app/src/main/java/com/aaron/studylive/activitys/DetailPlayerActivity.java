@@ -18,7 +18,7 @@ import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
 import com.aaron.studylive.video.LandLayoutVideo;
-import com.aaron.studylive.view.NoScrollViewPager;
+import com.aaron.studylive.views.NoScrollViewPager;
 import com.google.android.exoplayer2.SeekParameters;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -101,6 +101,7 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
     private int classType;
     private String mTitle;  //课程名
     private String summary; //课程简介
+    private int numberOfLession;
     private List<MediaData> mMediaDatas;
 
     private boolean isPlay;
@@ -122,11 +123,14 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
         ButterKnife.bind(this);
 
         ActivityCollector.addActivity(this);
+
         //获取上层传下来的数据
         mCourseId = getIntent().getIntExtra("id",0);
         mTitle = getIntent().getStringExtra("title");
         summary = getIntent().getStringExtra("summary");
         classType = getIntent().getIntExtra("type",1);
+        numberOfLession = getIntent().getIntExtra("lessionNum",1);
+
 
         L.d("summaryDetail =  "+summary);
         //1.创建Fragment的管理对象
@@ -148,6 +152,7 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
     public void onFragmentInteraction(int s) {
 //        tvMain.setText(s);
         position = s;
+
         L.d("回调之后的执行："+position);
         new MediaAsyncTask().execute();
     }
@@ -159,7 +164,7 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
 
             String url = HttpUrl.getInstance().getMediaInfo(mCourseId);
             L.d("DetailPlayerActivity ->  MediaAsyncTask + url = "+url);
-            return HttpRequest.getInstance().GET(url,null);
+            return HttpRequest.getInstance().GET(DetailPlayerActivity.this,url,null);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -187,7 +192,7 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
                     object = array.getJSONObject(i);
 
                     L.d("start:::: DetailPlayerActivity ->  analysisJsonData  =  "+i);
-                    L.d("请求到的播放链接的原始地址 =  "+object.getString("resourceAddress2"));
+                    L.d("看看课程 ID是多少 "+object.getInt("id"));
                     mMediaData.setCourseId(object.getInt("courseId"));
                     mMediaData.setCourseTime(object.getString("courseTime"));
                     mMediaData.setCreateTime(object.getString("createTime"));
@@ -411,8 +416,10 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
         bundle.putString("title",mTitle);
         bundle.putString("summary",summary);
         bundle.putInt("type",classType);
+        bundle.putInt("lessionNum",numberOfLession);
         mCpFragment.setArguments(bundle);
         mIntroFragment.setArguments(bundle);
+        mCommentFragmet.setArguments(bundle);
 
         mFragments.add(mCpFragment);
         mFragments.add(mIntroFragment);
@@ -438,41 +445,47 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
         };
         vpCpContent.setAdapter(adapter);
         vpCpContent.setOffscreenPageLimit(mFragments.size());
-        vpCpContent.setOnPageChangeListener(onPageChangeListener);
-
+        vpCpContent.setOnPageChangeListener(pagerChangeListener());
+        vpCpContent.setCurrentItem(0);
         setupTabClick();
 
     }
 
     ////界面监听，当界面改变的时候，进行设置
-    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    private  ViewPager.OnPageChangeListener pagerChangeListener(){
 
-        }
+        vpCpContent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        @Override
-        public void onPageSelected(int position) {
-            clearTabBackgroundWithTextColor();  //每次点击之前，清除上次的点击
-            switch (position){
-                case 0:
-                    tvCp.setTextColor(getResources().getColor(R.color.tab_text_selected));
-                    break;
-                case 1:
-                    tvIntro.setTextColor(getResources().getColor(R.color.tab_text_selected));
-                    break;
-                case 2:
-                    tvComment.setTextColor(getResources().getColor(R.color.tab_text_selected));
-                    break;
             }
 
-        }
+            @Override
+            public void onPageSelected(int position) {
 
-        @Override
-        public void onPageScrollStateChanged(int state) {
+                clearTabBackgroundWithTextColor();  //每次点击之前，清除上次的点击
+                switch (position){
+                    case 0:
+                        tvCp.setTextColor(getResources().getColor(R.color.tab_text_selected));
+                        break;
+                    case 1:
+                        tvIntro.setTextColor(getResources().getColor(R.color.tab_text_selected));
+                        break;
+                    case 2:
+                        tvComment.setTextColor(getResources().getColor(R.color.tab_text_selected));
+                        break;
+                }
+            }
 
-        }
-    };
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        return null;
+    }
+
 
     //每次点击之前，清除上次的点击
     private void clearTabBackgroundWithTextColor() {

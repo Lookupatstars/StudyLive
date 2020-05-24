@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="40dp">
+        android:layout_marginBottom="20dp">
         <TextView
             android:id="@+id/tv_"
             android:layout_width="wrap_content"
@@ -25,10 +25,161 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+
+        android:id="@+id/ll_setting_myAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="3dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="25dp"
+            android:gravity="left|center"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="账号与安全" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/go"
+            android:layout_gravity="right|center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_setting_deleteCache"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="3dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="25dp"
+            android:gravity="left|center"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="清除缓存" />
+
+        <TextView
+            android:id="@+id/tv_setting_cache_number"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="1.23M"
+            android:textSize="17sp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/go"
+            android:layout_gravity="right|center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_setting_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="3dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="25dp"
+            android:gravity="left|center"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="版本更新" />
+
+        <TextView
+            android:id="@+id/tv_setting_version"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textSize="17sp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/go"
+            android:layout_gravity="right|center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_setting_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="3dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="25dp"
+            android:gravity="left|center"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="意见反馈" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/go"
+            android:layout_gravity="right|center"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_setting_policy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="3dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="25dp"
+            android:gravity="left|center"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="服务政策" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/go"
+            android:layout_gravity="right|center"
+            />
+
+    </LinearLayout>
+
 
 
     <LinearLayout
-        android:id="@+id/ll_about"
+        android:id="@+id/ll_setting_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="3dp"
@@ -54,5 +205,31 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_setting_relogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="3dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="25dp"
+            android:gravity="left|center"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="注销账号" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/go"
+            android:layout_gravity="right|center"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

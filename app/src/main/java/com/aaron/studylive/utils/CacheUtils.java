@@ -13,7 +13,7 @@ public class CacheUtils {
 //    直接调用PreUtils工具类
 
     //设置缓存、写缓存
-    //key-value   =  url-json 保存在本地,通过 sharepreference
+    //key-url   =  value-json 保存在本地,通过 sharepreference
     public static void setCache(String url, String json, Context context){
         PrefUtils.setString(context,url ,json);
     }

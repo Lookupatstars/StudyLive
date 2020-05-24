@@ -3,32 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".fragments.HomeFragment">
 
     <RelativeLayout
+        android:id="@+id/rl_search_parent"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
 
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/tab_text_selected">
+
+<!--        android:focusable="true"
+        android:focusableInTouchMode="true"-->
         <ImageView
-            android:id="@+id/iv_search"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginLeft="10dp"
+            android:id="@+id/iv_search_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/search_selected"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="未来搜索栏的位置"
-            android:textColor="@color/black"
-            android:layout_toRightOf="@+id/iv_search"
-            android:textSize="26sp"
-            />
+<!--        <androidx.appcompat.widget.SearchView-->
+<!--            android:id="@+id/sv_search"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:queryHint="请输入课程名"-->
+<!--            android:imeOptions="actionSearch"-->
+<!--            android:src="@drawable/search_selected"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_marginHorizontal="10dp"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            />-->
+
     </RelativeLayout>
 
     <com.aaron.studylive.views.RefreshListView
@@ -38,6 +47,5 @@
         android:divider="@null"
         android:scrollbars="none"
         />
-
 
 </LinearLayout>

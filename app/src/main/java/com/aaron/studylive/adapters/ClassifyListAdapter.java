@@ -68,7 +68,7 @@ public class ClassifyListAdapter extends BaseAdapter {
             hodler = (ViewHodler) view.getTag();
         }
 
-        Picasso.with(mContext).load(data.getPic()).placeholder(R.drawable.course_default_bg).into(hodler.img);
+        Picasso.with(mContext).load(data.getPic()).placeholder(R.drawable.bg_default).into(hodler.img);
         hodler.title.setText(data.getName()+"");
         hodler.numbers.setText(data.getNumbers()+"");
 

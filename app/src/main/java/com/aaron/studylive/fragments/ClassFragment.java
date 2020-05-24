@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.aaron.studylive.R;
 import com.aaron.studylive.activitys.ClassifyActivity;
 import com.aaron.studylive.activitys.DetailPlayerActivity;
+import com.aaron.studylive.activitys.SearchActivity;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.CourseListData;
@@ -114,6 +115,8 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.iv_search:
                 toast("点击了搜索信息");
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
 
                 break;
             case R.id.iv_study_latest:
@@ -130,7 +133,7 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
 
             String url = HttpUrl.getInstance().getCourseListUrlNew(mCurrentPage);
 //            Map<String, String> params = HttpUrl.getInstance().getCourseListNewParams();
-            String result = HttpRequest.getInstance().GET(url,null);
+            String result = HttpRequest.getInstance().GET(getContext(),url,null);
             return result;
         }
 

@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
+        android:background="@color/tab_text_selected">
 
         <ImageView
             android:id="@+id/iv_back"
@@ -28,7 +28,7 @@
 
 
         <ImageView
-            android:id="@+id/iv_search"
+            android:id="@+id/iv_search_classify"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:src="@drawable/search_selected"

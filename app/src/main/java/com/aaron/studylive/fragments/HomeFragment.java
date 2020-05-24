@@ -1,23 +1,32 @@
 package com.aaron.studylive.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.activitys.DetailPlayerActivity;
+import com.aaron.studylive.activitys.SearchActivity;
 import com.aaron.studylive.adapter.LiveClassAdapter;
 import com.aaron.studylive.adapters.CourseListAdapter;
+import com.aaron.studylive.adapters.SearchAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.BannerData;
 import com.aaron.studylive.bean.CourseListData;
 import com.aaron.studylive.bean.LiveClassInfo;
+import com.aaron.studylive.bean.SearchData;
+import com.aaron.studylive.database.SearchDBHelper;
+import com.aaron.studylive.database.SearchRecordsDBHelper;
 import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.CacheUtils;
 import com.aaron.studylive.utils.Class2detail;
@@ -37,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -51,19 +61,23 @@ import butterknife.ButterKnife;
  * 或者可以加上教师的信息列表？？
  */
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener
-        , RefreshListView.OnRefreshListener , AdapterView.OnItemClickListener {
+public class HomeFragment extends BaseFragment implements
+        RefreshListView.OnRefreshListener , AdapterView.OnItemClickListener{
 
-    @Bind(R.id.iv_search)
-    ImageView mIvSearch;
+    @Bind(R.id.rl_search_parent)
+    RelativeLayout rl_search_parent;
 
     @Bind(R.id.refresh_listview)
     RefreshListView mRefreshListView;
+
+    @Bind(R.id.iv_search_btn)
+    ImageView mSearch;
 
     private FlyBanner mBanner;
     private List<CourseListData> mCourseDatas;
     private List<BannerData> mBannerDatas;
     private CourseListAdapter mAdapter;
+
     private Loading mLoading;
     private View mHeaderView;  // 头部fragment_home_header.xml的初始化
     private int mCurrentPage = 1;//当前页面
@@ -73,6 +87,19 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     private static final String ImgUrl = "http://course-api.zzu.gdatacloud.com:890/";
 
+    private final static String TAG = "SearchViewActivity";
+    private TextView tv_desc;
+    private SearchView.SearchAutoComplete sac_key; // 声明一个搜索自动完成的编辑框对象
+    private String[] hintArray = {"iphone", "iphone8", "iphone8 plus", "iphone7", "iphone7 plus"};
+    private List<SearchData> searchData;
+    private SearchAdapter mSearchAdapter;
+
+    SearchDBHelper searchDBHelper;
+    SearchRecordsDBHelper searchRecordsDBHelper;
+    SQLiteDatabase db_search;
+    SQLiteDatabase db_records;
+    Cursor cursor;
+    private boolean isFocus = false;
 
     //获取到activity
     @Override
@@ -80,18 +107,44 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         return R.layout.fragment_home;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void init() {
+
+        searchData = new ArrayList<>();
+
         initView();
-        setupClick();
         new BannerAsyncTask().execute();
         setBanner();
+//        String cache = CacheUtils.getCache(HttpUrl.getInstance().getCourseListUrlHot(mCurrentPage),getActivity());
+//        if (!TextUtils.isEmpty(cache)){
+//            L.d("发现缓存啦、。。。。,直接解析数据analysisCourseListHotJsonData");
+//            analysisCourseListHotJsonData(cache);
+//        }
+//        L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
+
         new CourseListHotAsyncTask().execute();
+
+        initSearchView();
+
+    }
+
+    private void initSearchView(){
+        mSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+                L.d("是时候可以条界面了");
+            }
+        });
+
     }
 
 
     // 头部 fragment_home_header.xml 的 banner、课程列表 初始化
     private void initView(){
+
         mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_home_header,null);
         mRefreshListView.addHeaderView(mHeaderView);
         mBanner = ButterKnife.findById(mHeaderView,R.id.fb_banner);
@@ -107,6 +160,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         LiveClassAdapter liveClassAdapter = new LiveClassAdapter(getActivity(), LiveClassInfo.getDefaultStag());
         // 设置瀑布流列表的点击监听器
         liveClassAdapter.setOnItemClickListener(liveClassAdapter);
+        rv_hor_live_class.setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
         // 给rv_hor_live_class设置直播公开课信息瀑布流适配器
         rv_hor_live_class.setAdapter(liveClassAdapter);
         // 设置rv_hor_live_class的默认动画效果
@@ -124,7 +178,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-
     //Start 数据解析
 
     private class BannerAsyncTask extends AsyncTask<Void, Void, String> {
@@ -133,15 +186,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
             //在请求服务器之前，先判断有没有缓存。有的话，先加载缓存
             String cache = CacheUtils.getCache(HttpUrl.getInstance().getBannerUrl(),getActivity());
-            if (!TextUtils.isEmpty(cache)){
-                L.d("发现缓存,直接解析数据analysisBannnerJsonData");
-//                analysisBannnerJsonData(cache);
-            }
-            L.d("有没有缓存都要重新请求数据库analysisBannnerJsonData");
 
             String url = HttpUrl.getInstance().getBannerUrl();
             Map<String, String> params = HttpUrl.getInstance().getBannerParams();
-            String result = HttpRequest.getInstance().POST(url, params);
+            String result = HttpRequest.getInstance().POST(getContext(),url, params);
             L.d("BannerAsyncTask:result"+result);
 
             return result;
@@ -214,19 +262,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
     private class CourseListHotAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
-
             try {
-                String cache = CacheUtils.getCache(HttpUrl.getInstance().getCourseListUrlHot(mCurrentPage),getActivity());
-                if (!TextUtils.isEmpty(cache)){
-                    L.d("发现缓存,直接解析数据analysisCourseListHotJsonData");
-                    analysisCourseListHotJsonData(cache);
-                }
-                L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
 
                 String url = HttpUrl.getInstance().getCourseListUrlHot(mCurrentPage);
-                String result = HttpRequest.getInstance().GET(url, null);
+                String result = HttpRequest.getInstance().GET(getContext(),url, null);
                 L.d("url = "+url);
                 L.d("getCourseListHot  result =  "+result);
+
+//                L.d("保存缓存 ");
+//                CacheUtils.setCache(url,result,getContext());
 
                 return result;
             } catch (Exception e){
@@ -259,6 +303,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
                 L.d("+2::"+array);
                 for (int i = 0; i< array.length(); i++) {
                     CourseListData data = new CourseListData();
+
                     object = array.getJSONObject(i);
 
                     L.d("Home    name:::"+object.getString("name"));
@@ -281,7 +326,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
                 mAdapter.notifyDataSetChanged();
 
                 if (mIsRefshing == true) {
-                    toast("刷新成功");
+                    Toast.makeText(getContext(),"刷新成功",Toast.LENGTH_SHORT).show();
                 }
                 mIsRefshing = false;
                 mIsLoadingMore = false;
@@ -296,18 +341,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
 
     //END  数据解析
 
-
-    @Override
-    public void onClick(View v) {
-        //实现搜索的点击功能
-    }
-
-    /**
-     * 设置点击事件
-     */
-    private void setupClick() {
-        mIvSearch.setOnClickListener(this);
-    }
 
 
     @Override
@@ -359,6 +392,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+//        mSearch.setFocusable(true);
+//        mSearch.setFocusableInTouchMode(true);
         mBanner.startAutoPlay();
     }
 
@@ -369,13 +404,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener
         mBanner.stopAutoPlay();
     }
 
-    private void toast(String str) {
-        Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         ActivityCollector.removeActivity(getActivity());
     }
+
 }

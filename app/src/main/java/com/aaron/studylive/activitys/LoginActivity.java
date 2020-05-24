@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.utils.ActivityCollector;
 
 /**
  *
@@ -28,6 +29,7 @@ public class LoginActivity extends ActivityGroup implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ActivityCollector.addActivity(this);
 
         //获取登录界面的内容布局
         ll_content = findViewById(R.id.ll_content);

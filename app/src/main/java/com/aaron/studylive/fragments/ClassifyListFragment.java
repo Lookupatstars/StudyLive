@@ -144,7 +144,7 @@ public class ClassifyListFragment extends BaseFragment implements
             String url = HttpUrl.getInstance().getClassifListUrl();
             Map<String, String> params = HttpUrl.getInstance().getClassifyListParams(mId, mType, mPage);
 
-            return HttpRequest.getInstance().POST(url, params);
+            return HttpRequest.getInstance().POST(getContext(),url, params);
         }
 
         @Override

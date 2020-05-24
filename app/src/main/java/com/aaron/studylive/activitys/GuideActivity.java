@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.PrefUtils;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class GuideActivity extends AppCompatActivity {
         //去掉标题，必须在setContentView初始化界面之前调用
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_guide);
+        ActivityCollector.addActivity(this);
 
         mViewPager = findViewById(R.id.vp_guide);
         llContainer =  findViewById(R.id.ll_dot);
@@ -129,7 +131,7 @@ public class GuideActivity extends AppCompatActivity {
                 PrefUtils.setBoolen(getApplicationContext(), "is_first", false);
 
                 //跳到主页面
-                startActivity(new Intent(getApplicationContext(), FlyMainActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
             }
         });

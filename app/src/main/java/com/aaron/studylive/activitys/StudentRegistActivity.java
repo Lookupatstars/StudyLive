@@ -1,31 +1,53 @@
 package com.aaron.studylive.activitys;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Looper;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.aaron.studylive.R;
-import com.aaron.studylive.database.StudentInfo;
 import com.aaron.studylive.constant.GlobalVaries;
 import com.aaron.studylive.database.StudentDBhelper;
+import com.aaron.studylive.database.StudentInfo;
 import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.DateUtil;
+import com.aaron.studylive.utils.HttpUrl;
+import com.aaron.studylive.utils.ImageToBase64;
 import com.aaron.studylive.utils.L;
+
+import org.json.JSONObject;
+
+import java.io.InputStream;
+
+import androidx.appcompat.app.AppCompatActivity;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class StudentRegistActivity extends AppCompatActivity {
 
     private Button btn_reg_back,btn_reg_check,btn_reg_reg;
-    private EditText et_reg_phone,et_reg_check,et_reg_name,et_reg_passwd,et_reg_conpasswd;
+    private EditText et_reg_phone,et_reg_email,et_reg_username,et_reg_passwd,et_reg_conpasswd,et_reg_name;
     private TextView tv_reg_pro;
+    private ToggleButton tb_pw,tb_pw_conf;
 
     private StudentDBhelper sDB; // 声明一个用户数据库帮助器对象
 
+    private String ImageResult = "";
+    private int res = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,45 +64,6 @@ public class StudentRegistActivity extends AppCompatActivity {
         //点击按钮的实现类
         intiClick();
 
-        //验证手机号
-        btn_reg_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String phone = et_reg_phone.getText().toString().trim();
-                StudentInfo byPhoneInfo = sDB.queryByPhone(phone);
-                if (v.getId() == R.id.btn_reg_check){
-                    if (phone.equals("")){
-                        Toast.makeText(StudentRegistActivity.this,"请输入手机号",Toast.LENGTH_SHORT).show();
-                        return;
-                    } else {
-                        if (phone.length() != 11){
-                            Toast.makeText(StudentRegistActivity.this,"请正确输入手机号",Toast.LENGTH_SHORT).show();
-                            return;
-                        }else{ //非空，位数正确
-                            L.d("byPhoneInfo::"+byPhoneInfo);
-//                            L.d("byPhoneInfo.phone::"+byPhoneInfo.phone);
-                            if (byPhoneInfo == null){
-                                // 生成六位随机数字的验证码
-                                String str = String.format("%06d", (int) (Math.random() * 1000000 % 1000000));
-                                globalVaries.setVerifyCode(str);
-                                // 弹出提醒对话框，提示用户六位验证码数字
-                                AlertDialog.Builder builder = new AlertDialog.Builder(StudentRegistActivity.this);
-                                builder.setTitle("请记住验证码");
-                                builder.setMessage("手机号" + phone + "，本次验证码是" + str + "，请输入验证码");
-                                builder.setPositiveButton("好的", null);
-                                AlertDialog alert = builder.create();
-                                alert.show();
-                            }else { //数据库里存在有这个手机号
-                                Toast.makeText(StudentRegistActivity.this,"手机号已存在，请检查输入是否正确",Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                        }
-                    }
-                }
-            }
-        });
-
         //注册按钮
         btn_reg_reg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,14 +71,11 @@ public class StudentRegistActivity extends AppCompatActivity {
                 if(v.getId()==R.id.btn_reg_reg){
 
                     String student_phone = et_reg_phone.getText().toString().trim();
-                    String student_check = et_reg_check.getText().toString().trim();
+                    String student_email = et_reg_email.getText().toString().trim();
                     String student_name = et_reg_name.getText().toString().trim();
+                    String student_username = et_reg_username.getText().toString().trim();
                     String student_passwd = et_reg_passwd.getText().toString().trim();
                     String student_conpasswd = et_reg_conpasswd.getText().toString().trim();
-
-                    String verifyCode = globalVaries.getVerifyCode();
-                    L.d("verifyCode:"+verifyCode);
-                    L.d("student_check:"+student_check);
 
                     //判断是否为空
                     //判断数据库中是否有重复的手机号，如果有重复的可以提示找回密码
@@ -105,49 +85,213 @@ public class StudentRegistActivity extends AppCompatActivity {
                     } else if (student_phone.length()!= 11){
                         Toast.makeText(StudentRegistActivity.this,"手机号有误，请重新输入",Toast.LENGTH_SHORT).show();
                         return;
-                    }else if (student_check.equals("")){
-                        Toast.makeText(StudentRegistActivity.this,"验证码不能为空",Toast.LENGTH_SHORT).show();
+                    }else if (student_email.equals("")){
+                        Toast.makeText(StudentRegistActivity.this,"邮件不能为空",Toast.LENGTH_SHORT).show();
                         return;
-                    }  else if (!student_check.equals(verifyCode)){
-                        Toast.makeText(StudentRegistActivity.this,"请输入正确的验证码！",Toast.LENGTH_SHORT).show();
+                    } else if (!student_email.contains("@") || !student_email.contains(".")){
+                        Toast.makeText(StudentRegistActivity.this,"邮件格式不正确",Toast.LENGTH_SHORT).show();
                         return;
                     } else if (student_name.equals("")){
-                        Toast.makeText(StudentRegistActivity.this,"昵称不能为空",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentRegistActivity.this,"名称不能为空",Toast.LENGTH_SHORT).show();
                         return;
-                    }else if (student_passwd.equals("")||student_conpasswd.equals("")){
+                    }else if (student_username.equals("")){
+                        Toast.makeText(StudentRegistActivity.this,"用户名不能为空",Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (student_passwd.equals("")||student_conpasswd.equals("")){
                         Toast.makeText(StudentRegistActivity.this,"密码不能为空",Toast.LENGTH_SHORT).show();
                         return;
                     }else if (student_passwd.length()<6 || student_passwd.length()>16){
                         Toast.makeText(StudentRegistActivity.this,"密码长度不对",Toast.LENGTH_SHORT).show();
                         return;
-                    }else if (student_passwd.equals(student_conpasswd) && student_check.equals(verifyCode)){
-
-                        //两次密码相同，注册
-                        //创建一个实体的类，把信息注册进入StunetInfo
-                        StudentInfo studentInfo = new StudentInfo();
-                        studentInfo.name =  student_name;
-                        studentInfo.phone = student_phone;
-                        studentInfo.password = student_passwd;
-                        studentInfo.update_time = DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss");
-                        studentInfo.permission = 1; //学生默认为1
-                        sDB.insert(studentInfo);
-
-                        Toast.makeText(StudentRegistActivity.this,"注册成功，您已同意服务协议",Toast.LENGTH_SHORT).show();
-                        //注册成功后直接登陆.
-
-                        Intent intent=new Intent(StudentRegistActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                    }else if (student_passwd != student_conpasswd){
+                    }else if (!student_passwd.equals(student_conpasswd)){
                         Toast.makeText(StudentRegistActivity.this,"两次输入的密码不一致，请重新输入！",Toast.LENGTH_SHORT).show();
                         return;
+                    }else {
+
+                        //两次密码相同，注册
+                        L.d("student_email = "+student_email + "student_name = "+
+                                student_name + "student_phone = "+student_phone
+                                + "student_username = "+student_username +"student_passwd = "+student_passwd);
+//                        sendRegisterDataWithOkHttp(student_email,student_name,student_phone,student_username,student_passwd);
+
+                        new Thread(new Runnable() {
+                            public void run() {
+                                JSONObject object = new JSONObject();
+
+                                //把图片转化为base64格式的
+                                ImageTranslate();
+                                try {
+                                    object.put("email",student_email);
+                                    object.put("img","data:image/png;base64,"+ImageResult);  //图片默认为初始头像
+                                    object.put("name",student_name);
+                                    object.put("password", student_passwd);
+                                    object.put("phone", student_phone);
+                                    object.put("username", student_username);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                MediaType type = MediaType.parse("application/json;charset=UTF-8");
+                                RequestBody requestBody = RequestBody.create(type, "" + object.toString());
+
+                                try {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder()
+                                            // 指定访问的服务器地址
+                                            .url(HttpUrl.getInstance().getRegister()).post(requestBody)
+                                            .build();
+                                    Response response = client.newCall(request).execute();
+
+                                    String responseData = response.body().string();
+
+                                    JSONObject data = new JSONObject(responseData);
+                                    L.d("data "+ data);
+                                    int code = data.getInt("code");
+                                    if (code == 0){
+                                        L.d("第一次查看 res的值 "+code);
+                                        //创建一个实体的类，把信息注册进入StunetInfo
+                                        StudentInfo studentInfo = new StudentInfo();
+                                        studentInfo.name =  student_name;
+                                        studentInfo.username = student_username;
+                                        studentInfo.password = student_passwd;
+                                        studentInfo.phone = student_phone;
+                                        studentInfo.email=  student_email;
+                                        studentInfo.update_time = DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss");
+                                        studentInfo.roleId = 2;
+                                        sDB.insert(studentInfo);
+
+                                        Looper.prepare();
+                                        Toast.makeText(getApplicationContext(), "注册成功，您已同意服务协议", Toast.LENGTH_SHORT).show();
+                                        Looper.loop();
+
+                                        //注册成功后直接登陆.
+                                        Intent intent = new Intent(StudentRegistActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                    }else if (code == 3){
+                                        Looper.prepare();
+                                        Toast.makeText(getApplicationContext(),"邮箱或账号名已经被注册",Toast.LENGTH_SHORT).show();
+                                        Looper.loop();
+                                    }else {
+                                        Looper.prepare();
+                                        Toast.makeText(getApplicationContext(),"请再检查一遍",Toast.LENGTH_SHORT).show();
+                                        Looper.loop();
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }).start();
                     }
 
                 }
             }
         });  //注册按钮
 
+    }
+
+    //把图片转化为base64格式的
+    @SuppressLint("ResourceType")
+    private void ImageTranslate(){
+        InputStream is = getResources().openRawResource(R.drawable.default_header);
+        Bitmap mBitmap = BitmapFactory.decodeStream(is);
+        ImageResult = ImageToBase64.bitmaptoString(mBitmap);
+        L.d("看看xin的结果  = "+ImageResult);
+    }
+
+    //向服务器发送信息
+    private void sendRegisterDataWithOkHttp(String email ,String name , String phone, String username,String password ) {
+        new Thread(new Runnable() {
+            public void run() {
+                JSONObject object = new JSONObject();
+
+                //把图片转化为base64格式的
+                ImageTranslate();
+                try {
+                    object.put("email",email);
+                    object.put("img","data:image/png;base64,"+ImageResult);  //图片默认为初始头像
+                    object.put("name",name);
+                    object.put("password", password);
+                    object.put("phone", phone);
+                    object.put("username", username);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                MediaType type = MediaType.parse("application/json;charset=UTF-8");
+                RequestBody requestBody = RequestBody.create(type, "" + object.toString());
+
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            // 指定访问的服务器地址
+                            .url(HttpUrl.getInstance().getRegister()).post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+
+                    String responseData = response.body().string();
+
+                    JSONObject data = new JSONObject(responseData);
+                    L.d("data "+ data);
+                    int code = data.getInt("code");
+                    if (code == 0){
+                        L.d("第一次查看 res的值 "+code);
+                        //创建一个实体的类，把信息注册进入StunetInfo
+                        StudentInfo studentInfo = new StudentInfo();
+                        studentInfo.name =  name;
+                        studentInfo.username = username;
+                        studentInfo.password = password;
+                        studentInfo.phone = phone;
+                        studentInfo.email=  email;
+                        studentInfo.update_time = DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss");
+                        studentInfo.roleId = 2;
+                        sDB.insert(studentInfo);
+
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(), "注册成功，您已同意服务协议", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+
+                        //注册成功后直接登陆.
+                        Intent intent = new Intent(StudentRegistActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }else if (code == 3){
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(),"邮箱或账号名已经被注册",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }else {
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(),"请再检查一遍",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    //事件注册的类
+    private void initView(){
+        //Button按钮的事件注册
+        btn_reg_back = findViewById(R.id.btn_reg_back);
+        btn_reg_reg = findViewById(R.id.btn_reg_reg);
+        tv_reg_pro = findViewById(R.id.tv_reg_pro);
+
+        //EditText的事件注册
+        et_reg_phone = findViewById(R.id.et_reg_phone);
+        et_reg_email = findViewById(R.id.et_reg_email);
+        et_reg_name = findViewById(R.id.et_reg_name);
+        et_reg_username = findViewById(R.id.et_reg_username);
+        et_reg_passwd = findViewById(R.id.et_reg_passwd);
+        et_reg_conpasswd = findViewById(R.id.et_reg_conpasswd);
+        //眼镜
+        tb_pw = findViewById(R.id.tb_reg_s_pw);
+        tb_pw_conf = findViewById(R.id.tb_reg_s_pw_conf);
 
     }
 
@@ -155,27 +299,35 @@ public class StudentRegistActivity extends AppCompatActivity {
     private void intiClick() {
         btn_reg_back.setOnClickListener(new BackLogin()); //返回按钮
         tv_reg_pro.setOnClickListener(new ProText());  //协议点击
-//        btn_reg_reg.setOnClickListener(new Regists());  //注册按钮
-//        btn_reg_check.setOnClickListener(new CheckCode());  //手机号验证按钮
+        tb_pw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //如果选中，显示密码
+                    et_reg_passwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    //否则隐藏密码
+                    et_reg_passwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
+
+        tb_pw_conf.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //如果选中，显示密码
+                    et_reg_conpasswd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    //否则隐藏密码
+                    et_reg_conpasswd.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
+
 
     }
 
-    //事件注册的类
-    private void initView(){
-        //Button按钮的事件注册
-        btn_reg_back = findViewById(R.id.btn_reg_back);
-        btn_reg_check = findViewById(R.id.btn_reg_check);
-        btn_reg_reg = findViewById(R.id.btn_reg_reg);
-        tv_reg_pro = findViewById(R.id.tv_reg_pro);
-
-        //EditText的事件注册
-        et_reg_phone = findViewById(R.id.et_reg_phone);
-        et_reg_check = findViewById(R.id.et_reg_check);
-        et_reg_name = findViewById(R.id.et_reg_name);
-        et_reg_passwd = findViewById(R.id.et_reg_passwd);
-        et_reg_conpasswd = findViewById(R.id.et_reg_conpasswd);
-
-    }
 
     //返回按钮
     private class BackLogin implements View.OnClickListener {
@@ -188,35 +340,6 @@ public class StudentRegistActivity extends AppCompatActivity {
             }
         }
     }
-//
-//    //手机号验证功能
-//    private class CheckCode implements View.OnClickListener {
-//        @Override
-//        public void onClick(View v) {
-//             String phone = et_reg_phone.getText().toString().trim();
-//            if (v.getId() == R.id.btn_reg_check){
-//                if (phone.equals("")){
-//                    Toast.makeText(StudentRegistActivity.this,"请输入手机号",Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else if (phone.length()<11){
-//                    Toast.makeText(StudentRegistActivity.this,"请正确输入手机号",Toast.LENGTH_SHORT).show();
-//                    return;
-//                }else{
-//                    // 生成六位随机数字的验证码
-//                    String str = String.format("%06d", (int) (Math.random() * 1000000 % 1000000));
-////                    globalVaries.setVerifyCode(str);
-//                    // 弹出提醒对话框，提示用户六位验证码数字
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(StudentRegistActivity.this);
-//                    builder.setTitle("请记住验证码");
-//                    builder.setMessage("手机号" + phone + "，本次验证码是" + str + "，请输入验证码");
-//                    builder.setPositiveButton("好的", null);
-//                    AlertDialog alert = builder.create();
-//                    alert.show();
-//
-//                }
-//            }
-//        }
-//    }
 
     //点击协议
     private class ProText implements View.OnClickListener {

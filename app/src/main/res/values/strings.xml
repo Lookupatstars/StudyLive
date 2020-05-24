@@ -18,5 +18,10 @@
     <string name="login_student">学生登录</string>
     <string name="login_teacher">教师登录</string>
     <string name="login_root">管理员登录</string>
+    <string name="chaptername">章节</string>
+    <string name="detailname">详情</string>
+    <string name="commentname">评论</string>
+
+    <string name="search_hint">请输入要搜索的课程名</string>
 
 </resources>

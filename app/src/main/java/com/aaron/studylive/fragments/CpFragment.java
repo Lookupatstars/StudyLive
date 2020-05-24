@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.aaron.studylive.R;
@@ -14,6 +15,7 @@ import com.aaron.studylive.bean.CpData;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
+import com.aaron.studylive.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.Bind;
 
@@ -37,14 +40,27 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
     @Bind(R.id.lv_cp_list)
     ListView mListView;
 
+    @Bind(R.id.ll_cp_height)
+    LinearLayout ll_cp_height;
+
     private List<CpData> cpDataContent;  //存放章节数据的列表
     private CpAdapter mAdapter;
     private int mCourseId;
-
+    private int h=1;
+//    private CourseCommentFragment mCommentFragmet = new CourseCommentFragment();
     private OnFragmentInteractionListener interactionListener;
     String result;
+    private int lessonid;
 
     private static final String homeUrl = "http://course-api.zzu.gdatacloud.com:890/";
+
+    public void setLessonid(int lessonid) {
+        this.lessonid = lessonid;
+    }
+
+    public int getLessonid() {
+        return lessonid;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -67,11 +83,13 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
          Bundle bundle = getArguments();
          if (bundle != null){
              mCourseId = bundle.getInt("CourseId");
+//             lessionNum = bundle.getInt("lessionNum");
          }
 
          cpDataContent = new ArrayList<>();
          mAdapter = new CpAdapter(getContext(), cpDataContent);
          mListView.setAdapter(mAdapter);
+         mListView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
          mListView.setOnItemClickListener(this);
 
          new CpAsyncTask().execute();
@@ -79,6 +97,9 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
          L.d("init 不知道执行了米有 mCourseId  = "+mCourseId);
 
      }
+
+
+
 
      /*
      重新解析课程数据，并存储到CPData中
@@ -89,7 +110,7 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
 
             String url = HttpUrl.getInstance().getMediaInfo(mCourseId);
             L.d("CpFragment ->  CpAsyncTask + url = "+url);
-            result = HttpRequest.getInstance().GET(url,null);
+            result = HttpRequest.getInstance().GET(getContext(),url,null);
             return result;
         }
 
@@ -112,9 +133,9 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
                 for (int i = 0; i< array.length(); i++){
                     CpData cpData = new CpData();
                     object = array.getJSONObject(i);
-
+                    h = array.length();
                     L.d("start:::: CpFragment ->  analysisCpJsonData  =  "+i);
-                    L.d("请求到的播放链接的原始地址 =  "+object.getString("resourceAddress2"));
+                    L.d("cpData  的课程Id 是多少 =  "+object.getInt("id"));
                     cpData.setCourseId(object.getInt("courseId"));
                     cpData.setCourseTime(object.getString("courseTime"));
                     cpData.setCreateTime(object.getString("createTime"));
@@ -137,6 +158,7 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
                     }
                     cpDataContent.add(cpData);
                 }
+                setHeight();
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -147,14 +169,15 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
 
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//当item被点击之后的处理，也就是。直接替换fragment
+        //当item被点击之后的处理，也就是。直接替换fragment
          mAdapter.notifyDataSetChanged();//刷新listView
          clearListSelected();
          cpDataContent.get(0).setSeletedEnd(true);
+         setLessonid(cpDataContent.get(position).getId());
          //侧边蓝点击之后，要修改直播课的FrameLayout的内容
-         L.d("点击了第 "+position+"个？？？" + cpDataContent.get(position).getName());
+         L.d("点击了第 "+position+"个   id 是啊？？？" + cpDataContent.get(position).getId());
          L.d("点击了第  "+position+" 个？？？" + cpDataContent.get(position).getResourceAddress2());
-
+//         SendValue(position);
          String url = cpDataContent.get(position).getResourceAddress2();
          cpDataContent.get(position).setSeleted(true);
          cpDataContent.get(position).setSeletedEnd(true);
@@ -165,6 +188,25 @@ public class CpFragment extends BaseFragment implements AdapterView.OnItemClickL
          }
 
      }
+
+    //传递lesson的id给评论，
+//    private void SendValue(int i){
+//        Bundle bundle1 = new Bundle();
+//        L.d("  id 是 " + cpDataContent.get(i).getId());
+//        bundle1.putInt("lessonId",cpDataContent.get(i).getId());
+//        mCommentFragmet.setArguments(bundle1);
+//    }
+
+
+    private void setHeight(){
+        LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) mListView.getLayoutParams();
+
+        params.weight=LinearLayout.LayoutParams.MATCH_PARENT;
+        L.d("高度  cp "+(50*h));
+        params.height= Utils.dip2px(Objects.requireNonNull(getActivity()),50)*h;
+
+        mListView.setLayoutParams(params);
+    }
 
     private void clearListSelected() {
         for (CpData data : cpDataContent)

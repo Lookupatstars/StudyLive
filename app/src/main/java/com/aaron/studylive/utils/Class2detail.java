@@ -14,7 +14,7 @@ public class Class2detail {
 
     public Intent TransformData(Intent intent, CourseListData data){
 
-        L.d("onItemClick::data  = "+data);
+
         intent.putExtra("id", data.getId());
         intent.putExtra("title", data.getName());
         intent.putExtra("lessionNum", data.getNumLession());

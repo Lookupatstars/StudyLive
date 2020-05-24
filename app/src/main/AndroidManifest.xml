@@ -6,10 +6,20 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 读写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name= "android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
+    <!-- 开机自启动权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
         android:appComponentFactory="android.support.v4.app.CoreComponentFactory"
@@ -23,7 +33,49 @@
         android:supportsRtl="true"
         android:theme="@style/AppCompatTheme"
         tools:ignore="GoogleAppIndexingWarning"
+        android:largeHeap="true"
+        android:hardwareAccelerated="false"
         tools:targetApi="p">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities = "com.aaron.studylive.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- App安装完成接收广播 -->
+<!--        <receiver-->
+<!--            android:name=".broadcast.UpdateReceiver"-->
+<!--            android:enabled="true">-->
+<!--            <intent-filter android:priority="100">-->
+<!--                <action android:name="android.intent.action.PACKAGE_ADDED" />-->
+<!--                <action android:name="android.intent.action.PACKAGE_REPLACED" />-->
+<!--                <action android:name="android.intent.action.PACKAGE_REMOVED" />-->
+
+<!--                <data android:scheme="package" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
+
+<!--        <receiver-->
+<!--            android:name=".broadcast.InstallReceiver">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
+
+
+        <activity android:name=".activitys.SearchActivity"/>
+        <activity android:name=".activitys.SearchResultActivity" android:theme="@style/AppCompatTheme">
+                <intent-filter>
+                    <action android:name="android.intent.action.SEARCH" />
+                </intent-filter>
+                <meta-data android:name="android.app.searchable"
+                    android:resource="@xml/searchable"/>
+        </activity>
 
         <activity
             android:name=".activitys.DetailPlayerActivity"
@@ -39,17 +91,10 @@
         <activity android:name=".activitys.ClassifyActivity" />
         <activity android:name=".activitys.ClassifyListActivity" />
         <activity android:name=".activitys.ForgetPasswdActivity"/>
-        <activity android:name=".HomeActivity" />
         <activity android:name=".activitys.LoginActivity" />
-        <activity android:name=".MineActivity" />
-        <activity android:name=".DiscussActivity" />
-        <activity android:name=".CourseActivity" />
         <activity android:name=".activitys.TeacherRegistActivity"/>
         <activity android:name=".activitys.StudentRegistActivity" />
-        <activity android:name=".BannerActivity" />
         <activity android:name=".activitys.LoginContentActivity" />
-        <activity android:name=".LoginTeacherActivity" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".activitys.GuideActivity" />
         <activity
             android:name=".activitys.SplashActivity"
@@ -60,7 +105,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivityWithTab" />
     </application>
 
 

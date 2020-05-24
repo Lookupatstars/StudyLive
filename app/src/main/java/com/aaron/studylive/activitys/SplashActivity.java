@@ -9,6 +9,7 @@ import android.view.animation.AnimationSet;
 import android.widget.RelativeLayout;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.PrefUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        ActivityCollector.addActivity(this);
         rl_splash = findViewById(R.id.rl_splash);
 
         //渐变动画
@@ -67,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
                 intent = new Intent(SplashActivity.this, GuideActivity.class);
             }else {
                 //调到主页面
-                intent = new Intent(SplashActivity.this, FlyMainActivity.class);
+                intent = new Intent(SplashActivity.this, LoginActivity.class);
             }
             startActivity(intent);
             finish();
