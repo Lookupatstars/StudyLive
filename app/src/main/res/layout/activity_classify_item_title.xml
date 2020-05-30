@@ -10,10 +10,13 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="前端开发"
-        android:textSize="12sp"
-        android:textColor="@color/classify_seconde_text"/>
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textColor="#18CAC4"/>
 
 </LinearLayout>

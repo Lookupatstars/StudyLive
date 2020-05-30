@@ -11,24 +11,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.activitys.DetailPlayerActivity;
 import com.aaron.studylive.activitys.SearchActivity;
-import com.aaron.studylive.adapter.LiveClassAdapter;
+import com.aaron.studylive.adapters.LiveClassAdapter;
 import com.aaron.studylive.adapters.CourseListAdapter;
 import com.aaron.studylive.adapters.SearchAdapter;
 import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.BannerData;
 import com.aaron.studylive.bean.CourseListData;
+import com.aaron.studylive.bean.LiveClassData;
 import com.aaron.studylive.bean.LiveClassInfo;
 import com.aaron.studylive.bean.SearchData;
 import com.aaron.studylive.database.SearchDBHelper;
 import com.aaron.studylive.database.SearchRecordsDBHelper;
 import com.aaron.studylive.utils.ActivityCollector;
-import com.aaron.studylive.utils.CacheUtils;
 import com.aaron.studylive.utils.Class2detail;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
@@ -44,9 +43,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -54,11 +51,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
+ *  Created by Aaron on 2020/4/8
+ *   The current project is StudyLive
+ *
+ *   @Describe:  首页
  * 使用FlyBanner作为轮播图
  *
- * 这个界面最后可能还需要加上 我也是有底线的~~~
- *
- * 或者可以加上教师的信息列表？？
  */
 
 public class HomeFragment extends BaseFragment implements
@@ -84,13 +82,11 @@ public class HomeFragment extends BaseFragment implements
     private boolean mIsRefshing = false;//是否正在刷新
     private boolean mIsLoadingMore = false;//是否正在加载更多
     private RecyclerView rv_hor_live_class;
+    private List<LiveClassData> liveClassData = new ArrayList<>();
 
     private static final String ImgUrl = "http://course-api.zzu.gdatacloud.com:890/";
 
     private final static String TAG = "SearchViewActivity";
-    private TextView tv_desc;
-    private SearchView.SearchAutoComplete sac_key; // 声明一个搜索自动完成的编辑框对象
-    private String[] hintArray = {"iphone", "iphone8", "iphone8 plus", "iphone7", "iphone7 plus"};
     private List<SearchData> searchData;
     private SearchAdapter mSearchAdapter;
 
@@ -114,17 +110,9 @@ public class HomeFragment extends BaseFragment implements
         searchData = new ArrayList<>();
 
         initView();
-        new BannerAsyncTask().execute();
+//        new BannerAsyncTask().execute();
         setBanner();
-//        String cache = CacheUtils.getCache(HttpUrl.getInstance().getCourseListUrlHot(mCurrentPage),getActivity());
-//        if (!TextUtils.isEmpty(cache)){
-//            L.d("发现缓存啦、。。。。,直接解析数据analysisCourseListHotJsonData");
-//            analysisCourseListHotJsonData(cache);
-//        }
-//        L.d("有没有缓存都要重新请求数据库analysisCourseListHotJsonData");
-
         new CourseListHotAsyncTask().execute();
-
         initSearchView();
 
     }
@@ -135,7 +123,6 @@ public class HomeFragment extends BaseFragment implements
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(intent);
-                L.d("是时候可以条界面了");
             }
         });
 
@@ -149,9 +136,11 @@ public class HomeFragment extends BaseFragment implements
         mRefreshListView.addHeaderView(mHeaderView);
         mBanner = ButterKnife.findById(mHeaderView,R.id.fb_banner);
 
+
         //初始化直播公开课
         // 从布局文件中获取循环视图
         rv_hor_live_class = mHeaderView.findViewById(R.id.rv_hor_live_class);
+
         // 创建一个横向的瀑布流布局管理器
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(1, RecyclerView.HORIZONTAL);
         // 设置循环视图的布局管理器
@@ -161,7 +150,6 @@ public class HomeFragment extends BaseFragment implements
         // 设置瀑布流列表的点击监听器
         liveClassAdapter.setOnItemClickListener(liveClassAdapter);
         rv_hor_live_class.setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
-        // 给rv_hor_live_class设置直播公开课信息瀑布流适配器
         rv_hor_live_class.setAdapter(liveClassAdapter);
         // 设置rv_hor_live_class的默认动画效果
         rv_hor_live_class.setItemAnimator(new DefaultItemAnimator());
@@ -180,60 +168,6 @@ public class HomeFragment extends BaseFragment implements
 
     //Start 数据解析
 
-    private class BannerAsyncTask extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... voids) {
-
-            //在请求服务器之前，先判断有没有缓存。有的话，先加载缓存
-            String cache = CacheUtils.getCache(HttpUrl.getInstance().getBannerUrl(),getActivity());
-
-            String url = HttpUrl.getInstance().getBannerUrl();
-            Map<String, String> params = HttpUrl.getInstance().getBannerParams();
-            String result = HttpRequest.getInstance().POST(getContext(),url, params);
-            L.d("BannerAsyncTask:result"+result);
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-//            analysisBannnerJsonData(s);
-        }
-    }
-
-    /**
-     * 解析广告栏数据
-     * @param //s
-     */
-    private void analysisBannnerJsonData(String s) {
-        L.d("analysisBannnerJsonData::SSS"+s);
-        try {
-            JSONObject object = new JSONObject(s);
-            int errorCode = object.getInt("code");
-            if (errorCode == 0) {
-                mBannerDatas = new ArrayList<>();
-                JSONArray array =object.getJSONObject("content").getJSONArray("list");
-                L.d("+2::"+array);
-                for (int i = 0; i < array.length(); i++) {
-                    BannerData data = new BannerData();
-                    object = array.getJSONObject(i);
-
-                    L.d("name:::"+object.getString("name"));
-                    L.d("img::"+object.getString("img"));
-                    //每当数据不对的时候，总是会停止，
-                    data.setName(object.getString("name"));
-                    mBannerDatas.add(data);
-                }
-                setBanner();
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 设置广告栏
      */
@@ -247,36 +181,57 @@ public class HomeFragment extends BaseFragment implements
         imgs.add(R.drawable.banner2);
         imgs.add(R.drawable.banner3);
         imgs.add(R.drawable.banner4);
-        imgs.add(R.drawable.banner_5);
         //设置的网络图片
         mBanner.setImages(imgs);
         mBanner.setPointsIsVisible(true);
         mBanner.setOnItemClickListener(new FlyBanner.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                Intent intent = new Intent(getActivity(), DetailPlayerActivity.class);
+                intent.putExtra("id", 11);
+                intent.putExtra("title", "HTML");
+                intent.putExtra("lessionNum", 4);
+                intent.putExtra("summary","随着 Web 前端工程师的需求越来越多，Web 前端人员也大幅增长，企业对工程师的要求也逐步提高，对工程师的经验要求非常严格" +
+                        "，新手 Web 前端工程师没有经验很难拿到高工资。那么我们这个课程，" +
+                        "就是通过商业项目进行开发，让新手 Web 前端工程师能够掌握商业开发中的技巧及细节。");
+                intent.putExtra("type",1);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
             }
         });
     }
+//
+//    private class LiveInfoAsyncTask extends AsyncTask<String, Void,String>{
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//            String url = HttpUrl.getInstance().getLiveInfo();
+//
+//            return HttpRequest.getInstance().GET(getContext(),url,null);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            analysisLiveInfo(s);
+//        }
+//    }
+//
+//    private void analysisLiveInfo(String s){
+//
+//        liveClassData
+//
+//    }
 
+    //获取课程数据
     private class CourseListHotAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
-            try {
 
-                String url = HttpUrl.getInstance().getCourseListUrlHot(mCurrentPage);
-                String result = HttpRequest.getInstance().GET(getContext(),url, null);
-                L.d("url = "+url);
-                L.d("getCourseListHot  result =  "+result);
+            String url = HttpUrl.getInstance().getCourseListUrlHot(mCurrentPage);
+            String result = HttpRequest.getInstance().GET(getContext(),url, null);
 
-//                L.d("保存缓存 ");
-//                CacheUtils.setCache(url,result,getContext());
-
-                return result;
-            } catch (Exception e){
-                e.getMessage();
-            }
-            return null;
+            return result;
         }
 
         @Override
@@ -287,10 +242,7 @@ public class HomeFragment extends BaseFragment implements
         }
     }
 
-    /**
-     * 解析课程列表数据
-     * @param s
-     */
+    //解析课程列表数据
     private void analysisCourseListHotJsonData(String s) {
         L.d("analysisCourseListJsonData::SSS"+s);
         try {

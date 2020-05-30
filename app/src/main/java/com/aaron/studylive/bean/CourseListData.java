@@ -1,10 +1,10 @@
 package com.aaron.studylive.bean;
 
 /**
- * Created by recker on 16/5/24.
+ * Created by Aaron on 2020/4/7
+ * The current project is StudyLive
  *
- * 课程列表数据
- *
+ * @Describe:   课程列表数据
  */
 public class CourseListData {
 

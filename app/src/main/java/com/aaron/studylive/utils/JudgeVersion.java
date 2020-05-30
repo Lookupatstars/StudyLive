@@ -4,20 +4,18 @@ package com.aaron.studylive.utils;
  * Created by Aaron on 2020/5/14
  * The current project is StudyLive
  *
- * @Describe:
+ * @Describe:  版本判断
+ *
+ * 大家都知道，版本号一般由以下几部分组成：
+ *      1.  主版本号
+ *      2.  次版本号
+ *      3.  修正版本号
+ *      4.  编译版本号
+ *     0代表相等，1代表version1大于version2，-1代表version1小于version2
  */
 public class JudgeVersion {
-    /**
-     * 大家都知道，版本号一般由以下几部分组成：
-     1.  主版本号
-     2.  次版本号
-     3.  修正版本号
-     4.  编译版本号
-     * @param version1
-     * @param version2
-     * @return 0代表相等，1代表version1大于version2，-1代表version1小于version2
-     * @throws Exception
-     */
+
+
     public static int compareVersion(String version1, String version2) throws Exception {
 
         if (version1.equals(version2)) {

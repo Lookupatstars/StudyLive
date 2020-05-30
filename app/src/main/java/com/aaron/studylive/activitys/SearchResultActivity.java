@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.aaron.studylive.R;
+import com.aaron.studylive.utils.ActivityCollector;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -53,5 +54,9 @@ public class SearchResultActivity extends AppCompatActivity {
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

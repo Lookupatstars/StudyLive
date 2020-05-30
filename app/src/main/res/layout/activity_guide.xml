@@ -21,7 +21,7 @@
         android:visibility="gone"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:background="@drawable/button_circle_shape"
+        android:background="@drawable/btn_guide_start"
         android:text="@string/guide_start" />
 
     <RelativeLayout

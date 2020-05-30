@@ -18,8 +18,12 @@ import okhttp3.Request;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by recker on 16/4/23.
+ * Created by Aaron on 2020/4/25
+ * The current project is StudyLive
+ *
+ * @Describe: 数据请求  request
  */
+
 public class HttpRequest {
 
     private static int connectTimeout = 5;

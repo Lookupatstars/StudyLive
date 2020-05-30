@@ -28,7 +28,7 @@ import java.util.Objects;
 import butterknife.Bind;
 
 /**
- * Created by Aaron on 2020/5/8
+ * Created by Aaron on 2020/4/8
  * The current project is StudyLive
  *
  * @Describe:  章节信息界面  类似于课程页面

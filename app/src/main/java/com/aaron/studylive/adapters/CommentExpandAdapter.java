@@ -1,11 +1,13 @@
 package com.aaron.studylive.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.studylive.R;
@@ -28,6 +30,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private List<CommentContentRecordsReplays> replyBeanList;
     private Context context;
     private int pageIndex = 1;
+    private Bitmap img;
 
     public CommentExpandAdapter(Context context, List<ClassInCommentData> commentBeanList) {
         this.context = context;
@@ -46,7 +49,6 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }else {
             return commentBeanList.get(0).records.get(i).replys.size()>0 ? commentBeanList.get(0).records.get(i).replys.size():0;
         }
-
     }
 
     @Override
@@ -79,6 +81,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     public View getGroupView(final int groupPosition, boolean isExpand, View convertView, ViewGroup viewGroup) {
         final GroupHolder groupHolder;
 
+
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.fragment_course_comment_item, viewGroup, false);
             groupHolder = new GroupHolder(convertView);
@@ -86,13 +89,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }else {
             groupHolder = (GroupHolder) convertView.getTag();
         }
-//        Glide.with(context).load(R.drawable.user_other)
-//                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                .error(R.mipmap.ic_launcher)
-//                .centerCrop()
-//                .into(groupHolder.logo);
+        groupHolder.logo.setImageBitmap(commentBeanList.get(0).records.get(groupPosition).bm);
         groupHolder.tv_name.setText(commentBeanList.get(0).records.get(groupPosition).name);
-        groupHolder.tv_time.setText(commentBeanList.get(0).records.get(groupPosition).createTime);
+        groupHolder.tv_time.setText(commentBeanList.get(0).records.get(groupPosition).createTime.replace("T"," "));
         groupHolder.tv_content.setText(commentBeanList.get(0).records.get(groupPosition).content);
 //        groupHolder.iv_like.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -130,7 +129,6 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
 
         childHolder.tv_content.setText(commentBeanList.get(0).records.get(groupPosition).replys.get(childPosition).content);
-
         return convertView;
     }
 
@@ -140,11 +138,11 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
 
     private class GroupHolder{
-//        private CircleImageView logo;
+        private ImageView logo;
         private TextView tv_name, tv_content, tv_time;
 //        private ImageView iv_like;
         public GroupHolder(View view) {
-//            logo = (CircleImageView) view.findViewById(R.id.comment_item_logo);
+            logo = view.findViewById(R.id.img);
             tv_content = (TextView) view.findViewById(R.id.tv_comment_content);
             tv_name = (TextView) view.findViewById(R.id.tv_comment_name);
             tv_time = (TextView) view.findViewById(R.id.tv_comment_time);
@@ -201,6 +199,5 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
 
     }
-
 
 }

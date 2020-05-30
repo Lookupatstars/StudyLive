@@ -4,15 +4,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import android.widget.ToggleButton;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.bean.LoginData;
+import com.aaron.studylive.constant.AppContants;
 import com.aaron.studylive.database.StudentDBhelper;
 import com.aaron.studylive.database.StudentInfo;
 import com.aaron.studylive.utils.ActivityCollector;
@@ -41,11 +44,18 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.aaron.studylive.constant.AppContants.ACCOUNT_PREF;
+import static com.aaron.studylive.constant.AppContants.PASSWORD_PREF;
+import static com.aaron.studylive.constant.AppContants.REMEMBER_PWD_PREF;
+import static com.aaron.studylive.utils.ImageFormatUtil.getBitmap;
+import static com.aaron.studylive.utils.ImageFormatUtil.stringtoBitmap;
+
 public class LoginContentActivity extends AppCompatActivity{
     private static final String TAG = "LoginContentActivity";
 
     private EditText et_student_user,et_student_passwd;
-    private TextView tv_forgotpasswd;
+    private TextView tv_remember_pwd_text;
+    private CheckBox cb_remember_pwd;
     private Button btn_login,btn_regist;
     private ToggleButton toggleBtnPw;
 
@@ -53,20 +63,19 @@ public class LoginContentActivity extends AppCompatActivity{
 
     private LoginData loginData = new LoginData();
     private int isUser = 0;  //0 :不存在用户；1：存在用户
-    private static final String ImgUrl = "http://course-api.zzu.gdatacloud.com:890/";
+
+    private boolean isRemember = false;
+    private SharedPreferences preference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_student);
         ActivityCollector.addActivity(this);
-        //透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         //事件注册以及点击的实现
         initViewAndClick();
-
 
     }
 
@@ -74,15 +83,15 @@ public class LoginContentActivity extends AppCompatActivity{
     private void initViewAndClick() {
         et_student_user = findViewById(R.id.et_student_user);
         et_student_passwd = findViewById(R.id.et_student_passwd);
-        tv_forgotpasswd = findViewById(R.id.tv_forgotpasswd);
+        tv_remember_pwd_text = findViewById(R.id.tv_remember_pwd_text);
         toggleBtnPw = findViewById(R.id.togglePwd);
 
         btn_login = findViewById(R.id.btn_login);
         btn_regist = findViewById(R.id.btn_regist);
+        cb_remember_pwd = findViewById(R.id.cb_remember_pwd);
 
         btn_login.setOnClickListener(new LoginOnClickListener());
         btn_regist.setOnClickListener(new RegistClickListener());
-        tv_forgotpasswd.setOnClickListener(new ForgetPasswd());
 
         //监听密码框是否获取到焦点
         et_student_user.setOnFocusChangeListener(new UserFocusListener());
@@ -99,6 +108,28 @@ public class LoginContentActivity extends AppCompatActivity{
                 }
             }
         });
+
+        //是否记住密码
+        IsRememberPassword();
+    }
+
+    //是否记住密码
+    public void IsRememberPassword(){
+
+        preference = PreferenceManager.getDefaultSharedPreferences(this);
+        isRemember = preference.getBoolean(REMEMBER_PWD_PREF, false);
+
+        if (isRemember) {//设置【账号】与【密码】到文本框，并勾选【记住密码】
+            et_student_user.setText(preference.getString(ACCOUNT_PREF, ""));
+            et_student_passwd.setText(preference.getString(PASSWORD_PREF, ""));
+            btn_login.setEnabled(true);
+            cb_remember_pwd.setChecked(true);
+        }
+
+        String username = et_student_user.getText().toString().trim();
+        String passwd = et_student_passwd.getText().toString().trim();
+        JudgeByNameAndPasswd(username,passwd);
+        sendRequestWithOkHttp(username, passwd );
     }
 
     @Override
@@ -120,29 +151,28 @@ public class LoginContentActivity extends AppCompatActivity{
     //注册界面的点击按钮
     class RegistClickListener implements View.OnClickListener{
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_regist:
-                    new AlertDialog.Builder(getParent())
-                            .setTitle("请选择注册类型").setMessage("请正确选择您的身份，点击进行注册！")
-                            .setPositiveButton("教师", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(LoginContentActivity.this,"请移步到网页注册",Toast.LENGTH_SHORT).show();
+            if (v.getId() == R.id.btn_regist){
+                new AlertDialog.Builder(LoginContentActivity.this)
+                        .setTitle("请选择注册类型").setMessage("请正确选择您的身份，点击进行注册！")
+                        .setPositiveButton("教师", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(LoginContentActivity.this,"请移步到网页注册",Toast.LENGTH_SHORT).show();
 //                                    Intent intent1 = new Intent();
 //                                    intent1.setClass(LoginContentActivity.this, TeacherRegistActivity.class);
 //                                    startActivity(intent1);
 //                                    finish();
-                                }
-                            })
-                            .setNeutralButton("学生", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent();
-                                    intent.setClass(LoginContentActivity.this, StudentRegistActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }).create().show();
+                            }
+                        })
+                        .setNeutralButton("学生", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent();
+                                intent.setClass(LoginContentActivity.this, StudentRegistActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }).create().show();
             }
         }
     }
@@ -199,18 +229,17 @@ public class LoginContentActivity extends AppCompatActivity{
         try {
             JSONObject object = new JSONObject(jsonData).getJSONObject("content");
 
-//            if (object.getString("img").contains("data:image/png;base64,")){
-//                String userId = object.getString("img");
-//                String userIdJiequ = userId.substring(22);
-//                L.d("登录界面获取的照片信息 = "+userIdJiequ);
-//                Bitmap bm = ImageToBase64.stringtoBitmap(userIdJiequ);
-//                L.d(" 位图是不是 = "+bm);
-//                Drawable drawable = new BitmapDrawable(bm);
-//                L.d("  drawable "+drawable);
-//                loginData.setImg(drawable); //多一个照片信息
-//            }else {
-//
-//            }
+            if (object.getString("img").contains("data:image/png;base64,")){
+                String base64 = object.getString("img");
+                String userIdJiequ = base64.substring(22);
+                L.d("登录界面获取的照片信息 = "+userIdJiequ);
+                Bitmap bm = stringtoBitmap(userIdJiequ);
+                loginData.setImg(bm); //多一个照片信息
+            }else {
+                String ImgUrl = AppContants.ImgUrl+object.getString("img");
+                Bitmap bm = getBitmap(ImgUrl);
+                loginData.setImg(bm); //多一个照片信息
+            }
 
             //设置登录信息，方便个人信息界面调用
             loginData.setsId(object.getInt("id"));
@@ -218,11 +247,9 @@ public class LoginContentActivity extends AppCompatActivity{
             loginData.setEmail(object.getString("email"));
             loginData.setRoleId(object.getInt("roleId"));
             loginData.setName(object.getString("name"));
-
             loginData.setPhone(object.getString("phone"));
             loginData.setUpdate_time(object.getString("updateTime"));
             loginData.setCreate_time(object.getString("createTime"));
-
 
             //END
         } catch (JSONException e) {
@@ -275,6 +302,7 @@ public class LoginContentActivity extends AppCompatActivity{
                 String username = et_student_user.getText().toString().trim();
                 String passwd = et_student_passwd.getText().toString().trim();
                 JudgeByNameAndPasswd(username,passwd);
+                sendRequestWithOkHttp(username, passwd );
 //                StudentInfo byPhoneInfo = sDB.queryByPhone(phone);
 //                L.d("1.登录对比手机号byPhoneInfo.phone::"+byPhoneInfo.phone);
                 //判断user和password
@@ -284,7 +312,7 @@ public class LoginContentActivity extends AppCompatActivity{
                 } else if (passwd.equals("")){
                     Toast.makeText(LoginContentActivity.this,"密码不能为空！",Toast.LENGTH_SHORT).show();
                     return;
-                } else if (username.equals(loginData.getUsername())){ //对比数据库的用户名
+                } else if (username.equals(LoginData.getUsername())){ //对比数据库的用户名
                     //对比数据库的用户名密码
                     //如果比对失败，提示注册
                     if (isUser == 0){
@@ -303,6 +331,16 @@ public class LoginContentActivity extends AppCompatActivity{
                         // 往用户数据库添加登录成功的用户信息（包含手机号码、密码、登录时间）
                         sDB.insert(info);
 
+                        SharedPreferences.Editor editor = preference.edit();
+                        if (cb_remember_pwd.isChecked()) {//记住账号与密码
+                            editor.putBoolean(REMEMBER_PWD_PREF, true);
+                            editor.putString(ACCOUNT_PREF, username);
+                            editor.putString(PASSWORD_PREF, passwd);
+                        } else {//清空数据
+                            editor.clear();
+                        }
+                        editor.apply();
+
                         Intent intent = new Intent(LoginContentActivity.this, FlyMainActivity.class);
                         startActivity(intent);
                         finish();
@@ -312,7 +350,7 @@ public class LoginContentActivity extends AppCompatActivity{
                         return;
                     }
                 }else {
-                    Toast.makeText(LoginContentActivity.this,"用户不存在",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginContentActivity.this,"用户名或密码不正确，请再检查一遍",Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -383,13 +421,19 @@ public class LoginContentActivity extends AppCompatActivity{
         }
     }
 
-    //忘记密码的点击
-    private class ForgetPasswd implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(LoginContentActivity.this, ForgetPasswdActivity.class);
-            startActivity(intent);
-            finish();
-        }
+//    //忘记密码的点击
+//    private class ForgetPasswd implements View.OnClickListener {
+//        @Override
+//        public void onClick(View v) {
+//            Intent intent = new Intent(LoginContentActivity.this, ForgetPasswdActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+//    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

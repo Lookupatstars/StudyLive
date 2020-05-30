@@ -1,10 +1,12 @@
 package com.aaron.studylive.bean;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Aaron on 2020/5/24
  * The current project is StudyLive
  *
- * @Describe:
+ * @Describe:  评论回复的数据
  */
 
 public class CommentContentRecordsReplays{
@@ -18,6 +20,7 @@ public class CommentContentRecordsReplays{
     public int userId= 0;
     public String name ="";
     public String img ="";
+    public Bitmap bm;
 
     public CommentContentRecordsReplays(String name, String replyContent) {
         this.name = name;
@@ -36,6 +39,7 @@ public class CommentContentRecordsReplays{
                 ", type=" + type +
                 ", userId=" + userId +
                 ", name='" + name + '\'' +
+                ", bm=" + bm +
                 '}';
     }
 }

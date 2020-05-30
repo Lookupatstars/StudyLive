@@ -15,7 +15,11 @@ import java.io.File;
 import butterknife.Bind;
 
 /**
- * Created by recker on 16/5/23.
+ *  Created by Aaron on 2020/4/8
+ *   The current project is StudyLive
+ *
+ *   @Describe:  下载页面
+ *
  */
 public class DownloadFragment extends BaseFragment {
 

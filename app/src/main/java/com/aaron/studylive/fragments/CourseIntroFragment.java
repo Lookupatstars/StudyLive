@@ -21,7 +21,6 @@ import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.L;
 import com.aaron.studylive.utils.Loading;
-import com.aaron.studylive.views.WrapContentViewPager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,11 +59,6 @@ public class CourseIntroFragment extends BaseFragment implements //RefreshListVi
     private CourseListAdapter mAdapter;
 
     private View mHeaderView;
-//    private TextView mTvTitle;
-//    private TextView mTvContent;
-//    private TextView mTvIntro;
-
-    private WrapContentViewPager vp;
 
     private String mTitle;  //课程名
     private String summary; //课程简介
@@ -101,12 +95,10 @@ public class CourseIntroFragment extends BaseFragment implements //RefreshListVi
 
         mAdapter = new CourseListAdapter(getActivity(), listDatas);
         mListView.setAdapter(mAdapter);
-//        mListView.setOnRefreshListener(this);
         mListView.setOnItemClickListener(this);
         //关闭view的OverScroll
         mListView.setOverScrollMode(ListView.OVER_SCROLL_IF_CONTENT_SCROLLS);
         mLoading = Loading.getInstance(getActivity());
-//        showLoading();
 
         new CourseListHotAsyncTask().execute();
     }
@@ -137,12 +129,11 @@ public class CourseIntroFragment extends BaseFragment implements //RefreshListVi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getContext(),"点击了课程",Toast.LENGTH_SHORT).show();
         L.d("position  = 多少？"+position);
         CourseListData data = listDatas.get(position);
         Intent intent = new Intent(getActivity(), DetailPlayerActivity.class);
         if (data.getNumLession()==0){
-            Toast.makeText(getActivity(),"敬请期待",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"课程正在制作中，请敬请期待...",Toast.LENGTH_SHORT).show();
             return;
         }
         Class2detail class2detail = new Class2detail();
@@ -211,19 +202,12 @@ public class CourseIntroFragment extends BaseFragment implements //RefreshListVi
                 shezhigaodu();
 //                hideLoading();
                 mAdapter.notifyDataSetChanged();
-//
-//                if (mIsRefshing == true) {
-//                    Toast.makeText(getActivity(),"刷新成功",Toast.LENGTH_SHORT).show();
-//                }
-//                mIsRefshing = false;
-//                mIsLoadingMore = false;
 
             }
 
 
         } catch (JSONException e) {
             e.printStackTrace();
-//            mListView.refreshComplete();
         }
     }
 

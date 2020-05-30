@@ -10,6 +10,7 @@ import java.util.ArrayList;
  *
  * @Describe: 轮播图的图片资源
  */
+
 public class ImageList {
     public static ArrayList<Integer> getDefault() {
         ArrayList<Integer> imageList = new ArrayList<Integer>();
@@ -17,7 +18,7 @@ public class ImageList {
         imageList.add(R.drawable.banner2);
         imageList.add(R.drawable.banner3);
         imageList.add(R.drawable.banner4);
-        imageList.add(R.drawable.banner_5);
         return imageList;
     }
+
 }

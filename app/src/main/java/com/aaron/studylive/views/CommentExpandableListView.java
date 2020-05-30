@@ -9,10 +9,10 @@ import androidx.core.view.NestedScrollingChild;
 import androidx.core.view.NestedScrollingChildHelper;
 
 /**
- * Author: Moos
- * E-mail: moosphon@gmail.com
- * Date:  18/4/20.
- * Desc: 自定义ExpandableListView,解决与CoordinatorLayout滑动冲突问题
+ *  Created by Aaron on 2020/4/19
+ *  The current project is StudyLive
+ *
+ *  @Describe:  自定义ExpandableListView,解决与CoordinatorLayout滑动冲突问题
  */
 
 public class CommentExpandableListView extends ExpandableListView implements NestedScrollingChild {

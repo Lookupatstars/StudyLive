@@ -25,19 +25,6 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"/>
 
-<!--        <androidx.appcompat.widget.SearchView-->
-<!--            android:id="@+id/sv_search"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:queryHint="请输入课程名"-->
-<!--            android:imeOptions="actionSearch"-->
-<!--            android:src="@drawable/search_selected"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_marginHorizontal="10dp"-->
-<!--            android:layout_marginRight="10dp"-->
-<!--            />-->
-
     </RelativeLayout>
 
     <com.aaron.studylive.views.RefreshListView

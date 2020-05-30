@@ -24,7 +24,10 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 /**
- * Created by recker on 16/4/17.
+ *  Created by Aaron on 2020/4/19
+ *  The current project is StudyLive
+ *
+ *  @Describe:  轮播图实现
  */
 public class FlyBanner extends RelativeLayout {
 

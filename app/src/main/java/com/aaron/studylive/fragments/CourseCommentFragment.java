@@ -2,6 +2,7 @@ package com.aaron.studylive.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.aaron.studylive.base.BaseFragment;
 import com.aaron.studylive.bean.ClassInCommentData;
 import com.aaron.studylive.bean.CommentContentRecordsReplays;
 import com.aaron.studylive.bean.LoginData;
+import com.aaron.studylive.constant.AppContants;
 import com.aaron.studylive.utils.DateUtil;
 import com.aaron.studylive.utils.HttpRequest;
 import com.aaron.studylive.utils.HttpUrl;
@@ -49,6 +51,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.aaron.studylive.utils.ImageFormatUtil.getBitmap;
+import static com.aaron.studylive.utils.ImageFormatUtil.stringtoBitmap;
 
 /**
  * Created by Aaron on 2020/5/8
@@ -78,7 +82,6 @@ public class CourseCommentFragment extends BaseFragment implements View.OnClickL
 
     private List<ClassInCommentData> contentList = new ArrayList<>();
     private int mCourseId;
-    LoginData LoginData = new LoginData();
         private CommentExpandAdapter adapter;
 //    private CourseCommentAdapter mAdapter;
     private CpFragment cpFragment = new CpFragment();
@@ -206,20 +209,35 @@ public class CourseCommentFragment extends BaseFragment implements View.OnClickL
     private void analysisDisplayCommentJsonData(String json) {
 
         try {
+
+
             JSONObject object = new JSONObject(json).getJSONObject("content");
             Gson gson = new Gson();
             ClassInCommentData data = gson.fromJson(object.toString(), ClassInCommentData.class);
-            L.d("看卡你新的data 是个啥 "+data);
-            L.d("看看有多少个回复 = "+h);
             contentList.add(data);
-            h = contentList.size();
-            L.d("第一次设置高度 h 的个数  analysisDisplayCommentJsonData = "+h);
+
 
             L.d("contentList = "+contentList);
 
             if (contentList.get(0).total == 0){
                 tv_no_comment.setVisibility(View.VISIBLE);
             }
+            //把照片转为bitmap
+            for (int i = 0;i<contentList.get(0).records.size();i++){    //records层
+                if (contentList.get(0).records.get(i).img.contains("data:image/png;base64,")){
+                    String base64 = contentList.get(0).records.get(i).img;
+                    String userIdJiequ = base64.substring(22);
+                    L.d("登录界面获取的照片信息 = "+userIdJiequ);
+                    Bitmap bm = stringtoBitmap(userIdJiequ);
+                    contentList.get(0).records.get(i).bm = bm; //多一个照片信息
+                }else {
+                    String ImgUrl = AppContants.ImgUrl+contentList.get(0).records.get(i).img;
+                    Bitmap bm = getBitmap(ImgUrl);
+                    contentList.get(0).records.get(i).bm = bm; //多一个照片信息
+                }
+
+            }
+
 
             initExpandableListView(contentList);
 
@@ -321,14 +339,13 @@ public class CourseCommentFragment extends BaseFragment implements View.OnClickL
         behavior.setPeekHeight(commentView.getMeasuredHeight());
 
         bt_comment.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 String commentContent = commentText.getText().toString().trim();
                 if(!TextUtils.isEmpty(commentContent)){
                     dialog.dismiss();
 
-                    ClassInCommentData.CommentContentRecords commentData =new ClassInCommentData.CommentContentRecords(LoginData.getName()
+                    ClassInCommentData.CommentContentRecords commentData =new ClassInCommentData.CommentContentRecords(LoginData.getImg(),LoginData.getName()
                             ,commentContent,DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss"));
                     adapter.addTheCommentData(commentData);
                     SendCommentWithOkHttp(commentContent,mCourseId,lessonId,0,0);
@@ -343,26 +360,6 @@ public class CourseCommentFragment extends BaseFragment implements View.OnClickL
             }
         });
 
-        commentText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
-                    bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
-                }else {
-                    bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
         dialog.show();
     }
 

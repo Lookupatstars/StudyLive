@@ -135,7 +135,7 @@ public class TeacherRegistActivity extends AppCompatActivity {
                         Toast.makeText(TeacherRegistActivity.this,"注册成功，您已同意服务协议",Toast.LENGTH_SHORT).show();
                         //注册成功后直接登陆.
 
-                        Intent intent=new Intent(TeacherRegistActivity.this, LoginActivity.class);
+                        Intent intent=new Intent(TeacherRegistActivity.this, LoginContentActivity.class);
                         startActivity(intent);
                         finish();
 
@@ -183,7 +183,7 @@ public class TeacherRegistActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(v.getId()==R.id.btn_reg_back){
-                Intent intent = new Intent(TeacherRegistActivity.this,LoginActivity.class);
+                Intent intent = new Intent(TeacherRegistActivity.this,LoginContentActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -242,6 +242,12 @@ public class TeacherRegistActivity extends AppCompatActivity {
         super.onStop();
         // 关闭数据库连接
         sDB.closeLink();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
 }

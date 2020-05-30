@@ -30,7 +30,7 @@ public class ForgetPasswdActivity extends AppCompatActivity implements View.OnCl
 
         switch (v.getId()){
             case R.id.btn_forgetpasswd_back:
-                Intent intent = new Intent(ForgetPasswdActivity.this, LoginActivity.class);
+                Intent intent = new Intent(ForgetPasswdActivity.this, LoginContentActivity.class);
                 startActivity(intent);
                 finish();
                 break;
@@ -38,5 +38,11 @@ public class ForgetPasswdActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

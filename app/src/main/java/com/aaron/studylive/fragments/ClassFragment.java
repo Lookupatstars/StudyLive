@@ -30,6 +30,13 @@ import java.util.List;
 
 import butterknife.Bind;
 
+/**
+ *  Created by Aaron on 2020/5/8
+ *   The current project is StudyLive
+ *
+ *   @Describe:  课程列表
+ *
+ */
 public class ClassFragment extends BaseFragment implements View.OnClickListener,
         AdapterView.OnItemClickListener, RefreshListView.OnRefreshListener{
 
@@ -43,12 +50,6 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
 
     @Bind(R.id.iv_classify)
     ImageView mIvClassify;
-
-    @Bind(R.id.iv_scan)
-    ImageView mIvScan;
-
-    @Bind(R.id.iv_study_latest)
-    ImageView mIvStudyLatest;
 
     @Bind(R.id.refresh_listview_class)
     RefreshListView mRefreshListView;
@@ -96,8 +97,6 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
     private void setupClick() {
         mIvSearch.setOnClickListener(this);
         mIvClassify.setOnClickListener(this);
-        mIvScan.setOnClickListener(this);
-        mIvStudyLatest.setOnClickListener(this);
     }
 
 
@@ -105,23 +104,14 @@ public class ClassFragment extends BaseFragment implements View.OnClickListener,
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_classify:
-                toast("点击了分类信息");
                 Intent intent1 = new Intent(getActivity(), ClassifyActivity.class);
                 startActivity(intent1);
                 getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_none);
                 break;
-            case R.id.iv_scan:
-                toast("点击了扫描信息");
-                break;
+
             case R.id.iv_search:
-                toast("点击了搜索信息");
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(intent);
-
-                break;
-            case R.id.iv_study_latest:
-                toast("点击了最近学习信息");
-
                 break;
         }
     }

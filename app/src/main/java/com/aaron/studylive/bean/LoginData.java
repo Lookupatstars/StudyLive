@@ -1,6 +1,6 @@
 package com.aaron.studylive.bean;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 
 /**
  * Created by Aaron on 2020/4/17
@@ -16,7 +16,7 @@ public class LoginData  {
     static private String email;
     static private int roleId;  //角色ID  2：学生 3：讲师
     static private String name;     //昵称
-    static private Drawable img;    //头像
+    static private Bitmap img;    //头像
     static private String phone;  //手机号
     static private String update_time;  //更新时间
     static private String create_time;
@@ -29,7 +29,7 @@ public class LoginData  {
         return create_time;
     }
 
-    public static Drawable getImg() {
+    public static Bitmap getImg() {
         return img;
     }
 
@@ -73,7 +73,7 @@ public class LoginData  {
         LoginData.phone = phone;
     }
 
-    public static void setImg(Drawable img) {
+    public static void setImg(Bitmap img) {
         LoginData.img = img;
     }
 

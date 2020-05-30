@@ -14,7 +14,6 @@ public class Class2detail {
 
     public Intent TransformData(Intent intent, CourseListData data){
 
-
         intent.putExtra("id", data.getId());
         intent.putExtra("title", data.getName());
         intent.putExtra("lessionNum", data.getNumLession());
@@ -22,12 +21,6 @@ public class Class2detail {
         intent.putExtra("summary",data.getDesc());
         intent.putExtra("type",data.getClassType());
 
-        L.d("onItemClick::data.getId()  = "+data.getId());
-        L.d("onItemClick::data.getName()  = "+data.getName());
-        L.d("onItemClick::data.getThumb()  = "+data.getThumb());
-        L.d("onItemClick::data.getNumLession()  = "+data.getNumLession());
-        L.d("onItemClick::data.getDesc()  = "+data.getDesc());
-        L.d("onItemClick::data.getClassType()  = "+data.getClassType());
         return intent;
     }
 }

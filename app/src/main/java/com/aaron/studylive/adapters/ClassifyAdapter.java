@@ -1,19 +1,19 @@
 package com.aaron.studylive.adapters;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.bean.ClassifyData;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Random;
 
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.ButterKnife;
 
 /**
@@ -52,10 +52,14 @@ public class ClassifyAdapter extends RecyclerView.Adapter<ClassifyAdapter.ViewHo
         if (isSection(position)) {
             holder.title.setText(data.getName() + "");
         } else {
-            Picasso.with(mContext).load(data.getPic()).into(holder.image);
             holder.name.setText(data.getName()+"");
-            holder.number.setText(data.getNumbers()+"");
         }
+
+        Random random = new Random();
+        int r = 30 + random.nextInt(200);
+        int g = 30 + random.nextInt(200);
+        int b = 30 + random.nextInt(200);
+        holder.title.setTextColor(Color.rgb(r, g, b));
     }
 
     @Override
@@ -74,10 +78,7 @@ public class ClassifyAdapter extends RecyclerView.Adapter<ClassifyAdapter.ViewHo
     }
 
     public boolean isSection(int position) {
-        if (listDatas.get(position).isTitle())
             return true;
-
-        return false;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -85,7 +86,6 @@ public class ClassifyAdapter extends RecyclerView.Adapter<ClassifyAdapter.ViewHo
         TextView title;
         TextView name;
         TextView number;
-        ImageView image;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -94,7 +94,6 @@ public class ClassifyAdapter extends RecyclerView.Adapter<ClassifyAdapter.ViewHo
             } else {
                 name = ButterKnife.findById(itemView, R.id.tv_name);
                 number = ButterKnife.findById(itemView, R.id.tv_number);
-                image = ButterKnife.findById(itemView, R.id.image);
             }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

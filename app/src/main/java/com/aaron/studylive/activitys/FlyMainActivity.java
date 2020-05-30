@@ -27,13 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.studylive.R;
-import com.aaron.studylive.bean.HttpRespData;
-import com.aaron.studylive.events.UpdateManager;
+import com.aaron.studylive.bean.VersionData;
 import com.aaron.studylive.fragments.ClassFragment;
 import com.aaron.studylive.fragments.DownloadFragment;
 import com.aaron.studylive.fragments.HomeFragment;
 import com.aaron.studylive.fragments.MineFragment;
 import com.aaron.studylive.utils.ActivityCollector;
+import com.aaron.studylive.utils.DestroyActivityUtil;
 import com.aaron.studylive.utils.HttpUrl;
 import com.aaron.studylive.utils.JudgeVersion;
 import com.aaron.studylive.utils.L;
@@ -57,7 +57,6 @@ import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -94,7 +93,6 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
 
     public Activity mActivity;
     public Context mContext;
-    private UpdateManager mUpdateManager;
 
 
     private Drawable drawable;// 给底部标签栏设置图片
@@ -104,7 +102,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
     };
 
     //更新
-    private HttpRespData respData = new HttpRespData();
+    private VersionData respData = new VersionData();
     private Disposable downDisposable;
     private ProgressBar progressBar;
     private TextView textView4;
@@ -122,9 +120,6 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
     //end 更新 变量
 
     private final static String TAG = "SearchViewActivity";
-    private TextView tv_desc;
-    private SearchView.SearchAutoComplete sac_key; // 声明一个搜索自动完成的编辑框对象
-    private String[] hintArray = {"iphone", "iphone8", "iphone8 plus", "iphone7", "iphone7 plus"};
     //end 搜索
 
     @Override
@@ -132,6 +127,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fly_main);
         ActivityCollector.addActivity(this);
+        DestroyActivityUtil.addDestoryActivityToMap(FlyMainActivity.this,"FlyMainActivity");
 
         mActivity = this;
         mContext = this;
@@ -409,11 +405,13 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
             if (JudgeVersion.compareVersion(respData.appVersion, versionName) == 1) { //网络版本大于本地版本
                 L.d("网络版本大于本地版本");
                 String title = "新版本更新";
-                String size = respData.fileSize;
-                String message = respData.note;
-                AlertDialog dialog = new AlertDialog.Builder(mContext)
+                int fileSize = Integer.parseInt(VersionData.fileSize);
+                String size = String.valueOf(fileSize/1048567);
+                String message = VersionData.note.replace("；","；\n");
+
+                AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle(title)
-                        .setMessage(message)
+                        .setMessage(message+"\n"+"文件大小："+size + " MB")
                         .setNeutralButton("暂不更新", new DialogInterface
                                 .OnClickListener() {
                             @Override
@@ -427,8 +425,6 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
                                 L.d("下载");
                                 startDownload(respData.appUrl);
                                 Toast.makeText(mContext, "正在下载更新...", Toast.LENGTH_SHORT).show();
-
-
                             }
                         }).show();
                 dialog.setCanceledOnTouchOutside(false);//可选
@@ -452,59 +448,80 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
             System.out.println("下载的文件不存在!!!");
             return;
         }
-        System.out.println("要打开的文件:" + file.getAbsolutePath() + "是否存在:" + file.exists());
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        System.out.println("要打开的文件:" + file.getAbsolutePath() + " 是否存在:" + file.exists());
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
         if (null != file) {
             try {
                 //兼容7.0/24以上
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     System.out.println("api24/sdk7.0以上");
-                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
                     L.d("456行 mContext.getPackageName() =  "+mContext.getPackageName());
                     //第二个参数是跟manifest文件里的authorities属性是一致的,当包名修改的时候配置里的参数也要修改
                     Uri uri = FileProvider.getUriForFile(mContext, mContext.getPackageName() + ".fileprovider",file);
                     L.d("458   uri   = "+uri);
+
+                    System.out.println("要打开的文件:" + file.getAbsolutePath() + " 是否存在:" + file.exists());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
                     intent.setDataAndType(uri, "application/vnd.android.package-archive");
+
+                    mContext.startActivity(intent);
                     //兼容8.0/26以上,需要安装权限
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        System.out.println("api26/sdk8.0以上");
-                        Toast.makeText(mContext, "更新需要设置允许安装外部来源应用,将为您跳转设置界面",Toast.LENGTH_SHORT).show();
-                        //这里不弄个定时器会下载完立刻打开设置界面,用户可能会有点懵逼
-//                        new Timer().schedule(new TimerTask() {
-//                            @Override
-//                            public void run() {
-                                if (!mContext.getPackageManager().canRequestPackageInstalls()) {
-                                    //这个是8.0新api
-                                    Intent intent1 = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-                                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    intent1.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-                                    mContext.startActivity(intent1);
-                                    restartAPP(mContext);
-                                    return;
-                                }
-//                            }
-//                        }, 3000);
-                    }
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                        System.out.println("api26/sdk8.0以上");
+//                        Toast.makeText(mContext, "更新需要设置允许安装外部来源应用,将为您跳转设置界面",Toast.LENGTH_SHORT).show();
+//                        //这里不弄个定时器会下载完立刻打开设置界面,用户可能会有点懵逼
+////                        new Timer().schedule(new TimerTask() {
+////                            @Override
+////                            public void run() {
+//                                if (!mContext.getPackageManager().canRequestPackageInstalls()) {
+//                                    //这个是8.0新api
+//                                    Intent intent1 = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+//                                    intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                    intent1.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+//                                    mContext.startActivity(intent1);
+//                                    sendBroadcast(intent1,Intent.ACTION_PACKAGE_REPLACED);
+//                                    return;
+//                                }
+////                            }
+////                        }, 3000);
+//                    }
+
                 } else {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
                     System.out.println("api24/sdk7.0以下");
                     intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                }
-                if (mContext.getPackageManager().queryIntentActivities(intent, 0).size() > 0) {
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);
+
                 }
+
+//                if (mContext.getPackageManager().queryIntentActivities(intent, 0).size() > 0) {
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+//                    mContext.startActivity(intent);
+//                    sendBroadcast(intent,Intent.ACTION_PACKAGE_REPLACED);
+//                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        System.out.println("打开安装界面");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-        mContext.startActivity(intent);
-        restartAPP(mContext);
+//        System.out.println("打开安装界面");
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+//        mContext.startActivity(intent);
+//        sendBroadcast(intent,Intent.ACTION_PACKAGE_REPLACED);
+    }
+
+    // 开启安装未知来源权限
+    private void toInstallPermissionSettingIntent() {
+        Uri packageURI = Uri.parse("package:"+getPackageName());
+        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageURI);
+        startActivityForResult(intent, 100);
     }
 
 
@@ -531,7 +548,7 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         //设置通知栏的message
         request.setDescription("Study Live 正在下载....");
         //设置漫游状态下是否可以下载
-        request.setAllowedOverRoaming(false);
+        request.setAllowedOverRoaming(true);
         File file = new File(Environment.DIRECTORY_DOWNLOADS + "/" + "studylive.apk");
         System.out.println(file.getAbsolutePath());
         //设置文件存放目录
@@ -578,6 +595,12 @@ public class FlyMainActivity extends AppCompatActivity implements View.OnClickLi
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
 }

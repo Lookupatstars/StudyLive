@@ -22,9 +22,11 @@ import com.aaron.studylive.views.NoScrollViewPager;
 import com.google.android.exoplayer2.SeekParameters;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
@@ -49,6 +51,7 @@ import androidx.viewpager.widget.ViewPager;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
+import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager;
 
 /**
  * Created by Aaron on 2020/4/27
@@ -122,8 +125,6 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_detail_player);
         ButterKnife.bind(this);
 
-        ActivityCollector.addActivity(this);
-
         //获取上层传下来的数据
         mCourseId = getIntent().getIntExtra("id",0);
         mTitle = getIntent().getStringExtra("title");
@@ -167,6 +168,7 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
             return HttpRequest.getInstance().GET(DetailPlayerActivity.this,url,null);
         }
 
+
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
         @Override
         protected void onPostExecute(String s) {
@@ -186,12 +188,10 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
             int errorCode = object.getInt("code");
             if (errorCode == 0) {
                 JSONArray array =object.getJSONObject("content").getJSONArray("records");
-                L.d("DetailPlayerActivity ->  analysisJsonData + array.length = "+array.length());
                 for (int i = 0; i< array.length(); i++){
                     MediaData mMediaData = new MediaData();
                     object = array.getJSONObject(i);
 
-                    L.d("start:::: DetailPlayerActivity ->  analysisJsonData  =  "+i);
                     L.d("看看课程 ID是多少 "+object.getInt("id"));
                     mMediaData.setCourseId(object.getInt("courseId"));
                     mMediaData.setCourseTime(object.getString("courseTime"));
@@ -209,7 +209,7 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
                     mMediaData.setViewCount(object.getInt("viewCount"));
                     mMediaData.setViewPermissions(object.getInt("viewPermissions"));
 
-                    L.d("end:::: DetailPlayerActivity ->  analysisJsonData  =  ");
+                    L.d("end:::: DetailPlayerActivity ->  analysisJsonData ");
                     mMediaDatas.add(mMediaData);
                 }
                 setupPlay();
@@ -223,7 +223,7 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
 
     public void setupPlay() {
         try {
-            String url = mMediaDatas.get(position).getResourceAddress();
+            String url = mMediaDatas.get(position).getResourceAddress2();
 
 //        //增加封面
 //        ImageView imageView = new ImageView(this);
@@ -237,16 +237,27 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
             //初始化不打开外部的旋转
             orientationUtils.setEnable(false);
 
+            //EXOPlayer内核，支持格式更多
+            PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+//            //系统内核模式
+//            PlayerFactory.setPlayManager(SystemPlayerManager.class);
+//            //ijk内核，默认模式
+//            PlayerFactory.setPlayManager(IjkPlayerManager.class);
+
+            //exo缓存模式，支持m3u8，只支持exo
+            CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
+//            //代理缓存模式，支持所有模式，不支持m3u8等，默认
+//            CacheFactory.setCacheManager(ProxyCacheManager.class);
+
             Map<String, String> header = new HashMap<>();
             header.put("ee", "33");
-//            header.put("allowCrossProtocolRedirects", "true");
+            header.put("allowCrossProtocolRedirects", "true");
             GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
-            gsyVideoOption.setUrl(url)
-//                .setThumbImageView(imageView)
-
+            gsyVideoOption
+                    .setUrl(url)
                     .setIsTouchWiget(true)
                     .setRotateViewAuto(false)
-                    .setRotateWithSystem(true)
+                    .setRotateWithSystem(false) //跟随系统旋转，不知道false还是true
                     .setLockLand(false)
                     .setShowFullAnimation(false)
                     .setNeedLockFull(true)
@@ -369,6 +380,8 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
         //GSYPreViewManager.instance().releaseMediaPlayer();
         if (orientationUtils != null)
             orientationUtils.releaseListener();
+
+        ActivityCollector.removeActivity(this);
     }
 
 
@@ -520,6 +533,8 @@ public class DetailPlayerActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
+
+
 
 
 }

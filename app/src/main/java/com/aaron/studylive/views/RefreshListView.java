@@ -14,9 +14,11 @@ import android.widget.TextView;
 
 import com.aaron.studylive.R;
 
-
 /**
- * Created by recker on 16/5/13.
+ * Created by Aaron on 2020/3/30
+ * The current project is StudyLive
+ *
+ * @Describe: 可以刷新的自定义ListView
  */
 public class RefreshListView extends ListView implements AbsListView.OnScrollListener {
 

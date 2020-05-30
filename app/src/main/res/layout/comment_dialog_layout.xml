@@ -22,7 +22,7 @@
             android:id="@+id/dialog_comment_bt"
             android:layout_width="72dp"
             android:layout_height="32dp"
-            android:background="#D8D8D8"
+            android:background="@color/blue"
             android:layout_marginBottom="14dp"
             android:textColor="@android:color/white"
             android:textSize="14sp"

@@ -1,7 +1,10 @@
 package com.aaron.studylive.bean;
 
 /**
- * Created by recker on 16/5/25.
+ * Created by Aaron on 16/5/25.
+ * The current project is StudyLive
+ *
+ * @Describe:
  */
 public class ClassifyData {
 
@@ -9,11 +12,7 @@ public class ClassifyData {
 
     private String name;
 
-    private String pic;
-
-    private int numbers;
-
-    private boolean isTitle = false;
+    private int pid;
 
 
     public int getId() {
@@ -32,28 +31,12 @@ public class ClassifyData {
         this.name = name;
     }
 
-    public String getPic() {
-        return pic;
+    public int getPid() {
+        return pid;
     }
 
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
-    public int getNumbers() {
-        return numbers;
-    }
-
-    public void setNumbers(int numbers) {
-        this.numbers = numbers;
-    }
-
-    public boolean isTitle() {
-        return isTitle;
-    }
-
-    public void setTitle(boolean title) {
-        isTitle = title;
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
     @Override
@@ -61,9 +44,7 @@ public class ClassifyData {
         return "ClassifyData{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", pic='" + pic + '\'' +
-                ", numbers=" + numbers +
-                ", isTitle=" + isTitle +
+                ", numbers=" + pid +
                 '}';
     }
 }

@@ -1,5 +1,7 @@
 package com.aaron.studylive.bean;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +29,12 @@ public class ClassInCommentData {
         public int type;
         public int userId;
         public String img;
+        public Bitmap bm;
         public String name;
         public List<CommentContentRecordsReplays> replys;
 
-        public CommentContentRecords(String name , String content, String time){
+        public CommentContentRecords(Bitmap bm, String name , String content, String time){
+            this.bm = bm;
             this.name = name;
             this.content = content;
             this.createTime = time;
@@ -45,8 +49,6 @@ public class ClassInCommentData {
             this.replys = replys;
         }
 
-
-
         @Override
         public String toString() {
             return "CommentContentRecords{" +
@@ -58,6 +60,7 @@ public class ClassInCommentData {
                     ", pid=" + pid +
                     ", type=" + type +
                     ", userId=" + userId +
+                    ", bm=" + bm +
                     ", name='" + name + '\'' +
                     ", replys=" + replys +
                     '}';

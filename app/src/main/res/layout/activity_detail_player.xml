@@ -97,6 +97,11 @@
 
     </androidx.core.widget.NestedScrollView>
 
+<!--    <com.aaron.studylive.video.LandLayoutVideo-->
+<!--        android:id="@+id/detail_player"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp" />-->
+
     <com.aaron.studylive.video.LandLayoutVideo
         android:id="@+id/detail_player"
         android:layout_width="match_parent"

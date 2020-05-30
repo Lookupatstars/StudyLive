@@ -46,4 +46,10 @@ public class AboutActivity extends AppCompatActivity {
         L.d("versionName  是多少=  "+versionName);
         tvVersionName.setText("软件版本号： "+versionName);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

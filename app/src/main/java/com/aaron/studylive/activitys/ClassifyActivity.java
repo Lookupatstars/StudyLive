@@ -2,10 +2,10 @@ package com.aaron.studylive.activitys;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.aaron.studylive.R;
 import com.aaron.studylive.adapters.ClassifyAdapter;
@@ -21,14 +21,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.Bind;
 
 /**
- * Created by recker on 16/5/23.
+ * Created by recker on 2020/5/23.
  *
  * 课程分类
  *
@@ -36,7 +35,7 @@ import butterknife.Bind;
 public class ClassifyActivity extends BaseActivity implements
         View.OnClickListener, ClassifyAdapter.OnItemClickListener{
 
-    @Bind(R.id.iv_back)
+    @Bind(R.id.iv_classify_back)
     ImageView mIvBack;
 
     @Bind(R.id.iv_search_classify)
@@ -92,11 +91,12 @@ public class ClassifyActivity extends BaseActivity implements
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_back:
+            case R.id.iv_classify_back:
                 finish();
                 break;
-            case R.id.iv_search:
-
+            case R.id.iv_search_classify:
+                Intent intent = new Intent(ClassifyActivity.this, SearchActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -107,15 +107,6 @@ public class ClassifyActivity extends BaseActivity implements
             int errorCode = object.getInt("code");
 
             if (errorCode == 0) {
-//                ClassifyData data = new ClassifyData();
-//                object = object.getJSONObject("data");
-//
-//                data.setId(object.getInt("id"));
-//                data.setName(object.getString("name"));
-//                data.setPic(object.getString("pic"));
-//                data.setNumbers(object.getInt("numbers"));
-//
-//                listDatas.add(data);
 
                 JSONArray array = object.getJSONArray("content");
                 for (int i = 0; i < array.length(); i++) {
@@ -124,23 +115,9 @@ public class ClassifyActivity extends BaseActivity implements
 
                     data1.setId(object.getInt("id"));
                     data1.setName(object.getString("name"));
-                    data1.setPic("");
-                    data1.setNumbers(0);
-                    data1.setTitle(true);
+                    data1.setPid(object.getInt("pid"));
 
                     listDatas.add(data1);
-//                    JSONArray array1 = object.getJSONArray("skills");
-//                    for (int j = 0; j < array1.length(); j++) {
-//                        object = array1.getJSONObject(j);
-//                        ClassifyData data2 = new ClassifyData();
-//
-//                        data2.setId(object.getInt("id"));
-//                        data2.setName(object.getString("name"));
-//                        data2.setPic(object.getString("pic"));
-//                        data2.setNumbers(object.getInt("numbers"));
-//
-//                        listDatas.add(data2);
-//                    }
                 }
 
                 mAdapter.notifyDataSetChanged();
@@ -153,14 +130,16 @@ public class ClassifyActivity extends BaseActivity implements
 
     @Override
     public void onItemClick(View view, int position) {
-        ClassifyData data = listDatas.get(position);
-        if (!data.isTitle()) {
-            Intent intent = new Intent(this, ClassifyListActivity.class);
-            intent.putExtra("title", data.getName()+"");
-            intent.putExtra("url", data.getPic());
-            intent.putExtra("id", data.getId());
-            startActivity(intent);
-        }
+        Toast.makeText(ClassifyActivity.this,"暂未实现",Toast.LENGTH_SHORT).show();
+
+//        ClassifyData data = listDatas.get(position);
+//        if (!data.isTitle()) {
+//            Intent intent = new Intent(this, ClassifyListActivity.class);
+//            intent.putExtra("title", data.getName()+"");
+//            intent.putExtra("url", data.getPic());
+//            intent.putExtra("id", data.getId());
+//            startActivity(intent);
+//        }
     }
 
 
@@ -168,10 +147,8 @@ public class ClassifyActivity extends BaseActivity implements
         @Override
         protected String doInBackground(Void... voids) {
 
-            String url = HttpUrl.getInstance().getClassifyCourseUrl();
-            Map<String, String> params = HttpUrl.getInstance().getClassifyCourseParams();
-
-            return HttpRequest.getInstance().POST(ClassifyActivity.this,url, params);
+            String url = HttpUrl.getInstance().getClassifListUrl();
+            return HttpRequest.getInstance().GET(ClassifyActivity.this,url, null);
         }
 
         @Override
@@ -181,11 +158,6 @@ public class ClassifyActivity extends BaseActivity implements
             mProgressBar.setVisibility(View.GONE);
             analysisJsonData(s);
         }
-    }
-
-
-    private void debug(String str) {
-        Log.d(ClassifyActivity.class.getSimpleName(), str);
     }
 
     @Override

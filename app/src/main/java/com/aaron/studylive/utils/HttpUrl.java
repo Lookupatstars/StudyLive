@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by recker on 16/5/24.
+ * Created by Aaron on 2020/4/25
+ * The current project is StudyLive
+ *
+ * @Describe: 数据请求的 连接网站
  */
 public class HttpUrl {
 
@@ -17,6 +20,7 @@ public class HttpUrl {
 
     //Banner请求URL  Banner
     private String mBannerUrl = "http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1";
+
 
     //课程列表请求URL（最新）    http://218.28.238.170:8995/course/courses?current=1&orderBy=time&paging=true&size=10
     // http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/courseList?curr=1&directionId=0&sortId=0&typeId=0&way=1
@@ -32,11 +36,9 @@ public class HttpUrl {
     private String mCourseListUrlHot;
 
 
-    //课程分类列表URL http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getSort
-    private String mClassifyCourseUrl = "http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getSort";
+    //分类课程列表  // 第一层分类 http://218.28.238.170:8995/course/courseTypes?pid=0
+    private String mClassifyListUrl =  "http://218.28.238.170:8995/course/courseTypes?pid=0";
 
-    //分类课程列表  http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getType
-    private String mClassifyListUrl =  "http://course.zzu.gdatacloud.com:890/courseWeb/courseWeb/getType";
 
     //获取课时信息   http://218.28.238.170:8995 /course/courseLesson/5/lessons?current=1&size=10
     private String mMediaInfoStart = mHostName + "/course/courseLesson/";
@@ -55,6 +57,7 @@ public class HttpUrl {
     //http://218.28.238.170:8995/user/userLogin/session
     private String loginUrl = "http://218.28.238.170:8995/user/userLogin/session";
 
+    //注册
     //http://218.28.238.170:8995/user/userLogin/user
     private String register= "http://218.28.238.170:8995/user/userLogin/user";
 
@@ -69,6 +72,11 @@ public class HttpUrl {
     private String endSendComment = "/comments";
     private String sendComment;
 
+    // 直播课 http://218.28.238.170:8995/live/liveInfos?current=1&paging=true&size=10
+    private String liveInfo = "http://218.28.238.170:8995/live/liveInfos?current=1&paging=true&size=10";
+
+
+
     private HttpUrl() {
 
     }
@@ -82,6 +90,10 @@ public class HttpUrl {
             }
         }
         return instance;
+    }
+
+    public String getLiveInfo() {
+        return liveInfo;
     }
 
     public String getSendComment(int lessonId) {
@@ -118,10 +130,6 @@ public class HttpUrl {
     public String getCourseListUrlHot(int current) {
         mCourseListUrlHot = startHot+ current + endHot;
         return mCourseListUrlHot;
-    }
-
-    public String getClassifyCourseUrl() {
-        return mClassifyCourseUrl;
     }
 
     public String getClassifListUrl() {

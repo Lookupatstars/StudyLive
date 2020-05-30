@@ -23,7 +23,6 @@ import com.aaron.studylive.database.StudentInfo;
 import com.aaron.studylive.utils.ActivityCollector;
 import com.aaron.studylive.utils.DateUtil;
 import com.aaron.studylive.utils.HttpUrl;
-import com.aaron.studylive.utils.ImageToBase64;
 import com.aaron.studylive.utils.L;
 
 import org.json.JSONObject;
@@ -36,6 +35,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.aaron.studylive.utils.ImageFormatUtil.bitmaptoString;
 
 public class StudentRegistActivity extends AppCompatActivity {
 
@@ -164,7 +165,7 @@ public class StudentRegistActivity extends AppCompatActivity {
                                         Looper.loop();
 
                                         //注册成功后直接登陆.
-                                        Intent intent = new Intent(StudentRegistActivity.this, LoginActivity.class);
+                                        Intent intent = new Intent(StudentRegistActivity.this, LoginContentActivity.class);
                                         startActivity(intent);
                                         finish();
 
@@ -197,7 +198,7 @@ public class StudentRegistActivity extends AppCompatActivity {
     private void ImageTranslate(){
         InputStream is = getResources().openRawResource(R.drawable.default_header);
         Bitmap mBitmap = BitmapFactory.decodeStream(is);
-        ImageResult = ImageToBase64.bitmaptoString(mBitmap);
+        ImageResult = bitmaptoString(mBitmap);
         L.d("看看xin的结果  = "+ImageResult);
     }
 
@@ -253,7 +254,7 @@ public class StudentRegistActivity extends AppCompatActivity {
                         Looper.loop();
 
                         //注册成功后直接登陆.
-                        Intent intent = new Intent(StudentRegistActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(StudentRegistActivity.this, LoginContentActivity.class);
                         startActivity(intent);
                         finish();
 
@@ -334,7 +335,7 @@ public class StudentRegistActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(v.getId()==R.id.btn_reg_back){
-                Intent intent = new Intent(StudentRegistActivity.this,LoginActivity.class);
+                Intent intent = new Intent(StudentRegistActivity.this,LoginContentActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -346,7 +347,9 @@ public class StudentRegistActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             //点击服务协议的显示内容
-            Toast.makeText(StudentRegistActivity.this,"您点击了服务条约",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(StudentRegistActivity.this,"您点击了服务条约",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(StudentRegistActivity.this,ProTextActivity.class);
+            startActivity(intent);
         }
     }
 

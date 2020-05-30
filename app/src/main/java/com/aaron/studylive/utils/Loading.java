@@ -13,6 +13,12 @@ import com.aaron.studylive.constant.GlobalVaries;
 
 import butterknife.ButterKnife;
 
+/**
+ * Created by Aaron on 2020/4/25
+ * The current project is StudyLive
+ *
+ * @Describe:  刷新加载
+ */
 
 public class Loading {
 

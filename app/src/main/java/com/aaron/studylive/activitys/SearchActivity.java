@@ -126,9 +126,8 @@ public class SearchActivity extends AppCompatActivity {
 
     private void initView() {
         sv_search_display = findViewById(R.id.sv_search_display);
-        sv_search_display.setSubmitButtonEnabled(true);
         TextView searchText = sv_search_display.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchText.setTextColor(getResources().getColor(R.color.blue));
+        searchText.setTextColor(getResources().getColor(R.color.black));
 
         mTvTip = findViewById(R.id.tv_tip);
         mListView = findViewById(R.id.listView);
@@ -396,6 +395,8 @@ public class SearchActivity extends AppCompatActivity {
         if (db_search != null) {
             db_search.close();
         }
+
+        ActivityCollector.removeActivity(this);
     }
 
 }
